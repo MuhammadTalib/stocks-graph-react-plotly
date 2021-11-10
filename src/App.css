@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+.fullscreen {
+  position: fixed;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.plott {
+  background-color: grey;
+  padding: 2px;
+  flex-grow: 1;
+}
