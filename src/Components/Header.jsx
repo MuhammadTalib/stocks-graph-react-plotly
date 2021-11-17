@@ -9,20 +9,23 @@ const Header = ({
   graphType,
   templateChange,
   templatesOptions,
+  data,
 }) => {
   return (
     <div>
       <ButtonGroup variant="text" aria-label="text button group">
-        <Button onClick={() => handleGrapthType(1)}>
-          <WaterfallChartIcon color={graphType === 1 ? "primary" : "action"} />
+        <Button onClick={() => handleGrapthType("candlestick")}>
+          <WaterfallChartIcon
+            color={graphType === "candlestick" ? "primary" : "action"}
+          />
         </Button>
-        <Button onClick={() => handleGrapthType(2)}>
-          <BarChartIcon color={graphType !== 1 ? "primary" : "action"} />
+        <Button onClick={() => handleGrapthType("ohlc")}>
+          <BarChartIcon color={graphType !== "ohlc" ? "primary" : "action"} />
         </Button>
       </ButtonGroup>
 
       <ButtonGroup variant="text" aria-label="text button group">
-        {templatesOptions.map((m) => (
+        {templatesOptions(data).map((m) => (
           <Button onClick={() => templateChange(m)}>{m.name}</Button>
         ))}
       </ButtonGroup>

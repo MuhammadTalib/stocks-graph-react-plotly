@@ -1,8 +1,8 @@
+import { Button } from "@mui/material";
 import React, { useState } from "react";
 import "./App.css";
-import { CandleStick } from "./Components/CandleStick";
+import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
-import OHLCBarChart from "./Components/OHLCBarChart";
 import { templatesOptions } from "./templates/templates";
 
 const data = {
@@ -147,7 +147,8 @@ const data = {
 };
 
 function App() {
-  const [graphType, setGraphType] = useState(1);
+  const [graphType, setGraphType] = useState("candlestick");
+  const [subGraphs, setSubGraphs] = useState([]);
   const [selectedTemplates, setSelectedTemplates] = useState([]);
   const [templates, setTemplates] = useState([]);
   const style = { width: "100%", height: "100%" };
@@ -164,29 +165,37 @@ function App() {
       type: "date",
     },
     yaxis: {
-      domain: [0.4, 1],
+      domain: [0, 1],
       autorange: true,
     },
-    xaxis2: { domain: [0, 1] },
-    yaxis2: { anchor: "y2", domain: [0.18, 0.38], range: [-140, 140] },
+    autosize: true,
+    height: 600,
+    // xaxis2: { domain: [0, 1] },
+    // yaxis2: { anchor: "y2", domain: [0.18, 0.38], range: [-140, 140] },
 
-    xaxis3: { domain: [0, 1] },
-    yaxis3: { anchor: "y3", domain: [0, 0.18], range: [115, 140] },
+    // xaxis3: { domain: [0, 1] },
+    // yaxis3: { anchor: "y3", domain: [0, 0.18], range: [115, 140] },
   });
 
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
   const addTemplate = (id, template) => {
+    console.log("Arr", template.subGraphs);
     if (selectedTemplates.indexOf(id) !== -1) {
       setTemplates([...templates.filter((f) => f.templateType !== id)]);
+      setSubGraphs([...subGraphs.filter((f) => f.templateType !== id)]);
+
       setSelectedTemplates([...selectedTemplates.filter((f) => f !== id)]);
     } else {
       setSelectedTemplates([...selectedTemplates, id]);
-      setTemplates([...templates, ...template(data, 2)]);
+
+      setTemplates([...templates, ...template.graph]);
+      setSubGraphs([...subGraphs, ...template.subGraphs]);
     }
   };
   const templateChange = (tempData) => {
+    console.log("template.subGraphs", tempData);
     addTemplate(tempData.id, tempData.template);
   };
 
@@ -197,23 +206,25 @@ function App() {
         handleGrapthType={handleGrapthType}
         templateChange={templateChange}
         templatesOptions={templatesOptions}
+        data={data}
       />
+
       <div id="fullscreen">
-        {graphType === 1 ? (
-          <CandleStick
-            style={style}
-            data={data}
-            layout={layout}
-            templates={templates}
+        <Graph
+          style={style}
+          data={{ ...data, type: graphType }}
+          layout={layout}
+          templates={templates}
+        />
+        {subGraphs.map((m) => (
+          <Graph
+            key={m}
+            style={{ width: "100%" }}
+            data={{ ...m }}
+            layout={{ ...layout, autosize: true, height: 150 }}
+            templates={m.mergedGraphs}
           />
-        ) : (
-          <OHLCBarChart
-            style={style}
-            data={data}
-            layout={layout}
-            templates={templates}
-          />
-        )}
+        ))}
       </div>
     </div>
   );

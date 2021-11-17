@@ -5,7 +5,7 @@ import "../App.css";
 
 const Plot = createPlotlyComponent(Plotly);
 
-export const CandleStick = ({ style, data, layout, templates }) => {
+export const Graph = ({ style, data, layout, templates }) => {
   return (
     <Plot style={style} data={[data, ...(templates || [])]} layout={layout} />
   );
