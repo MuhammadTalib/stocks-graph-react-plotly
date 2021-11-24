@@ -1,9 +1,11 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
 import { templatesOptions } from "./templates/templates";
+import { getAllStocks } from "./services/api";
+
 
 const data = {
   x: [
@@ -152,6 +154,9 @@ function App() {
   const [selectedTemplates, setSelectedTemplates] = useState([]);
   const [templates, setTemplates] = useState([]);
   const style = { width: "100%", height: "100%" };
+  useEffect(()=>{
+    console.log(getAllStocks('stocks/available'))
+  },[])
   const [layout] = useState({
     dragmode: "zoom",
     margin: { t: 0, l: 30, r: 0, b: 25 },
