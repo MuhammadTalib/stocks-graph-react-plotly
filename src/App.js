@@ -6,8 +6,7 @@ import Header from "./Components/Header";
 import { templatesOptions } from "./templates/templates";
 import { getAllStocks } from "./services/api";
 
-
-const data = {
+const dummy = {
   x: [
     "2017-01-04",
     "2017-01-05",
@@ -131,21 +130,6 @@ const data = {
   type: "candlestick",
   xaxis: "x",
   yaxis: "y",
-  a: [
-    106.919998, 109.339996, 109.739998, 110, 111.110001, 111.919998, 111.949997,
-    112.339996, 112.419998, 113, 113.449997, 113.769997, 113.900002, 114.400002,
-    114.419998, 114.779999, 115.139999, 116.110001, 116.449997, 116.93,
-    116.949997, 117, 117.029999, 118, 118.30999800000001, 118.339996,
-    118.449997, 118.849998, 119.980003, 120, 120.150002, 120.550003, 120.849998,
-    121, 121, 122.400002, 123.110001, 123.339996, 123.35000600000001,
-    123.400002, 123.470001, 123.900002, 124.779999, 124.900002, 125.400002,
-    125.550003, 125.900002, 126.150002, 126.449997, 126.53999300000001,
-    126.739998, 126.769997, 126.93, 127.30999800000001, 127.470001, 128.130005,
-    128.139999, 129.110001, 130, 130.66999800000002, 130.980003, 131.080002,
-    131.460007, 131.460007, 131.649994, 131.66999800000002, 132.029999,
-    132.520004, 134.080002, 135.130005, 136.350006, 138.539993, 139.520004,
-    139.649994,
-  ],
 };
 
 function App() {
@@ -154,9 +138,7 @@ function App() {
   const [selectedTemplates, setSelectedTemplates] = useState([]);
   const [templates, setTemplates] = useState([]);
   const style = { width: "100%", height: "100%" };
-  useEffect(()=>{
-    console.log(getAllStocks('stocks/available'))
-  },[])
+
   const [layout] = useState({
     dragmode: "zoom",
     margin: { t: 0, l: 30, r: 0, b: 25 },
@@ -204,6 +186,56 @@ function App() {
     addTemplate(tempData.id, tempData.template);
   };
 
+  const [selectedStock, setSelectStock] = useState("MMM");
+  const [selectedTime, setSelectTime] = useState("1d");
+
+  const [data, setGraphData] = useState({ ...dummy });
+
+  const handleStockChange = (stock) => {
+    setSelectStock(stock);
+    stock &&
+      getAllStocks(`stocks?stock=${stock?.toLowerCase()}&interval=1h`).then(
+        (res) => {
+          let high = [],
+            low = [],
+            open = [],
+            close = [],
+            x = [];
+          console.log(("res.data.data", res.data.data));
+          res?.data?.data?.forEach((m) => {
+            high.push(m.high);
+            low.push(m.low);
+            open.push(m.open);
+            close.push(m.close);
+            x.push(new Date(m.date));
+          });
+          setGraphData({ ...dummy, high, low, open, close, x });
+        }
+      );
+  };
+
+  const hanldeSelectedTime = (time) => {
+    setSelectTime(time);
+    selectedStock &&
+      getAllStocks(
+        `stocks?stock=${selectedStock?.toLowerCase()}&interval=${selectedTime}`
+      ).then((res) => {
+        let high = [],
+          low = [],
+          open = [],
+          close = [],
+          x = [];
+        console.log(("res.data.data", res));
+        res?.data?.data?.forEach((m) => {
+          high.push(m.high);
+          low.push(m.low);
+          open.push(m.open);
+          close.push(m.close);
+          x.push(new Date(m.date));
+        });
+        setGraphData({ ...dummy, high, low, open, close, x });
+      });
+  };
   return (
     <div>
       <Header
@@ -212,6 +244,10 @@ function App() {
         templateChange={templateChange}
         templatesOptions={templatesOptions}
         data={data}
+        selectedStock={selectedStock}
+        selectedTime={selectedTime}
+        hanldeSelectedTime={hanldeSelectedTime}
+        handleStockChange={handleStockChange}
       />
 
       <div id="fullscreen">
