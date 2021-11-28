@@ -19,12 +19,7 @@ const Header = ({
   hanldeSelectedTime,
 }) => {
   let [stocks, setStocks] = useState([]);
-  const times = [
-    "1h",
-    "1d",
-    "1wk",
-    "1mo",
-  ];
+  const times = ["1h", "1d", "1wk", "1mo"];
   useEffect(() => {
     getAllStocks("stocks/available").then((res) => {
       console.log("res", res);
@@ -68,8 +63,9 @@ const Header = ({
       </Grid>
       <Grid item xs={4}>
         <ButtonGroup variant="text" aria-label="text button group">
-          {times.map((t) => (
+          {times.map((t, i) => (
             <Button
+              key={i}
               onClick={() => hanldeSelectedTime(t)}
               color={selectedTime !== t ? "primary" : "error"}
             >
