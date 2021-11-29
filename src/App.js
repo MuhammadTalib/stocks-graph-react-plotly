@@ -74,7 +74,7 @@ function App() {
   };
 
   const [selectedStock, setSelectStock] = useState("MMM");
-  const [selectedTime, setSelectTime] = useState("1d");
+  const [selectedTime, setSelectTime] = useState("1h");
 
   const [data, setGraphData] = useState({ ...dummy });
 
@@ -94,6 +94,7 @@ function App() {
         close.push(m.close);
         x.push(new Date(m.date));
       });
+      console.log(x)
       setGraphData({ ...dummy, high, low, open, close, x });
     });
   }, []);
@@ -122,9 +123,10 @@ function App() {
 
   const hanldeSelectedTime = (time) => {
     setSelectTime(time);
+    console.log(selectedTime)
     selectedStock &&
       getAllStocks(
-        `stocks?stock=${selectedStock?.toLowerCase()}&interval=${selectedTime}`
+        `stocks?stock=${selectedStock?.toLowerCase()}&interval=${time}`
       ).then((res) => {
         let high = [],
           low = [],
