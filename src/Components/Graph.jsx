@@ -7,6 +7,10 @@ const Plot = createPlotlyComponent(Plotly);
 
 export const Graph = ({ style, data, layout, templates }) => {
   return (
-    <Plot style={style} data={[data, ...(templates || [])]} layout={layout} />
+    <Plot style={style} data={[data, ...(templates || [])]} layout={layout} 
+    config={{
+      scrollZoom:true,
+    }}
+    />
   );
 };
