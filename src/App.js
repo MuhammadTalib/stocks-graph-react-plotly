@@ -4,14 +4,15 @@ import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
 import { getAllStocks } from "./services/api";
 import { templatesOptions } from "./templates/templates";
+import { Container } from "@mui/material";
 
 const dummy = {
   x: [],
   close: [],
-  decreasing: { line: { color: "black" } },
+  decreasing: { fillcolor: "black",line: { color:"black" } },
   high: [],
-  increasing: { line: { color: "black" } },
-  line: { color: "rgba(31,119,180,1)" },
+  increasing: {fillcolor: "white",line: { color:"black"}}, 
+  line: {color: 'rgba(31,119,180,1)'}, 
   low: [],
   open: [],
   type: "candlestick",
@@ -144,6 +145,7 @@ function App() {
       });
   };
   return (
+    <Container>
     <div>
       <Header
         graphType={graphType}
@@ -175,6 +177,8 @@ function App() {
         ))}
       </div>
     </div>
+            </Container>
+
   );
 }
 

@@ -38,6 +38,8 @@ const Header = ({
       <Grid item xs={2}>
         <Autocomplete
           value={selectedStock}
+          disableClearable
+          textInputProps={{ clearButtonMode: 'hidden' }}
           onChange={(event, newValue) => {
             handleStockChange(newValue);
           }}
