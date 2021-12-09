@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { getAllStocks } from "../services/api";
 import { Grid, TextField } from "@mui/material";
-
+import { times } from "../Utils/utils";
 const Header = ({
   handleGrapthType,
   graphType,
@@ -19,11 +19,11 @@ const Header = ({
   hanldeSelectedTime,
 }) => {
   let [stocks, setStocks] = useState([]);
-  const times = ["1h", "1d", "1wk", "1mo"];
+
   useEffect(() => {
     getAllStocks("stocks/available").then((res) => {
       console.log("res", res);
-      setStocks(res.data.list || []);
+      setStocks(res?.data?.list || []);
     });
   }, []);
 
@@ -34,12 +34,13 @@ const Header = ({
       direction="row"
       alignItems="center"
       textAlign="center"
+      style={{ padding: "10px" }}
     >
       <Grid item xs={2}>
         <Autocomplete
           value={selectedStock}
           disableClearable
-          textInputProps={{ clearButtonMode: 'hidden' }}
+          textInputProps={{ clearButtonMode: "hidden" }}
           onChange={(event, newValue) => {
             handleStockChange(newValue);
           }}
@@ -69,9 +70,9 @@ const Header = ({
             <Button
               key={i}
               onClick={() => hanldeSelectedTime(t)}
-              color={selectedTime !== t ? "primary" : "error"}
+              color={selectedTime.name !== t.name ? "primary" : "error"}
             >
-              {t}
+              {t.name}
             </Button>
           ))}
         </ButtonGroup>
