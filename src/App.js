@@ -161,7 +161,6 @@ function App() {
   return (
     <>
       {loader ? <div className="loader"></div> : <></>}
-      {/* <Container> */}
       <div>
         <Header
           graphType={graphType}
@@ -193,7 +192,6 @@ function App() {
           ))}
         </div>
       </div>
-      {/* </Container> */}
     </>
   );
 }
