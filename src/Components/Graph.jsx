@@ -5,10 +5,18 @@ import "../App.css";
 
 const Plot = createPlotlyComponent(Plotly);
 
-export const Graph = ({ style, data, layout, templates }) => {
-  const config = {responsive: true}
-  return (
-    <Plot style={style} data={[data, ...(templates || [])]} layout={layout} config={config}
-    />
-  );
+export const Graph = ({ style, data, layout, templates, time, loader }) => {
+  const config = { responsive: true };
+  if (loader) {
+    return <div className="loadingLabel">Loading...</div>;
+  } else
+    return (
+      <Plot
+        key={time}
+        style={style}
+        data={[data, ...(templates || [])]}
+        layout={layout}
+        config={config}
+      />
+    );
 };

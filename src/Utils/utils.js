@@ -4,3 +4,9 @@ export const times = [
   { name: "1wk", ms: 604800000 },
   { name: "1mo", ms: 2629746000 },
 ];
+
+export const templates = [
+  { name: "T1", id: 1 },
+  { name: "T2", id: 2 },
+  { name: "T3", id: 3 },
+];

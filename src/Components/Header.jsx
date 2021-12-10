@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { getAllStocks } from "../services/api";
 import { Grid, TextField } from "@mui/material";
-import { times } from "../Utils/utils";
+import { times, templates } from "../Utils/utils";
 const Header = ({
   handleGrapthType,
   graphType,
@@ -40,7 +40,7 @@ const Header = ({
         <Autocomplete
           value={selectedStock}
           disableClearable
-          textInputProps={{ clearButtonMode: "hidden" }}
+          // textInputProps={{ clearButtonMode: "hidden" }}
           onChange={(event, newValue) => {
             handleStockChange(newValue);
           }}
@@ -81,7 +81,7 @@ const Header = ({
       <Grid item xs={5}>
         {" "}
         <ButtonGroup variant="text" aria-label="text button group">
-          {templatesOptions(data).map((m, i) => (
+          {templates.map((m, i) => (
             <Button key={i} onClick={() => templateChange(m)}>
               {m.name}
             </Button>
