@@ -22,7 +22,7 @@ const dummy = {
   xaxis: "x",
   yaxis: "y",
 };
-const rightMargin = 10;
+const rightMargin = 20;
 const candleDefault = 214;
 
 function App() {
@@ -114,13 +114,40 @@ function App() {
     }
     getAllStocks(url)
       .then((res) => {
-        console.log(
-          "Total candles on time ",
-          time.name,
-          " is ",
-          res?.data?.data.length
-        );
+        // console.log(
+        //   "Total candles on time ",
+        //   time.name,
+        //   " is ",
+        //   res?.data?.data.length < candleDefault
+        // );
         setLoader(false);
+        let responseData = [...res?.data?.data];
+        // if (responseData.length < candleDefault) {
+        //   let startNull = candleDefault - responseData.length;
+        //   console.log("startNull", startNull);
+        //   console.log(
+        //     "responseData[0]",
+        //     responseData[0].date,
+        //     new Date(Date.now(new Date(responseData[0].date)))
+        //   );
+        //   console.log(
+        //     "responseData[0]",
+        //     new Date(Date.now(responseData[0].date) - (0 + 1) * time.ms)
+        //   );
+        //   let candle = {};
+        //   Object.entries(responseData[0]).map((m) => {
+        //     candle[m[0]] = m[1];
+        //   });
+        //   console.log("candle", candle);
+
+        //   for (let i = 0; i < startNull; i++) {
+        //     let d = new Date(
+        //       Date.now(responseData[0].date) - (i + 1) * time.ms
+        //     );
+        //     console.log("candle[ ", d);
+        //     responseData.unshift({ ...candle, date: d });
+        //   }
+        // }
         let high = [],
           low = [],
           open = [],
@@ -129,7 +156,7 @@ function App() {
         let EMA0 = [];
         let EMA1 = [];
         let EMA2 = [];
-        res?.data?.data?.forEach((m) => {
+        responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
           open.push(m.open);
@@ -140,21 +167,13 @@ function App() {
           x.push(new Date(m.date));
         });
 
-        console.log(
-          "new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms)",
-          new Date(
-            Date.now(x[x.length - 1]) - candleDefault * time.ms
-          ).toDateString()
-        );
-
-        let lowLowest = Math.min(...low);
-        let closeLowest = Math.min(...close);
+        let lowLowest = Math.min(...low.filter((f) => f !== null));
+        let closeLowest = Math.min(...close.filter((f) => f !== null));
         let lowest = lowLowest > closeLowest ? closeLowest : lowLowest;
 
-        let highHighest = Math.min(...low);
-        let openHighest = Math.max(...close);
+        let highHighest = Math.min(...low.filter((f) => f !== null));
+        let openHighest = Math.max(...close.filter((f) => f !== null));
         let highest = openHighest > highHighest ? openHighest : highHighest;
-        console.log("lowest", lowest, highest);
 
         for (let i = 0; i < rightMargin; i++) {
           high.push(null);
@@ -204,7 +223,7 @@ function App() {
   return (
     <>
       {loader ? <div className="loader"></div> : <></>}
-      <div>
+      <div style={{ padding: "10px" }}>
         <Header
           graphType={graphType}
           handleGrapthType={handleGrapthType}
