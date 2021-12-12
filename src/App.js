@@ -23,7 +23,7 @@ const dummy = {
   yaxis: "y",
 };
 const rightMargin = 20;
-const candleDefault = 214;
+const candleDefault = 215 + rightMargin;
 
 function App() {
   const [loader, setLoader] = useState(false);
@@ -36,7 +36,12 @@ function App() {
 
   const [layout, setLayout] = useState({
     dragmode: "zoom",
-    margin: { t: 0, l: 30, r: 0, b: 0 },
+    margin: {
+      r: 10,
+      t: 25,
+      b: 40,
+      l: 60,
+    },
     showlegend: false,
     xaxis: {
       domain: [0, 1],
@@ -47,7 +52,6 @@ function App() {
       title: "Date",
       type: "date",
     },
-    itemwidth: 50,
     yaxis: {
       domain: [0, 1],
       // autorange: true,
@@ -114,12 +118,12 @@ function App() {
     }
     getAllStocks(url)
       .then((res) => {
-        // console.log(
-        //   "Total candles on time ",
-        //   time.name,
-        //   " is ",
-        //   res?.data?.data.length < candleDefault
-        // );
+        console.log(
+          "Total candles on time ",
+          time.name,
+          " is ",
+          res?.data?.data.length
+        );
         setLoader(false);
         let responseData = [...res?.data?.data];
         // if (responseData.length < candleDefault) {
