@@ -23,7 +23,7 @@ const dummy = {
   yaxis: "y",
 };
 const rightMargin = 20;
-const candleDefault = 215 + rightMargin;
+const candleDefault = 214 + rightMargin;
 
 function App() {
   const [loader, setLoader] = useState(false);
@@ -191,9 +191,17 @@ function App() {
         }
 
         setGraphData({ ...dummy, high, low, open, close, x, EMA0, EMA1, EMA2 });
+        console.log("lowest", lowest, highest);
         setLayout({
           ...layout,
-          yaxis: { ...layout.yaxis, range: [lowest, highest] },
+          yaxis: {
+            ...layout.yaxis,
+            rangeslider: {
+              visible: false,
+            },
+            // range: [114, 218],
+            range: [lowest, highest],
+          },
           xaxis: {
             ...layout.xaxis,
             range: [
