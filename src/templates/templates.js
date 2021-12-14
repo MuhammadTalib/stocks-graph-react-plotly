@@ -121,7 +121,7 @@ export const template3 = (data, axis) => {
         y: data.open.map((m, i) => (m < data.close[i] ? m : m * -1)),
         type: "bar",
         marker: {
-          color: "rgba(255,0,0,0.7)", // data.open.map((m, i) => (m < data.close[i] ? "green" : "red")),
+          color: data.open.map((m, i) => (m < data.close[i] ? "green" : "red")), // data.open.map((m, i) => (m < data.close[i] ? "green" : "red")),
         },
         xaxis: "x",
         yaxis: "y",

@@ -32,6 +32,10 @@ function App() {
   const [subGraphs, setSubGraphs] = useState([]);
   const [selectedTemplates, setSelectedTemplates] = useState([]);
   const [templates, setTemplates] = useState([]);
+
+  const [mergedGraphs, setMergedGraphs] = useState([]);
+  const [separateGraphs, setSeparateGraphs] = useState([]);
+
   const style = { width: "100%", height: "100%" };
 
   const [layout, setLayout] = useState({
@@ -39,7 +43,7 @@ function App() {
     margin: {
       r: 10,
       t: 25,
-      b: 40,
+      b: 0,
       l: 60,
     },
     showlegend: false,
@@ -55,7 +59,6 @@ function App() {
     yaxis: {
       domain: [0, 1],
       // autorange: true,
-      range: [169, 187],
       rangeslider: {
         visible: false,
       },
@@ -101,7 +104,6 @@ function App() {
     }
   };
   const templateChange = (tempData) => {
-    // addTemplate(tempData.id, tempData.template);
     getDataRequest(selectedStock, selectedTime, tempData.id);
   };
 
@@ -160,14 +162,31 @@ function App() {
         let EMA0 = [];
         let EMA1 = [];
         let EMA2 = [];
+        let MACD0 = [];
+        let MACD1 = [];
+        let MACD2 = [];
+        let MACDSIGNAL0 = [];
+        let MACDHIST1 = [];
+        let MACDSIGNAL2 = [];
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
           open.push(m.open);
           close.push(m.close);
-          EMA0.push(m.indicators?.EMA0);
-          EMA1.push(m.indicators?.EMA1);
-          EMA2.push(m.indicators?.EMA2);
+          if (template === 1) {
+            EMA0.push(m.indicators?.EMA0);
+            EMA1.push(m.indicators?.EMA1);
+            EMA2.push(m.indicators?.EMA2);
+          } else if (template === 2) {
+            MACD0.push(m.indicators?.MACD0);
+            MACD1.push(m.indicators?.MACD1);
+            MACD2.push(m.indicators?.MACD2);
+            MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
+            MACDHIST1.push(m.indicators?.MACDHIST1);
+            MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
+          }
+
           x.push(new Date(m.date));
         });
 
@@ -184,14 +203,117 @@ function App() {
           low.push(null);
           open.push(null);
           close.push(null);
-          EMA0.push(null);
-          EMA1.push(null);
-          EMA2.push(null);
+          if (template === 1) {
+            EMA0.push(null);
+            EMA1.push(null);
+            EMA2.push(null);
+          } else if (template === 2) {
+            MACD0.push(null);
+            MACD1.push(null);
+            MACD2.push(null);
+            MACDSIGNAL0.push(null);
+            MACDHIST1.push(null);
+            MACDSIGNAL2.push(null);
+          }
           x.push(new Date(Date.now(x[x.length - 1]) + (i + 1) * time.ms));
         }
+        if (template === 1) {
+          setMergedGraphs([
+            {
+              x: x,
+              y: EMA0,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA2,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+          ]);
+        } else if (template === 2) {
+          setSeparateGraphs([
+            {
+              x: x,
+              y: MACD0,
+              marker: {
+                color: "blue",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: MACDSIGNAL0,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "black",
+                  },
+                },
+              ],
+            },
+            {
+              x: x,
+              y: MACD1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "black",
+              },
+              templates: [
+                {
+                  x: x,
+                  y: MACDHIST1,
+                  type: "bar",
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: MACDHIST1.map((m, i) => (m > 0 ? "green" : "red")), //"black",
+                  },
+                },
+              ],
+            },
+            {
+              x: x,
+              y: MACD2,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+              templates: [
+                {
+                  x: x,
+                  y: MACDSIGNAL2,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "black",
+                  },
+                },
+              ],
+            },
+          ]);
+        }
 
-        setGraphData({ ...dummy, high, low, open, close, x, EMA0, EMA1, EMA2 });
-        console.log("lowest", lowest, highest);
+        setGraphData({ ...dummy, high, low, open, close, x });
         setLayout({
           ...layout,
           yaxis: {
@@ -205,7 +327,9 @@ function App() {
           xaxis: {
             ...layout.xaxis,
             range: [
-              new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
+              // new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
+              // new Date(x[x.length - 1]),
+              new Date(x[0]), // - candleDefault * time.ms),
               new Date(x[x.length - 1]),
             ],
             rangeslider: {
@@ -254,48 +378,46 @@ function App() {
             style={style}
             data={{ ...data, type: graphType }}
             layout={layout}
-            templates={
-              data.EMA0
-                ? [
-                    {
-                      x: data.x,
-                      y: data.EMA0,
-                      xaxis: "x",
-                      yaxis: "y",
-                      marker: {
-                        color: "blue",
-                      },
-                    },
-                    {
-                      x: data.x,
-                      y: data.EMA1,
-                      xaxis: "x",
-                      yaxis: "y",
-                      marker: {
-                        color: "blue",
-                      },
-                    },
-                    {
-                      x: data.x,
-                      y: data.EMA2,
-                      xaxis: "x",
-                      yaxis: "y",
-                      marker: {
-                        color: "blue",
-                      },
-                    },
-                  ]
-                : []
-            }
+            templates={mergedGraphs.length ? [...mergedGraphs] : []}
             loader={loader}
           />
-          {subGraphs.map((m) => (
+          {separateGraphs.map((m) => (
             <Graph
               key={m}
+              templates={m.templates}
               style={{ width: "100%" }}
               data={{ ...m }}
-              layout={{ ...layout, autosize: true, height: 150 }}
-              templates={m.mergedGraphs}
+              layout={{
+                dragmode: "zoom",
+                margin: {
+                  r: 10,
+                  t: 1,
+                  b: 0,
+                  l: 60,
+                },
+                showlegend: false,
+                xaxis: {
+                  domain: [0, 1],
+                  autorange: true,
+                  rangeslider: {
+                    visible: false,
+                  },
+                  title: "Date",
+                  type: "date",
+                },
+                yaxis: {
+                  domain: [0, 1],
+                  autorange: true,
+                  rangeslider: {
+                    visible: false,
+                  },
+                  position: 1,
+                  side: "bottom",
+                },
+                opacity: 0.2,
+                autosize: true,
+                height: 150,
+              }}
             />
           ))}
         </div>

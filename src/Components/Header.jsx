@@ -79,7 +79,6 @@ const Header = ({
       </Grid>
 
       <Grid item xs={5}>
-        {" "}
         <ButtonGroup variant="text" aria-label="text button group">
           {templates.map((m, i) => (
             <Button key={i} onClick={() => templateChange(m)}>
