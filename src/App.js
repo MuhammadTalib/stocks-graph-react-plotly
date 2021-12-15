@@ -148,7 +148,7 @@ function App() {
         let MACDSIGNAL0 = [];
         let MACDHIST1 = [];
         let MACDSIGNAL2 = [];
-
+        let MACDHIST0 = [];
         let MA0 = [];
         let MA1 = [];
         let RSI0 = [];
@@ -181,6 +181,11 @@ function App() {
             EMA0.push(m.indicators?.EMA0);
             MA0.push(m.indicators?.MA0);
             MA1.push(m.indicators?.MA1);
+            RSI0.push(m.indicators?.RSI0);
+          } else if (template === 8) {
+            MACD0.push(m.indicators?.MACD0);
+            MACDHIST0.push(m.indicators?.MACDHIST0);
+            MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             RSI0.push(m.indicators?.RSI0);
           }
         });
@@ -224,7 +229,16 @@ function App() {
             MA0.push(null);
             MA1.push(null);
             RSI0.push(null);
+          } else if (template === 8) {
+            MACD0.push(null);
+            MACDHIST0.push(null);
+            MACDSIGNAL0.push(null);
+            RSI0.push(null);
           }
+        }
+        if (template === 0) {
+          setMergedGraphs([]);
+          setSeparateGraphs([]);
         }
         if (template === 1) {
           setMergedGraphs([
@@ -410,7 +424,41 @@ function App() {
               },
             },
           ]);
-          setSeparateGraphs([]);
+          setSeparateGraphs([
+            {
+              x: x,
+              y: RSI0,
+              marker: {
+                color: "blue",
+              },
+              xaxis: "x",
+              yaxis: "y",
+            },
+          ]);
+        } else if (template === 8) {
+          setMergedGraphs([]);
+          setSeparateGraphs([
+            {
+              x: x,
+              y: RSI0,
+              marker: {
+                color: "rgb(126,87,194)",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                // {
+                //   x: x,
+                //   y: RSI0,
+                //   xaxis: "x",
+                //   yaxis: "y",
+                //   marker: {
+                //     color: "black",
+                //   },
+                // },
+              ],
+            },
+          ]);
         }
         console.log("x", x);
         setGraphData({ ...dummy, high, low, open, close, x });
@@ -423,19 +471,6 @@ function App() {
             },
             range: [lowest, highest],
           },
-          // xaxis: {
-          //   ...layout.xaxis,
-          //   // autorange: true,
-          //   // range: [
-          //   //   // new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
-          //   //   // new Date(x[x.length - 1]),
-          //   //   new Date(x[0]), // - candleDefault * time.ms),
-          //   //   new Date(x[x.length - 1]),
-          //   // ],
-          //   // rangeslider: {
-          //   //   visible: false,
-          //   // },
-          // },
         });
       })
       .catch((err) => {
