@@ -79,7 +79,14 @@ export const TempChart = () => {
     yaxis: "y",
   };
 
-  var data = [trace1];
+  var data = [
+    {
+      ...trace1,
+      x: trace1.x.map((m) => {
+        return new Date(m);
+      }),
+    },
+  ];
 
   var layout = {
     dragmode: "zoom",
@@ -93,7 +100,7 @@ export const TempChart = () => {
     xaxis: {
       autorange: true,
       domain: [0, 1],
-      range: ["2017-02-03 12:00", "2017-02-15 12:00"],
+      // range: ["2017-02-03 12:00", "2017-02-15 12:00"],
       rangeslider: {
         visible: false,
         // range: ["2017-01-03 12:00", "2017-02-15 12:00"],
@@ -109,5 +116,6 @@ export const TempChart = () => {
       position: 1,
     },
   };
+  console.log("data", data);
   return <Plot data={data} layout={layout} />;
 };

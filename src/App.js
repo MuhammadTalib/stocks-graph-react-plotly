@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
+import { TempChart } from "./Components/TempChart";
 import { getAllStocks } from "./services/api";
 import { templatesOptions } from "./templates/templates";
 
@@ -9,7 +10,6 @@ const dummy = {
   x: [],
   close: [],
   decreasing: {
-    size: 8,
     fillcolor: "black",
     line: { color: "black", width: 1 },
   },
@@ -43,7 +43,7 @@ function App() {
     margin: {
       r: 10,
       t: 25,
-      b: 0,
+      b: 40,
       l: 60,
     },
     showlegend: false,
@@ -53,7 +53,6 @@ function App() {
       rangeslider: {
         visible: false,
       },
-      title: "Date",
       type: "date",
     },
     yaxis: {
@@ -64,6 +63,7 @@ function App() {
       },
       position: 1,
       side: "bottom",
+      type: "linear",
     },
     opacity: 0.2,
 
@@ -115,7 +115,7 @@ function App() {
   const getDataRequest = (stock, time, template) => {
     setLoader(true);
     let url = `stocks?stock=${stock?.toLowerCase()}&interval=${time.name}`;
-    if (template) {
+    if (template > 0) {
       url = url + `&template=${template}`;
     }
     getAllStocks(url)
@@ -128,40 +128,20 @@ function App() {
         );
         setLoader(false);
         let responseData = [...res?.data?.data];
-        // if (responseData.length < candleDefault) {
-        //   let startNull = candleDefault - responseData.length;
-        //   console.log("startNull", startNull);
-        //   console.log(
-        //     "responseData[0]",
-        //     responseData[0].date,
-        //     new Date(Date.now(new Date(responseData[0].date)))
-        //   );
-        //   console.log(
-        //     "responseData[0]",
-        //     new Date(Date.now(responseData[0].date) - (0 + 1) * time.ms)
-        //   );
-        //   let candle = {};
-        //   Object.entries(responseData[0]).map((m) => {
-        //     candle[m[0]] = m[1];
-        //   });
-        //   console.log("candle", candle);
 
-        //   for (let i = 0; i < startNull; i++) {
-        //     let d = new Date(
-        //       Date.now(responseData[0].date) - (i + 1) * time.ms
-        //     );
-        //     console.log("candle[ ", d);
-        //     responseData.unshift({ ...candle, date: d });
-        //   }
-        // }
         let high = [],
           low = [],
           open = [],
           close = [],
           x = [];
+
         let EMA0 = [];
         let EMA1 = [];
         let EMA2 = [];
+        let EMA3 = [];
+        let EMA4 = [];
+        let EMA5 = [];
+
         let MACD0 = [];
         let MACD1 = [];
         let MACD2 = [];
@@ -169,25 +149,40 @@ function App() {
         let MACDHIST1 = [];
         let MACDSIGNAL2 = [];
 
+        let MA0 = [];
+        let MA1 = [];
+        let RSI0 = [];
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
           open.push(m.open);
           close.push(m.close);
+          x.push(new Date(m.date));
           if (template === 1) {
             EMA0.push(m.indicators?.EMA0);
             EMA1.push(m.indicators?.EMA1);
             EMA2.push(m.indicators?.EMA2);
           } else if (template === 2) {
+            EMA0.push(m.indicators?.EMA0);
+            EMA1.push(m.indicators?.EMA1);
+            EMA2.push(m.indicators?.EMA2);
+            EMA3.push(m.indicators?.EMA3);
+            EMA4.push(m.indicators?.EMA4);
+            EMA5.push(m.indicators?.EMA5);
+          } else if (template === 4) {
             MACD0.push(m.indicators?.MACD0);
             MACD1.push(m.indicators?.MACD1);
             MACD2.push(m.indicators?.MACD2);
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             MACDHIST1.push(m.indicators?.MACDHIST1);
             MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
+          } else if (template === 7) {
+            EMA0.push(m.indicators?.EMA0);
+            MA0.push(m.indicators?.MA0);
+            MA1.push(m.indicators?.MA1);
+            RSI0.push(m.indicators?.RSI0);
           }
-
-          x.push(new Date(m.date));
         });
 
         let lowLowest = Math.min(...low.filter((f) => f !== null));
@@ -198,24 +193,38 @@ function App() {
         let openHighest = Math.max(...close.filter((f) => f !== null));
         let highest = openHighest > highHighest ? openHighest : highHighest;
 
+        console.log("lowest", lowest, highest);
+
         for (let i = 0; i < rightMargin; i++) {
           high.push(null);
           low.push(null);
           open.push(null);
           close.push(null);
+          x.push(new Date(Date.now(x[x.length - 1]) + (i + 1) * time.ms));
           if (template === 1) {
             EMA0.push(null);
             EMA1.push(null);
             EMA2.push(null);
           } else if (template === 2) {
+            EMA0.push(null);
+            EMA1.push(null);
+            EMA2.push(null);
+            EMA3.push(null);
+            EMA4.push(null);
+            EMA5.push(null);
+          } else if (template === 4) {
             MACD0.push(null);
             MACD1.push(null);
             MACD2.push(null);
             MACDSIGNAL0.push(null);
             MACDHIST1.push(null);
             MACDSIGNAL2.push(null);
+          } else if (template === 7) {
+            EMA0.push(null);
+            MA0.push(null);
+            MA1.push(null);
+            RSI0.push(null);
           }
-          x.push(new Date(Date.now(x[x.length - 1]) + (i + 1) * time.ms));
         }
         if (template === 1) {
           setMergedGraphs([
@@ -247,7 +256,67 @@ function App() {
               },
             },
           ]);
+          setSeparateGraphs([]);
         } else if (template === 2) {
+          setMergedGraphs([
+            {
+              x: x,
+              y: EMA0,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA2,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA3,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+            {
+              x: x,
+              y: EMA4,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+            {
+              x: x,
+              y: EMA5,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+          ]);
+          setSeparateGraphs([]);
+        } else if (template === 4) {
+          setMergedGraphs([]);
           setSeparateGraphs([
             {
               x: x,
@@ -311,8 +380,39 @@ function App() {
               ],
             },
           ]);
+        } else if (template === 7) {
+          setMergedGraphs([
+            {
+              x: x,
+              y: EMA0,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: MA0,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "black",
+              },
+            },
+            {
+              x: x,
+              y: MA1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "black",
+              },
+            },
+          ]);
+          setSeparateGraphs([]);
         }
-
+        console.log("x", x);
         setGraphData({ ...dummy, high, low, open, close, x });
         setLayout({
           ...layout,
@@ -321,21 +421,21 @@ function App() {
             rangeslider: {
               visible: false,
             },
-            // range: [114, 218],
             range: [lowest, highest],
           },
-          xaxis: {
-            ...layout.xaxis,
-            range: [
-              // new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
-              // new Date(x[x.length - 1]),
-              new Date(x[0]), // - candleDefault * time.ms),
-              new Date(x[x.length - 1]),
-            ],
-            rangeslider: {
-              visible: false,
-            },
-          },
+          // xaxis: {
+          //   ...layout.xaxis,
+          //   // autorange: true,
+          //   // range: [
+          //   //   // new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
+          //   //   // new Date(x[x.length - 1]),
+          //   //   new Date(x[0]), // - candleDefault * time.ms),
+          //   //   new Date(x[x.length - 1]),
+          //   // ],
+          //   // rangeslider: {
+          //   //   visible: false,
+          //   // },
+          // },
         });
       })
       .catch((err) => {
@@ -373,8 +473,8 @@ function App() {
         />
 
         <div id="fullscreen">
+          {/* <TempChart /> */}
           <Graph
-            time={selectedTime}
             style={style}
             data={{ ...data, type: graphType }}
             layout={layout}
@@ -392,7 +492,7 @@ function App() {
                 margin: {
                   r: 10,
                   t: 1,
-                  b: 0,
+                  b: 40,
                   l: 60,
                 },
                 showlegend: false,
@@ -402,7 +502,6 @@ function App() {
                   rangeslider: {
                     visible: false,
                   },
-                  title: "Date",
                   type: "date",
                 },
                 yaxis: {
