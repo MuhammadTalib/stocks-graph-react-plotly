@@ -7,6 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { getAllStocks } from "../services/api";
 import { Grid, TextField } from "@mui/material";
 import { times, templates } from "../Utils/utils";
+import "../App.css";
 const Header = ({
   handleGrapthType,
   graphType,
@@ -17,6 +18,7 @@ const Header = ({
   handleStockChange,
   selectedTime,
   hanldeSelectedTime,
+  selectedTemp,
 }) => {
   let [stocks, setStocks] = useState([]);
 
@@ -54,13 +56,17 @@ const Header = ({
       </Grid>
       <Grid item xs={1}>
         <ButtonGroup variant="text" aria-label="text button group">
-          <Button onClick={() => handleGrapthType("candlestick")}>
-            <WaterfallChartIcon
-              color={graphType === "candlestick" ? "primary" : "action"}
-            />
+          <Button
+            className={`btn ${graphType !== "ohlc" ? "templateBtn" : ""}`}
+            onClick={() => handleGrapthType("candlestick")}
+          >
+            <WaterfallChartIcon />
           </Button>
-          <Button onClick={() => handleGrapthType("ohlc")}>
-            <BarChartIcon color={graphType !== "ohlc" ? "primary" : "action"} />
+          <Button
+            className={`btn ${graphType === "ohlc" ? "templateBtn" : ""}`}
+            onClick={() => handleGrapthType("ohlc")}
+          >
+            <BarChartIcon />
           </Button>
         </ButtonGroup>
       </Grid>
@@ -70,7 +76,9 @@ const Header = ({
             <Button
               key={i}
               onClick={() => hanldeSelectedTime(t)}
-              color={selectedTime.name !== t.name ? "primary" : "error"}
+              className={`btn ${
+                selectedTime.name === t.name ? "templateBtn" : ""
+              }`}
             >
               {t.name}
             </Button>
@@ -81,7 +89,11 @@ const Header = ({
       <Grid item xs={5}>
         <ButtonGroup variant="text" aria-label="text button group">
           {templates.map((m, i) => (
-            <Button key={i} onClick={() => templateChange(m)}>
+            <Button
+              key={i}
+              onClick={() => templateChange(m)}
+              className={`btn ${selectedTemp.id === m.id ? "templateBtn" : ""}`}
+            >
               {m.name}
             </Button>
           ))}

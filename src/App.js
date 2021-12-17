@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./App.css";
 import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
-import { TempChart } from "./Components/TempChart";
 import { getAllStocks } from "./services/api";
 import { templatesOptions } from "./templates/templates";
 
@@ -23,7 +22,7 @@ const dummy = {
   yaxis: "y",
 };
 const rightMargin = 20;
-const candleDefault = 214 + rightMargin;
+// const candleDefault = 214 + rightMargin;
 
 function App() {
   const [loader, setLoader] = useState(false);
@@ -92,17 +91,17 @@ function App() {
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
-  const addTemplate = (id, template) => {
-    if (selectedTemplates.indexOf(id) !== -1) {
-      setTemplates([...templates.filter((f) => f.templateType !== id)]);
-      setSubGraphs([...subGraphs.filter((f) => f.templateType !== id)]);
-      setSelectedTemplates([...selectedTemplates.filter((f) => f !== id)]);
-    } else {
-      setSelectedTemplates([...selectedTemplates, id]);
-      setTemplates([...templates, ...template.graph]);
-      setSubGraphs([...subGraphs, ...template.subGraphs]);
-    }
-  };
+  // const addTemplate = (id, template) => {
+  //   if (selectedTemplates.indexOf(id) !== -1) {
+  //     setTemplates([...templates.filter((f) => f.templateType !== id)]);
+  //     setSubGraphs([...subGraphs.filter((f) => f.templateType !== id)]);
+  //     setSelectedTemplates([...selectedTemplates.filter((f) => f !== id)]);
+  //   } else {
+  //     setSelectedTemplates([...selectedTemplates, id]);
+  //     setTemplates([...templates, ...template.graph]);
+  //     setSubGraphs([...subGraphs, ...template.subGraphs]);
+  //   }
+  // };
 
   const [selectedStock, setSelectStock] = useState("MMM");
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
@@ -194,6 +193,12 @@ function App() {
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             MACDHIST1.push(m.indicators?.MACDHIST1);
             MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
+            SMA0.push(m.indicators?.SMA0);
+            SMA1.push(m.indicators?.SMA1);
+            SMA2.push(m.indicators?.SMA2);
+            SMA3.push(m.indicators?.SMA3);
+            stochd0.push(m.indicators?.stochd0);
+            stochk0.push(m.indicators?.stochk0);
           } else if (template === 5) {
             MACD0.push(m.indicators?.MACD0);
             MACD1.push(m.indicators?.MACD1);
@@ -210,16 +215,21 @@ function App() {
             SMA3.push(m.indicators?.SMA3);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
+          } else if (template === 6) {
           } else if (template === 7) {
             EMA0.push(m.indicators?.EMA0);
             MA0.push(m.indicators?.MA0);
             MA1.push(m.indicators?.MA1);
             RSI0.push(m.indicators?.RSI0);
+            stochd0.push(m.indicators?.stochd0);
+            stochk0.push(m.indicators?.stochk0);
           } else if (template === 8) {
             MACD0.push(m.indicators?.MACD0);
             MACDHIST0.push(m.indicators?.MACDHIST0);
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             RSI0.push(m.indicators?.RSI0);
+            stochd0.push(m.indicators?.stochd0);
+            stochk0.push(m.indicators?.stochk0);
           }
         });
 
@@ -261,6 +271,12 @@ function App() {
             MACDSIGNAL0.push(null);
             MACDHIST1.push(null);
             MACDSIGNAL2.push(null);
+            SMA0.push(null);
+            SMA1.push(null);
+            SMA2.push(null);
+            SMA3.push(null);
+            stochd0.push(null);
+            stochk0.push(null);
           } else if (template === 5) {
             MACD0.push(null);
             MACD1.push(null);
@@ -282,11 +298,16 @@ function App() {
             MA0.push(null);
             MA1.push(null);
             RSI0.push(null);
+            stochd0.push(null);
+            stochk0.push(null);
+          } else if (template === 6) {
           } else if (template === 8) {
             MACD0.push(null);
             MACDHIST0.push(null);
             MACDSIGNAL0.push(null);
             RSI0.push(null);
+            stochd0.push(null);
+            stochk0.push(null);
           }
         }
         if (template === 0) {
@@ -415,7 +436,44 @@ function App() {
             },
           ]);
         } else if (template === 4) {
-          setMergedGraphs([]);
+          setMergedGraphs([
+            {
+              x: x,
+              y: SMA0,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "rgb(255,173,89)",
+              },
+            },
+            {
+              x: x,
+              y: SMA1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "rgb(253,91,252)",
+              },
+            },
+            {
+              x: x,
+              y: SMA2,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "rgb(172,91,170)",
+              },
+            },
+            {
+              x: x,
+              y: SMA3,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "rgb(89,89,89)",
+              },
+            },
+          ]);
           setSeparateGraphs([
             {
               x: x,
@@ -460,16 +518,77 @@ function App() {
             },
             {
               x: x,
-              y: MACD2,
+              y: stochd0,
+              marker: {
+                color: "rgb(153,42,173)",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: stochk0,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "rgb(13,0,255)",
+                  },
+                },
+              ],
+            },
+          ]);
+        } else if (template === 5) {
+          setMergedGraphs([
+            {
+              x: x,
+              y: SMA0,
               xaxis: "x",
               yaxis: "y",
               marker: {
                 color: "blue",
               },
+            },
+            {
+              x: x,
+              y: SMA1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "rgb(255,0,56)",
+              },
+            },
+            {
+              x: x,
+              y: SMA2,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "rgb(13,190,58)",
+              },
+            },
+            {
+              x: x,
+              y: SMA3,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "black",
+              },
+            },
+          ]);
+          setSeparateGraphs([
+            {
+              x: x,
+              y: MACD0,
+              marker: {
+                color: "blue",
+              },
+              xaxis: "x",
+              yaxis: "y",
               templates: [
                 {
                   x: x,
-                  y: MACDSIGNAL2,
+                  y: MACDSIGNAL0,
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -478,7 +597,51 @@ function App() {
                 },
               ],
             },
+            {
+              x: x,
+              y: MACD0,
+              marker: {
+                color: "blue",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: MACDSIGNAL0,
+                  type: "bar",
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: MACDSIGNAL0.map((m, i) => (m > 0 ? "green" : "red")),
+                  },
+                },
+              ],
+            },
+            {
+              x: x,
+              y: stochd0,
+              marker: {
+                color: "rgb(153,42,173)",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: stochk0,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "rgb(13,0,255)",
+                  },
+                },
+              ],
+            },
           ]);
+        } else if (template === 6) {
+          setMergedGraphs([]);
+          setSeparateGraphs([]);
         } else if (template === 7) {
           setMergedGraphs([
             {
@@ -519,6 +682,26 @@ function App() {
               xaxis: "x",
               yaxis: "y",
             },
+            {
+              x: x,
+              y: stochd0,
+              marker: {
+                color: "rgb(153,42,173)",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: stochk0,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "rgb(13,0,255)",
+                  },
+                },
+              ],
+            },
           ]);
         } else if (template === 8) {
           setMergedGraphs([]);
@@ -531,6 +714,56 @@ function App() {
               },
               xaxis: "x",
               yaxis: "y",
+            },
+            {
+              x: x,
+              y: stochd0,
+              marker: {
+                color: "rgb(255,109,0)",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: stochk0,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "rgb(43,97,255)",
+                  },
+                },
+              ],
+            },
+            {
+              x: x,
+              y: MACD0,
+              marker: {
+                color: "rgb(43,97,255)",
+              },
+              xaxis: "x",
+              yaxis: "y",
+              templates: [
+                {
+                  x: x,
+                  y: MACDSIGNAL0,
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: "rgb(255,109,0)",
+                  },
+                },
+                {
+                  x: x,
+                  y: MACDHIST0,
+                  type: "bar",
+                  xaxis: "x",
+                  yaxis: "y",
+                  marker: {
+                    color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
+                  },
+                },
+              ],
             },
           ]);
         } else {
@@ -552,6 +785,9 @@ function App() {
       })
       .catch((err) => {
         setLoader(false);
+        setMergedGraphs([]);
+        setSeparateGraphs([]);
+        setGraphData(null);
       });
   };
 
@@ -588,6 +824,7 @@ function App() {
           selectedTime={selectedTime}
           hanldeSelectedTime={hanldeSelectedTime}
           handleStockChange={handleStockChange}
+          selectedTemp={selectedTemp}
         />
 
         <div id="fullscreen">

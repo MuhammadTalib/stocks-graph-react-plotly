@@ -64,3 +64,15 @@
   width: 100%;
   text-align: center;
 }
+.templateBtn {
+  background-color: #262626 !important;
+  color: white !important;
+}
+.btn {
+  border-radius: 100px !important;
+  font-size: 10px !important;
+  border: 1px solid #262626 !important;
+  height: 40px;
+  margin: 2px !important;
+  color: #262626;
+}
