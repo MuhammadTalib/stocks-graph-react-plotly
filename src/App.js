@@ -44,7 +44,7 @@ function App() {
       r: 10,
       t: 25,
       b: 40,
-      l: 60,
+      l: 20,
     },
     showlegend: false,
     xaxis: {
@@ -103,12 +103,10 @@ function App() {
       setSubGraphs([...subGraphs, ...template.subGraphs]);
     }
   };
-  const templateChange = (tempData) => {
-    getDataRequest(selectedStock, selectedTime, tempData.id);
-  };
 
   const [selectedStock, setSelectStock] = useState("MMM");
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
+  const [selectedTemp, setSelectedTemp] = useState(0);
 
   const [data, setGraphData] = useState({ ...dummy });
 
@@ -145,13 +143,28 @@ function App() {
         let MACD0 = [];
         let MACD1 = [];
         let MACD2 = [];
-        let MACDSIGNAL0 = [];
-        let MACDHIST1 = [];
-        let MACDSIGNAL2 = [];
         let MACDHIST0 = [];
+        let MACDHIST1 = [];
+        let MACDHIST2 = [];
+        let MACDSIGNAL0 = [];
+        let MACDSIGNAL1 = [];
+        let MACDSIGNAL2 = [];
+
+        let SMA0 = [];
+        let SMA1 = [];
+        let SMA2 = [];
+        let SMA3 = [];
+
+        let stochd0 = [];
+        let stochk0 = [];
+
         let MA0 = [];
         let MA1 = [];
         let RSI0 = [];
+
+        let R0 = [];
+        let R1 = [];
+        let donchian0 = [];
 
         responseData?.forEach((m) => {
           high.push(m.high);
@@ -170,6 +183,10 @@ function App() {
             EMA3.push(m.indicators?.EMA3);
             EMA4.push(m.indicators?.EMA4);
             EMA5.push(m.indicators?.EMA5);
+          } else if (template === 3 && m.indicators) {
+            R0.push(m.indicators["%R0"]);
+            R1.push(m.indicators["%R1"]);
+            donchian0.push(m.indicators?.donchian0);
           } else if (template === 4) {
             MACD0.push(m.indicators?.MACD0);
             MACD1.push(m.indicators?.MACD1);
@@ -177,6 +194,22 @@ function App() {
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             MACDHIST1.push(m.indicators?.MACDHIST1);
             MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
+          } else if (template === 5) {
+            MACD0.push(m.indicators?.MACD0);
+            MACD1.push(m.indicators?.MACD1);
+            MACD2.push(m.indicators?.MACD2);
+            MACDHIST0.push(m.indicators?.MACDHIST0);
+            MACDHIST1.push(m.indicators?.MACDHIST1);
+            MACDHIST2.push(m.indicators?.MACDHIST2);
+            MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
+            MACDSIGNAL1.push(m.indicators?.MACDSIGNAL1);
+            MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
+            SMA0.push(m.indicators?.SMA0);
+            SMA1.push(m.indicators?.SMA1);
+            SMA2.push(m.indicators?.SMA2);
+            SMA3.push(m.indicators?.SMA3);
+            stochd0.push(m.indicators?.stochd0);
+            stochk0.push(m.indicators?.stochk0);
           } else if (template === 7) {
             EMA0.push(m.indicators?.EMA0);
             MA0.push(m.indicators?.MA0);
@@ -217,6 +250,10 @@ function App() {
             EMA3.push(null);
             EMA4.push(null);
             EMA5.push(null);
+          } else if (template === 3) {
+            R0.push(null);
+            R1.push(null);
+            donchian0.push(null);
           } else if (template === 4) {
             MACD0.push(null);
             MACD1.push(null);
@@ -224,6 +261,22 @@ function App() {
             MACDSIGNAL0.push(null);
             MACDHIST1.push(null);
             MACDSIGNAL2.push(null);
+          } else if (template === 5) {
+            MACD0.push(null);
+            MACD1.push(null);
+            MACD2.push(null);
+            MACDHIST0.push(null);
+            MACDHIST1.push(null);
+            MACDHIST2.push(null);
+            MACDSIGNAL0.push(null);
+            MACDSIGNAL1.push(null);
+            MACDSIGNAL2.push(null);
+            SMA0.push(null);
+            SMA1.push(null);
+            SMA2.push(null);
+            SMA3.push(null);
+            stochd0.push(null);
+            stochk0.push(null);
           } else if (template === 7) {
             EMA0.push(null);
             MA0.push(null);
@@ -329,6 +382,38 @@ function App() {
             },
           ]);
           setSeparateGraphs([]);
+        } else if (template === 3) {
+          setMergedGraphs([
+            {
+              x: x,
+              y: donchian0,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+          ]);
+          setSeparateGraphs([
+            {
+              x: x,
+              y: R0,
+              marker: {
+                color: "blue",
+              },
+              xaxis: "x",
+              yaxis: "y",
+            },
+            {
+              x: x,
+              y: R1,
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+          ]);
         } else if (template === 4) {
           setMergedGraphs([]);
           setSeparateGraphs([
@@ -446,19 +531,11 @@ function App() {
               },
               xaxis: "x",
               yaxis: "y",
-              templates: [
-                // {
-                //   x: x,
-                //   y: RSI0,
-                //   xaxis: "x",
-                //   yaxis: "y",
-                //   marker: {
-                //     color: "black",
-                //   },
-                // },
-              ],
             },
           ]);
+        } else {
+          setMergedGraphs([]);
+          setSeparateGraphs([]);
         }
         console.log("x", x);
         setGraphData({ ...dummy, high, low, open, close, x });
@@ -484,13 +561,19 @@ function App() {
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
-    getDataRequest(stock, selectedTime);
+    getDataRequest(stock, selectedTime, selectedTemp.id);
   };
 
   const hanldeSelectedTime = (time) => {
     setSelectTime(time);
-    getDataRequest(selectedStock, time);
+    getDataRequest(selectedStock, time, selectedTemp.id);
   };
+
+  const templateChange = (tempData) => {
+    setSelectedTemp(tempData);
+    getDataRequest(selectedStock, selectedTime, tempData.id);
+  };
+
   return (
     <>
       {loader ? <div className="loader"></div> : <></>}
@@ -516,44 +599,45 @@ function App() {
             templates={mergedGraphs.length ? [...mergedGraphs] : []}
             loader={loader}
           />
-          {separateGraphs.map((m) => (
-            <Graph
-              key={m}
-              templates={m.templates}
-              style={{ width: "100%" }}
-              data={{ ...m }}
-              layout={{
-                dragmode: "zoom",
-                margin: {
-                  r: 10,
-                  t: 1,
-                  b: 40,
-                  l: 60,
-                },
-                showlegend: false,
-                xaxis: {
-                  domain: [0, 1],
-                  autorange: true,
-                  rangeslider: {
-                    visible: false,
+          {!loader &&
+            separateGraphs.map((m) => (
+              <Graph
+                key={m}
+                templates={m.templates}
+                style={{ width: "100%" }}
+                data={{ ...m }}
+                layout={{
+                  dragmode: "zoom",
+                  margin: {
+                    r: 10,
+                    t: 1,
+                    b: 40,
+                    l: 20,
                   },
-                  type: "date",
-                },
-                yaxis: {
-                  domain: [0, 1],
-                  autorange: true,
-                  rangeslider: {
-                    visible: false,
+                  showlegend: false,
+                  xaxis: {
+                    domain: [0, 1],
+                    autorange: true,
+                    rangeslider: {
+                      visible: false,
+                    },
+                    type: "date",
                   },
-                  position: 1,
-                  side: "bottom",
-                },
-                opacity: 0.2,
-                autosize: true,
-                height: 150,
-              }}
-            />
-          ))}
+                  yaxis: {
+                    domain: [0, 1],
+                    autorange: true,
+                    rangeslider: {
+                      visible: false,
+                    },
+                    position: 1,
+                    side: "bottom",
+                  },
+                  opacity: 0.2,
+                  autosize: true,
+                  height: 150,
+                }}
+              />
+            ))}
         </div>
       </div>
     </>
