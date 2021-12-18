@@ -7,6 +7,7 @@ import { templatesOptions } from "./templates/templates";
 
 const dummy = {
   x: [],
+  name: "main",
   close: [],
   decreasing: {
     fillcolor: "black",
@@ -22,7 +23,7 @@ const dummy = {
   yaxis: "y",
 };
 const rightMargin = 20;
-// const candleDefault = 214 + rightMargin;
+const candleDefault = 214 + rightMargin;
 
 function App() {
   const [loader, setLoader] = useState(false);
@@ -45,7 +46,8 @@ function App() {
       b: 40,
       l: 20,
     },
-    showlegend: false,
+    showlegend: true,
+    legend: { orientation: "h" },
     xaxis: {
       domain: [0, 1],
       range: [],
@@ -56,7 +58,7 @@ function App() {
     },
     yaxis: {
       domain: [0, 1],
-      // autorange: true,
+      autorange: true,
       rangeslider: {
         visible: false,
       },
@@ -313,14 +315,15 @@ function App() {
         if (template === 0) {
           setMergedGraphs([]);
           setSeparateGraphs([]);
-        }
-        if (template === 1) {
+        } else if (template === 1) {
           setMergedGraphs([
             {
               x: x,
               y: EMA0,
               xaxis: "x",
+              name: "EMA0",
               yaxis: "y",
+              type: "scatter",
               marker: {
                 color: "blue",
               },
@@ -328,7 +331,9 @@ function App() {
             {
               x: x,
               y: EMA1,
+              name: "EMA1",
               xaxis: "x",
+              type: "scatter",
               yaxis: "y",
               marker: {
                 color: "blue",
@@ -337,6 +342,8 @@ function App() {
             {
               x: x,
               y: EMA2,
+              name: "EMA2",
+              type: "scatter",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -350,6 +357,7 @@ function App() {
             {
               x: x,
               y: EMA0,
+              name: "EMA0",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -359,6 +367,7 @@ function App() {
             {
               x: x,
               y: EMA1,
+              name: "EMA1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -368,6 +377,7 @@ function App() {
             {
               x: x,
               y: EMA2,
+              name: "EMA2",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -377,6 +387,7 @@ function App() {
             {
               x: x,
               y: EMA3,
+              name: "EMA3",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -386,6 +397,7 @@ function App() {
             {
               x: x,
               y: EMA4,
+              name: "EMA4",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -395,6 +407,7 @@ function App() {
             {
               x: x,
               y: EMA5,
+              name: "EMA5",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -408,6 +421,7 @@ function App() {
             {
               x: x,
               y: donchian0,
+              name: "DONCHAIN",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -419,6 +433,7 @@ function App() {
             {
               x: x,
               y: R0,
+              name: "%R0",
               marker: {
                 color: "blue",
               },
@@ -428,6 +443,7 @@ function App() {
             {
               x: x,
               y: R1,
+              name: "%R1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -440,6 +456,7 @@ function App() {
             {
               x: x,
               y: SMA0,
+              name: "SMA0",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -449,6 +466,7 @@ function App() {
             {
               x: x,
               y: SMA1,
+              name: "SMA1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -458,6 +476,7 @@ function App() {
             {
               x: x,
               y: SMA2,
+              name: "SMA2",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -467,6 +486,7 @@ function App() {
             {
               x: x,
               y: SMA3,
+              name: "SMA3",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -478,6 +498,7 @@ function App() {
             {
               x: x,
               y: MACD0,
+              name: "MACD0",
               marker: {
                 color: "blue",
               },
@@ -487,6 +508,7 @@ function App() {
                 {
                   x: x,
                   y: MACDSIGNAL0,
+                  name: "MACD SIGNAL",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -498,6 +520,7 @@ function App() {
             {
               x: x,
               y: MACD1,
+              name: "MACD1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -507,6 +530,7 @@ function App() {
                 {
                   x: x,
                   y: MACDHIST1,
+                  name: "MACD HIST",
                   type: "bar",
                   xaxis: "x",
                   yaxis: "y",
@@ -519,6 +543,7 @@ function App() {
             {
               x: x,
               y: stochd0,
+              name: "stochd",
               marker: {
                 color: "rgb(153,42,173)",
               },
@@ -528,6 +553,7 @@ function App() {
                 {
                   x: x,
                   y: stochk0,
+                  name: "stochk",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -542,6 +568,7 @@ function App() {
             {
               x: x,
               y: SMA0,
+              name: "SMA0",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -551,6 +578,7 @@ function App() {
             {
               x: x,
               y: SMA1,
+              name: "SMA1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -560,6 +588,7 @@ function App() {
             {
               x: x,
               y: SMA2,
+              name: "SMA2",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -569,6 +598,7 @@ function App() {
             {
               x: x,
               y: SMA3,
+              name: "SMA3",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -580,6 +610,7 @@ function App() {
             {
               x: x,
               y: MACD0,
+              name: "MACD0",
               marker: {
                 color: "blue",
               },
@@ -589,6 +620,7 @@ function App() {
                 {
                   x: x,
                   y: MACDSIGNAL0,
+                  name: "MACD SIGNAL",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -600,6 +632,7 @@ function App() {
             {
               x: x,
               y: MACD0,
+              name: "MACD0",
               marker: {
                 color: "blue",
               },
@@ -609,6 +642,7 @@ function App() {
                 {
                   x: x,
                   y: MACDSIGNAL0,
+                  name: "MACD SIGNAL",
                   type: "bar",
                   xaxis: "x",
                   yaxis: "y",
@@ -621,6 +655,7 @@ function App() {
             {
               x: x,
               y: stochd0,
+              name: "stochd",
               marker: {
                 color: "rgb(153,42,173)",
               },
@@ -630,6 +665,7 @@ function App() {
                 {
                   x: x,
                   y: stochk0,
+                  name: "stochk",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -647,6 +683,7 @@ function App() {
             {
               x: x,
               y: EMA0,
+              name: "EMA0",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -656,6 +693,7 @@ function App() {
             {
               x: x,
               y: MA0,
+              name: "MA0",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -665,6 +703,7 @@ function App() {
             {
               x: x,
               y: MA1,
+              name: "MA1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -676,6 +715,7 @@ function App() {
             {
               x: x,
               y: RSI0,
+              name: "RSI0",
               marker: {
                 color: "blue",
               },
@@ -685,6 +725,7 @@ function App() {
             {
               x: x,
               y: stochd0,
+              name: "stochd",
               marker: {
                 color: "rgb(153,42,173)",
               },
@@ -694,6 +735,7 @@ function App() {
                 {
                   x: x,
                   y: stochk0,
+                  name: "stochk",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -709,6 +751,7 @@ function App() {
             {
               x: x,
               y: RSI0,
+              name: "RSI0",
               marker: {
                 color: "rgb(126,87,194)",
               },
@@ -718,6 +761,7 @@ function App() {
             {
               x: x,
               y: stochd0,
+              name: "stochd",
               marker: {
                 color: "rgb(255,109,0)",
               },
@@ -727,6 +771,7 @@ function App() {
                 {
                   x: x,
                   y: stochk0,
+                  name: "stochk",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -738,6 +783,7 @@ function App() {
             {
               x: x,
               y: MACD0,
+              name: "MACD0",
               marker: {
                 color: "rgb(43,97,255)",
               },
@@ -747,6 +793,7 @@ function App() {
                 {
                   x: x,
                   y: MACDSIGNAL0,
+                  name: "MACD SIGNAL",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -757,6 +804,7 @@ function App() {
                   x: x,
                   y: MACDHIST0,
                   type: "bar",
+                  name: "MACD HIST",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
@@ -770,16 +818,25 @@ function App() {
           setMergedGraphs([]);
           setSeparateGraphs([]);
         }
-        console.log("x", x);
         setGraphData({ ...dummy, high, low, open, close, x });
         setLayout({
           ...layout,
+          xaxis: {
+            ...layout.xaxis,
+            // range: [
+            //   new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
+            //   new Date(x[x.length - 1]),
+            //   // new Date(x[0]), // - candleDefault * time.ms),
+            //   // new Date(x[x.length - 1]),
+            // ],
+          },
           yaxis: {
             ...layout.yaxis,
             rangeslider: {
               visible: false,
             },
-            range: [lowest, highest],
+            autorange: true,
+            // range: [lowest, highest],
           },
         });
       })
@@ -828,7 +885,6 @@ function App() {
         />
 
         <div id="fullscreen">
-          {/* <TempChart /> */}
           <Graph
             style={style}
             data={{ ...data, type: graphType }}
@@ -851,7 +907,8 @@ function App() {
                     b: 40,
                     l: 20,
                   },
-                  showlegend: false,
+                  showlegend: true,
+                  legend: { orientation: "h" },
                   xaxis: {
                     domain: [0, 1],
                     autorange: true,
@@ -871,7 +928,7 @@ function App() {
                   },
                   opacity: 0.2,
                   autosize: true,
-                  height: 150,
+                  height: 190,
                 }}
               />
             ))}
