@@ -319,7 +319,10 @@ function App() {
           setMergedGraphs([
             {
               x: x,
-              y: EMA0,
+              y: EMA0.map((m) => {
+                if (!m) return null;
+                else return m;
+              }),
               xaxis: "x",
               name: "EMA0",
               yaxis: "y",
@@ -330,7 +333,10 @@ function App() {
             },
             {
               x: x,
-              y: EMA1,
+              y: EMA1.map((m) => {
+                if (!m) return null;
+                else return m;
+              }),
               name: "EMA1",
               xaxis: "x",
               type: "scatter",
@@ -341,7 +347,10 @@ function App() {
             },
             {
               x: x,
-              y: EMA2,
+              y: EMA2.map((m) => {
+                if (!m) return null;
+                else return m;
+              }),
               name: "EMA2",
               type: "scatter",
               xaxis: "x",
@@ -434,6 +443,7 @@ function App() {
               x: x,
               y: R0,
               name: "%R0",
+              type: "bar",
               marker: {
                 color: "blue",
               },
@@ -443,6 +453,7 @@ function App() {
             {
               x: x,
               y: R1,
+              type: "bar",
               name: "%R1",
               xaxis: "x",
               yaxis: "y",
@@ -519,26 +530,14 @@ function App() {
             },
             {
               x: x,
-              y: MACD1,
-              name: "MACD1",
+              y: MACDHIST1,
+              name: "MACD HIST",
+              type: "bar",
               xaxis: "x",
               yaxis: "y",
               marker: {
-                color: "black",
+                color: MACDHIST1.map((m, i) => (m > 0 ? "green" : "red")), //"black",
               },
-              templates: [
-                {
-                  x: x,
-                  y: MACDHIST1,
-                  name: "MACD HIST",
-                  type: "bar",
-                  xaxis: "x",
-                  yaxis: "y",
-                  marker: {
-                    color: MACDHIST1.map((m, i) => (m > 0 ? "green" : "red")), //"black",
-                  },
-                },
-              ],
             },
             {
               x: x,
