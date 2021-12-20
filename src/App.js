@@ -23,15 +23,15 @@ const dummy = {
   yaxis: "y",
 };
 const rightMargin = 20;
-const candleDefault = 214 + rightMargin;
+// const candleDefault = 214 + rightMargin;
 
 function App() {
   const [loader, setLoader] = useState(false);
 
   const [graphType, setGraphType] = useState("candlestick");
-  const [subGraphs, setSubGraphs] = useState([]);
-  const [selectedTemplates, setSelectedTemplates] = useState([]);
-  const [templates, setTemplates] = useState([]);
+  // const [subGraphs, setSubGraphs] = useState([]);
+  // const [selectedTemplates, setSelectedTemplates] = useState([]);
+  // const [templates, setTemplates] = useState([]);
 
   const [mergedGraphs, setMergedGraphs] = useState([]);
   const [separateGraphs, setSeparateGraphs] = useState([]);
