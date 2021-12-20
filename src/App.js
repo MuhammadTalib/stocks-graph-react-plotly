@@ -640,13 +640,13 @@ function App() {
               templates: [
                 {
                   x: x,
-                  y: MACDSIGNAL0,
-                  name: "MACD SIGNAL",
+                  y: MACDHIST0,
+                  name: "MACDHIST",
                   type: "bar",
                   xaxis: "x",
                   yaxis: "y",
                   marker: {
-                    color: MACDSIGNAL0.map((m, i) => (m > 0 ? "green" : "red")),
+                    color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
                   },
                 },
               ],
