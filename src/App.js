@@ -29,9 +29,6 @@ function App() {
   const [loader, setLoader] = useState(false);
 
   const [graphType, setGraphType] = useState("candlestick");
-  // const [subGraphs, setSubGraphs] = useState([]);
-  // const [selectedTemplates, setSelectedTemplates] = useState([]);
-  // const [templates, setTemplates] = useState([]);
 
   const [mergedGraphs, setMergedGraphs] = useState([]);
   const [separateGraphs, setSeparateGraphs] = useState([]);
@@ -167,6 +164,10 @@ function App() {
         let R1 = [];
         let donchian0 = [];
 
+        let     donchian_price0=[]
+        let donchian_min0=[]
+        let donchian_max0=[]
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
@@ -187,6 +188,9 @@ function App() {
           } else if (template === 3 && m.indicators) {
             R0.push(m.indicators["%R0"]);
             R1.push(m.indicators["%R1"]);
+            donchian_price0.push(m.indicators["donchian_price0"])
+            donchian_min0.push(m.indicators["donchian_min0"])
+            donchian_max0.push(m.indicators["donchian_max0"])
             donchian0.push(m.indicators?.donchian0);
           } else if (template === 4) {
             MACD0.push(m.indicators?.MACD0);
@@ -266,6 +270,9 @@ function App() {
             R0.push(null);
             R1.push(null);
             donchian0.push(null);
+            donchian_price0.push(null)
+            donchian_min0.push(null)
+            donchian_max0.push(null)
           } else if (template === 4) {
             MACD0.push(null);
             MACD1.push(null);
@@ -429,13 +436,42 @@ function App() {
           setMergedGraphs([
             {
               x: x,
-              y: donchian0,
+              y: donchian_price0,
               name: "DONCHAIN",
               xaxis: "x",
               yaxis: "y",
               marker: {
                 color: "blue",
+                size: 12
               },
+              line: {
+                width: 1
+              }
+            },
+            {
+              x: x,
+              y: donchian_min0,
+              name: "donchian min",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+
+              },line: {
+                width: 2
+              }
+            },
+            {
+              x: x,
+              y: donchian_max0,
+              name: "donchian max",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },line: {
+                width: 2
+              }
             },
           ]);
           setSeparateGraphs([
@@ -443,7 +479,6 @@ function App() {
               x: x,
               y: R0,
               name: "%R0",
-              type: "bar",
               marker: {
                 color: "blue",
               },
@@ -453,7 +488,6 @@ function App() {
             {
               x: x,
               y: R1,
-              type: "bar",
               name: "%R1",
               xaxis: "x",
               yaxis: "y",
