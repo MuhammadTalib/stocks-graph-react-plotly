@@ -39,11 +39,12 @@ const Header = ({
       style={{ padding: "10px" }}
     >
       <Grid item xs={2}>
-        <Autocomplete
+        {/* <Autocomplete
           value={selectedStock}
-          disableClearable
+          // disableClearable
           // textInputProps={{ clearButtonMode: "hidden" }}
           onChange={(event, newValue) => {
+            console.log("new Ba", newValue);
             handleStockChange(newValue);
           }}
           fullWidth
@@ -51,6 +52,30 @@ const Header = ({
           options={stocks}
           renderInput={(params) => (
             <TextField {...params} variant="standard" label="Stock" />
+          )}
+        /> */}
+        <Autocomplete
+          onChange={(event, newValue) => {
+            handleStockChange(newValue);
+          }}
+          fullWidth
+          id="free-solo-2-demo"
+          disableClearable={true}
+          options={stocks}
+          onClose={() => {
+            console.log("aytr");
+          }}
+          defaultValue={stocks.find((v) => v[0])}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Stock"
+              variant="standard"
+              InputProps={{
+                ...params.InputProps,
+                type: "search",
+              }}
+            />
           )}
         />
       </Grid>
