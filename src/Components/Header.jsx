@@ -65,6 +65,7 @@ const Header = ({
           onClose={() => {
             console.log("aytr");
           }}
+          value={selectedStock}
           defaultValue={stocks.find((v) => v[0])}
           renderInput={(params) => (
             <TextField
