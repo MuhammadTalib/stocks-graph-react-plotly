@@ -157,6 +157,9 @@ function App() {
         let donchian_min0 = [];
         let donchian_max0 = [];
 
+        let HIST0 = [];
+        let HIST1 = [];
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
@@ -225,6 +228,15 @@ function App() {
             RSI0.push(m.indicators?.RSI0);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
+          } else if (template === 9) {
+            EMA0.push(m.indicators?.EMA0);
+            EMA1.push(m.indicators?.EMA1);
+            EMA2.push(m.indicators?.EMA2);
+            EMA3.push(m.indicators?.EMA3);
+            EMA4.push(m.indicators?.EMA4);
+            EMA5.push(m.indicators?.EMA5);
+            HIST0.push(m.indicators?.HIST0);
+            HIST1.push(m.indicators?.HIST1);
           }
         });
 
@@ -314,7 +326,7 @@ function App() {
             EMA4.push(null);
             EMA5.push(null);
             HIST0.push(null);
-            HIST0.push(null);
+            HIST1.push(null);
           }
         }
         if (template === 0) {
@@ -844,6 +856,97 @@ function App() {
                   },
                 },
               ],
+            },
+          ]);
+        } else if (template === 9) {
+          setMergedGraphs([
+            {
+              x: x,
+              y: EMA0,
+              name: "EMA0",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA1,
+              name: "EMA1",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA2,
+              name: "EMA2",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "blue",
+              },
+            },
+            {
+              x: x,
+              y: EMA3,
+              name: "EMA3",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+            {
+              x: x,
+              y: EMA4,
+              name: "EMA4",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+            {
+              x: x,
+              y: EMA5,
+              name: "EMA5",
+              xaxis: "x",
+              yaxis: "y",
+              marker: {
+                color: "red",
+              },
+            },
+          ]);
+          setSeparateGraphs([
+            {
+              x: x,
+              y: HIST0,
+              type: "bar",
+              name: "HIST0",
+              marker: {
+                color: HIST0.map((m, i) =>
+                  m > 0 ? "rgb(38,165,154)" : "rgb(254,82,82)"
+                ), //"black",
+              },
+              xaxis: "x",
+              yaxis: "y",
+            },
+            {
+              x: x,
+              y: HIST1,
+              type: "bar",
+              marker: {
+                color: HIST1.map((m, i) =>
+                  m > 0 ? "rgb(38,165,154)" : "rgb(254,82,82)"
+                ), //"black",
+              },
+              name: "HIST1",
+              xaxis: "x",
+              yaxis: "y",
             },
           ]);
         } else {
