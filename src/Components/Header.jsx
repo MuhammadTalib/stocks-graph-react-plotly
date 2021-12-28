@@ -39,21 +39,6 @@ const Header = ({
       style={{ padding: "10px" }}
     >
       <Grid item xs={2}>
-        {/* <Autocomplete
-          value={selectedStock}
-          // disableClearable
-          // textInputProps={{ clearButtonMode: "hidden" }}
-          onChange={(event, newValue) => {
-            console.log("new Ba", newValue);
-            handleStockChange(newValue);
-          }}
-          fullWidth
-          inputValue={selectedStock}
-          options={stocks}
-          renderInput={(params) => (
-            <TextField {...params} variant="standard" label="Stock" />
-          )}
-        /> */}
         <Autocomplete
           onChange={(event, newValue) => {
             handleStockChange(newValue);

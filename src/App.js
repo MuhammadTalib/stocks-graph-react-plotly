@@ -90,17 +90,6 @@ function App() {
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
-  // const addTemplate = (id, template) => {
-  //   if (selectedTemplates.indexOf(id) !== -1) {
-  //     setTemplates([...templates.filter((f) => f.templateType !== id)]);
-  //     setSubGraphs([...subGraphs.filter((f) => f.templateType !== id)]);
-  //     setSelectedTemplates([...selectedTemplates.filter((f) => f !== id)]);
-  //   } else {
-  //     setSelectedTemplates([...selectedTemplates, id]);
-  //     setTemplates([...templates, ...template.graph]);
-  //     setSubGraphs([...subGraphs, ...template.subGraphs]);
-  //   }
-  // };
 
   const [selectedStock, setSelectStock] = useState("MMM");
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
@@ -164,9 +153,9 @@ function App() {
         let R1 = [];
         let donchian0 = [];
 
-        let     donchian_price0=[]
-        let donchian_min0=[]
-        let donchian_max0=[]
+        let donchian_price0 = [];
+        let donchian_min0 = [];
+        let donchian_max0 = [];
 
         responseData?.forEach((m) => {
           high.push(m.high);
@@ -188,9 +177,9 @@ function App() {
           } else if (template === 3 && m.indicators) {
             R0.push(m.indicators["%R0"]);
             R1.push(m.indicators["%R1"]);
-            donchian_price0.push(m.indicators["donchian_price0"])
-            donchian_min0.push(m.indicators["donchian_min0"])
-            donchian_max0.push(m.indicators["donchian_max0"])
+            donchian_price0.push(m.indicators["donchian_price0"]);
+            donchian_min0.push(m.indicators["donchian_min0"]);
+            donchian_max0.push(m.indicators["donchian_max0"]);
             donchian0.push(m.indicators?.donchian0);
           } else if (template === 4) {
             MACD0.push(m.indicators?.MACD0);
@@ -270,9 +259,9 @@ function App() {
             R0.push(null);
             R1.push(null);
             donchian0.push(null);
-            donchian_price0.push(null)
-            donchian_min0.push(null)
-            donchian_max0.push(null)
+            donchian_price0.push(null);
+            donchian_min0.push(null);
+            donchian_max0.push(null);
           } else if (template === 4) {
             MACD0.push(null);
             MACD1.push(null);
@@ -317,6 +306,15 @@ function App() {
             RSI0.push(null);
             stochd0.push(null);
             stochk0.push(null);
+          } else if (template === 9) {
+            EMA0.push(null);
+            EMA1.push(null);
+            EMA2.push(null);
+            EMA3.push(null);
+            EMA4.push(null);
+            EMA5.push(null);
+            HIST0.push(null);
+            HIST0.push(null);
           }
         }
         if (template === 0) {
@@ -442,11 +440,11 @@ function App() {
               yaxis: "y",
               marker: {
                 color: "blue",
-                size: 12
+                size: 12,
               },
               line: {
-                width: 1
-              }
+                width: 1,
+              },
             },
             {
               x: x,
@@ -456,10 +454,10 @@ function App() {
               yaxis: "y",
               marker: {
                 color: "blue",
-
-              },line: {
-                width: 2
-              }
+              },
+              line: {
+                width: 2,
+              },
             },
             {
               x: x,
@@ -469,9 +467,10 @@ function App() {
               yaxis: "y",
               marker: {
                 color: "blue",
-              },line: {
-                width: 2
-              }
+              },
+              line: {
+                width: 2,
+              },
             },
           ]);
           setSeparateGraphs([
