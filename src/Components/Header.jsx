@@ -16,16 +16,24 @@ const Header = ({
   data,
   selectedStock,
   handleStockChange,
+  handlePatternChange,
   selectedTime,
   hanldeSelectedTime,
   selectedTemp,
+  selectedPattern,
 }) => {
   let [stocks, setStocks] = useState([]);
+  let [patterns, setPatterns] = useState([]);
 
   useEffect(() => {
     getAllStocks("stocks/available").then((res) => {
       console.log("res", res);
       setStocks(res?.data?.list || []);
+    });
+
+    getAllStocks("stocks/patterns").then((res) => {
+      console.log("res", res);
+      setPatterns(res?.data?.list || []);
     });
   }, []);
 
@@ -64,6 +72,33 @@ const Header = ({
             />
           )}
         />
+      </Grid>{" "}
+      <Grid item xs={2}>
+        <Autocomplete
+          onChange={(event, newValue) => {
+            handlePatternChange(newValue);
+          }}
+          fullWidth
+          id="free-solo-2-demo"
+          disableClearable={true}
+          options={patterns}
+          onClose={() => {
+            console.log("aytr");
+          }}
+          value={selectedPattern}
+          defaultValue={patterns.find((v) => v[0])}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Pattern"
+              variant="standard"
+              InputProps={{
+                ...params.InputProps,
+                type: "search",
+              }}
+            />
+          )}
+        />
       </Grid>
       <Grid item xs={1}>
         <ButtonGroup variant="text" aria-label="text button group">
@@ -81,7 +116,7 @@ const Header = ({
           </Button>
         </ButtonGroup>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <ButtonGroup variant="text" aria-label="text button group">
           {times.map((t, i) => (
             <Button
@@ -96,8 +131,7 @@ const Header = ({
           ))}
         </ButtonGroup>
       </Grid>
-
-      <Grid item xs={5}>
+      <Grid item xs={4}>
         <ButtonGroup variant="text" aria-label="text button group">
           {templates.map((m, i) => (
             <Button

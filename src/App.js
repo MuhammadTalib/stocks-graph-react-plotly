@@ -65,24 +65,6 @@ function App() {
     },
     opacity: 0.2,
 
-    // shapes: [
-    //   {
-    //     type: "rect",
-    //     xref: "x",
-    //     yref: "y",
-    //     x0: "2021-10-25",
-    //     y0: 179,
-    //     x1: "2021-10-26",
-    //     y1: 180.5,
-    //     fillcolor: "yellow",
-    //     opacity: 0.6,
-    //     line: {
-    //       width: 1,
-    //       color: "green",
-    //       opacity: 1,
-    //     },
-    //   },
-    // ],
     autosize: true,
     height: 550,
   });
@@ -92,17 +74,23 @@ function App() {
   };
 
   const [selectedStock, setSelectStock] = useState("MMM");
+  const [selectedPattern, setSelectedPattern] = useState("");
+
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
   const [selectedTemp, setSelectedTemp] = useState(0);
 
   const [data, setGraphData] = useState({ ...dummy });
 
-  const getDataRequest = (stock, time, template) => {
+  const getDataRequest = (stock, time, template, pattern) => {
     setLoader(true);
     let url = `stocks?stock=${stock?.toLowerCase()}&interval=${time.name}`;
     if (template > 0) {
       url = url + `&template=${template}`;
     }
+    if (pattern?.length) {
+      url = url + `&pattern=${pattern}`;
+    }
+    setMergedGraphs([]);
     getAllStocks(url)
       .then((res) => {
         console.log(
@@ -160,11 +148,16 @@ function App() {
         let HIST0 = [];
         let HIST1 = [];
 
+        let patternData = [];
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
           open.push(m.open);
           close.push(m.close);
+          if (m[pattern] !== undefined) {
+            patternData.push(m[pattern]);
+          }
           x.push(new Date(m.date));
           if (template === 1) {
             EMA0.push(m.indicators?.EMA0);
@@ -240,15 +233,13 @@ function App() {
           }
         });
 
-        let lowLowest = Math.min(...low.filter((f) => f !== null));
-        let closeLowest = Math.min(...close.filter((f) => f !== null));
-        let lowest = lowLowest > closeLowest ? closeLowest : lowLowest;
+        // let lowLowest = Math.min(...low.filter((f) => f !== null));
+        // let closeLowest = Math.min(...close.filter((f) => f !== null));
+        // let lowest = lowLowest > closeLowest ? closeLowest : lowLowest;
 
-        let highHighest = Math.min(...low.filter((f) => f !== null));
-        let openHighest = Math.max(...close.filter((f) => f !== null));
-        let highest = openHighest > highHighest ? openHighest : highHighest;
-
-        console.log("lowest", lowest, highest);
+        // let highHighest = Math.min(...low.filter((f) => f !== null));
+        // let openHighest = Math.max(...close.filter((f) => f !== null));
+        // let highest = openHighest > highHighest ? openHighest : highHighest;
 
         for (let i = 0; i < rightMargin; i++) {
           high.push(null);
@@ -949,10 +940,28 @@ function App() {
               yaxis: "y",
             },
           ]);
-        } else {
-          setMergedGraphs([]);
-          setSeparateGraphs([]);
         }
+
+        // patternData.length &&
+        //   setMergedGraphs([
+        //     ...mergedGraphs.filter((f) => !f.pattern),
+        //     {
+        //       pattern: true,
+        //       x: x,
+        //       y: patternData.map((m) => {
+        //         if (m === 0) return null;
+        //         return m;
+        //       }),
+        //       mode: "markers",
+        //       type: "scatter",
+        //       xaxis: "x",
+        //       yaxis: "y",
+        //       marker: {
+        //         color: "green",
+        //       },
+        //     },
+        //   ]);
+
         setGraphData({ ...dummy, high, low, open, close, x });
         setLayout({
           ...layout,
@@ -971,8 +980,33 @@ function App() {
               visible: false,
             },
             autorange: true,
-            // range: [lowest, highest],
           },
+          shapes: [
+            ...high.map((shp, i) => {
+              if (patternData[i]) {
+                let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
+                let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
+
+                return {
+                  type: "rect",
+                  xref: "x",
+                  yref: "y",
+                  x0: new Date(x[i] - 0.5 * time.ms),
+                  y0: lowP,
+                  x1: new Date(x[i].getTime() + 0.5 * time.ms),
+                  y1: highP,
+                  fillcolor: "yellow",
+                  opacity: 0.6,
+                  line: {
+                    width: 2,
+                    color: open[i] < close[i] ? "green" : "red",
+                    opacity: 1,
+                  },
+                };
+              }
+              return null;
+            }),
+          ],
         });
       })
       .catch((err) => {
@@ -989,17 +1023,23 @@ function App() {
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
-    getDataRequest(stock, selectedTime, selectedTemp.id);
+    getDataRequest(stock, selectedTime, selectedTemp.id, selectedPattern);
+  };
+
+  const handlePatternChange = (pattern) => {
+    console.log("pattern", pattern);
+    setSelectedPattern(pattern);
+    getDataRequest(selectedStock, selectedTime, selectedTemp.id, pattern);
   };
 
   const hanldeSelectedTime = (time) => {
     setSelectTime(time);
-    getDataRequest(selectedStock, time, selectedTemp.id);
+    getDataRequest(selectedStock, time, selectedTemp.id, selectedPattern);
   };
 
   const templateChange = (tempData) => {
     setSelectedTemp(tempData);
-    getDataRequest(selectedStock, selectedTime, tempData.id);
+    getDataRequest(selectedStock, selectedTime, tempData.id, selectedPattern);
   };
 
   return (
@@ -1017,6 +1057,8 @@ function App() {
           hanldeSelectedTime={hanldeSelectedTime}
           handleStockChange={handleStockChange}
           selectedTemp={selectedTemp}
+          selectedPattern={selectedPattern}
+          handlePatternChange={handlePatternChange}
         />
 
         <div id="fullscreen">
