@@ -182,7 +182,7 @@ function App() {
             MACD1.push(m.indicators?.MACD1);
             MACD2.push(m.indicators?.MACD2);
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
-            MACDHIST1.push(m.indicators?.MACDHIST1);
+            MACDHIST0.push(m.indicators?.MACDHIST0);
             MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
             SMA0.push(m.indicators?.SMA0);
             SMA1.push(m.indicators?.SMA1);
@@ -270,7 +270,7 @@ function App() {
             MACD1.push(null);
             MACD2.push(null);
             MACDSIGNAL0.push(null);
-            MACDHIST1.push(null);
+            MACDHIST0.push(null);
             MACDSIGNAL2.push(null);
             SMA0.push(null);
             SMA1.push(null);
@@ -566,13 +566,13 @@ function App() {
             },
             {
               x: x,
-              y: MACDHIST1,
+              y: MACDHIST0,
               name: "MACD HIST",
               type: "bar",
               xaxis: "x",
               yaxis: "y",
               marker: {
-                color: MACDHIST1.map((m, i) => (m > 0 ? "green" : "red")), //"black",
+                color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")), //"black",
               },
             },
             {
@@ -666,26 +666,14 @@ function App() {
             },
             {
               x: x,
-              y: MACD0,
-              name: "MACD0",
-              marker: {
-                color: "blue",
-              },
+              y: MACDHIST0,
+              name: "MACDHIST",
+              type: "bar",
               xaxis: "x",
               yaxis: "y",
-              templates: [
-                {
-                  x: x,
-                  y: MACDHIST0,
-                  name: "MACDHIST",
-                  type: "bar",
-                  xaxis: "x",
-                  yaxis: "y",
-                  marker: {
-                    color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
-                  },
-                },
-              ],
+              marker: {
+                color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
+              },
             },
             {
               x: x,
@@ -1070,9 +1058,9 @@ function App() {
             loader={loader}
           />
           {!loader &&
-            separateGraphs.map((m) => (
+            separateGraphs.map((m, i) => (
               <Graph
-                key={m}
+                key={i + "subGraph"}
                 templates={m.templates}
                 style={{ width: "100%" }}
                 data={{ ...m }}
