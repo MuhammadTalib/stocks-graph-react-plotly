@@ -200,10 +200,10 @@ function App() {
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             MACDSIGNAL1.push(m.indicators?.MACDSIGNAL1);
             MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
-            SMA0.push(m.indicators?.SMA0);
-            SMA1.push(m.indicators?.SMA1);
-            SMA2.push(m.indicators?.SMA2);
-            SMA3.push(m.indicators?.SMA3);
+            EMA0.push(m.indicators?.EMA0);
+            EMA1.push(m.indicators?.EMA1);
+            EMA2.push(m.indicators?.EMA2);
+            EMA3.push(m.indicators?.EMA3);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
           } else if (template === 6) {
@@ -288,10 +288,10 @@ function App() {
             MACDSIGNAL0.push(null);
             MACDSIGNAL1.push(null);
             MACDSIGNAL2.push(null);
-            SMA0.push(null);
-            SMA1.push(null);
-            SMA2.push(null);
-            SMA3.push(null);
+            EMA0.push(null);
+            EMA1.push(null);
+            EMA2.push(null);
+            EMA3.push(null);
             stochd0.push(null);
             stochk0.push(null);
           } else if (template === 7) {
@@ -602,8 +602,8 @@ function App() {
           setMergedGraphs([
             {
               x: x,
-              y: SMA0,
-              name: "SMA0",
+              y: EMA0,
+              name: "EMA0",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -612,8 +612,8 @@ function App() {
             },
             {
               x: x,
-              y: SMA1,
-              name: "SMA1",
+              y: EMA1,
+              name: "EMA1",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -622,8 +622,8 @@ function App() {
             },
             {
               x: x,
-              y: SMA2,
-              name: "SMA2",
+              y: EMA2,
+              name: "EMA2",
               xaxis: "x",
               yaxis: "y",
               marker: {
@@ -632,8 +632,8 @@ function App() {
             },
             {
               x: x,
-              y: SMA3,
-              name: "SMA3",
+              y: EMA3,
+              name: "EMA3",
               xaxis: "x",
               yaxis: "y",
               marker: {
