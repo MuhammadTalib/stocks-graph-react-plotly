@@ -7,6 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { getAllStocks } from "../services/api";
 import { Grid, TextField } from "@mui/material";
 import { times, templates } from "../Utils/utils";
+import Switch from "@mui/material/Switch";
 import "../App.css";
 const Header = ({
   handleGrapthType,
@@ -21,6 +22,8 @@ const Header = ({
   hanldeSelectedTime,
   selectedTemp,
   selectedPattern,
+  handlSwitchToggle,
+  switchToggle,
 }) => {
   let [stocks, setStocks] = useState([]);
   let [patterns, setPatterns] = useState([]);
@@ -81,7 +84,7 @@ const Header = ({
           fullWidth
           id="free-solo-2-demo"
           disableClearable={true}
-          options={patterns}
+          options={[patterns]}
           onClose={() => {
             console.log("aytr");
           }}
@@ -116,7 +119,17 @@ const Header = ({
           </Button>
         </ButtonGroup>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={1}>
+        <Switch
+          checked={switchToggle}
+          onClick={(e) => {
+            console.log("console.log", e.target.checked);
+            handlSwitchToggle(e.target.checked);
+          }}
+          size="small"
+        />
+      </Grid>
+      <Grid item xs={2}>
         <ButtonGroup variant="text" aria-label="text button group">
           {times.map((t, i) => (
             <Button

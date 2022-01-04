@@ -47,7 +47,6 @@ function App() {
     legend: { orientation: "h" },
     xaxis: {
       domain: [0, 1],
-      range: [],
       rangeslider: {
         visible: false,
       },
@@ -78,10 +77,18 @@ function App() {
 
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
   const [selectedTemp, setSelectedTemp] = useState(0);
+  const [switchToggle, setSwitchToggle] = useState(false);
 
   const [data, setGraphData] = useState({ ...dummy });
 
-  const getDataRequest = (stock, time, template, pattern) => {
+  const getDataRequest = (
+    stock,
+    time,
+    template,
+    pattern,
+    meta_trader_indicator
+  ) => {
+    console.log("meta_trader_indicator", meta_trader_indicator);
     setLoader(true);
     let url = `stocks?stock=${stock?.toLowerCase()}&interval=${time.name}`;
     if (template > 0) {
@@ -89,6 +96,9 @@ function App() {
     }
     if (pattern?.length) {
       url = url + `&pattern=${pattern}`;
+    }
+    if (meta_trader_indicator) {
+      url = url + `&meta_trader_indicator=${meta_trader_indicator}`;
     }
     setMergedGraphs([]);
     getAllStocks(url)
@@ -150,11 +160,20 @@ function App() {
 
         let patternData = [];
 
+        let ConfrimHigh = [];
+        let ConfrimLow = [];
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
           open.push(m.open);
           close.push(m.close);
+
+          if (switchToggle) {
+            ConfrimHigh.push(m.indicators["Confrim High"]);
+            ConfrimLow.push(m.indicators["Confrim Low"]);
+          }
+
           if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
           }
@@ -320,6 +339,7 @@ function App() {
             HIST1.push(null);
           }
         }
+
         if (template === 0) {
           setMergedGraphs([]);
           setSeparateGraphs([]);
@@ -334,9 +354,12 @@ function App() {
               xaxis: "x",
               name: "EMA0",
               yaxis: "y",
+              mode: "line",
               type: "scatter",
               marker: {
+                size: 4,
                 color: "blue",
+                symbol: "diamond",
               },
             },
             {
@@ -930,37 +953,30 @@ function App() {
           ]);
         }
 
-        // patternData.length &&
+        // switchToggle &&
         //   setMergedGraphs([
-        //     ...mergedGraphs.filter((f) => !f.pattern),
-        //     {
-        //       pattern: true,
-        //       x: x,
-        //       y: patternData.map((m) => {
-        //         if (m === 0) return null;
-        //         return m;
-        //       }),
-        //       mode: "markers",
-        //       type: "scatter",
-        //       xaxis: "x",
-        //       yaxis: "y",
-        //       marker: {
-        //         color: "green",
-        //       },
-        //     },
+        //     ...mergedGraphs,
+
         //   ]);
 
-        setGraphData({ ...dummy, high, low, open, close, x });
+        setGraphData({
+          ...dummy,
+          high,
+          low,
+          open,
+          close,
+          x,
+          ConfrimHigh,
+          ConfrimLow,
+        });
         setLayout({
           ...layout,
           xaxis: {
             ...layout.xaxis,
-            // range: [
-            //   new Date(Date.now(x[x.length - 1]) - candleDefault * time.ms),
-            //   new Date(x[x.length - 1]),
-            //   // new Date(x[0]), // - candleDefault * time.ms),
-            //   // new Date(x[x.length - 1]),
-            // ],
+            rangeslider: {
+              visible: false,
+            },
+            autorange: true,
           },
           yaxis: {
             ...layout.yaxis,
@@ -971,7 +987,7 @@ function App() {
           },
           shapes: [
             ...high.map((shp, i) => {
-              if (patternData[i]) {
+              if (patternData[i] && meta_trader_indicator) {
                 let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
                 let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
 
@@ -994,6 +1010,21 @@ function App() {
               }
               return null;
             }),
+            // ...high.map((shp, i) => {
+            //   if (true && i % 10 == 0) {
+            //     return {
+            //       type: "path",
+            //       path:
+            //         "M 150 100 L " +
+            //         new Date(x[i].getTime() + 0.5 * time.ms) +
+            //         " 300 L 200 70 Z",
+            //       fillcolor: "rgba(255, 140, 184, 0.5)",
+            //       line: {
+            //         color: "rgb(255, 140, 184)",
+            //       },
+            //     };
+            //   }
+            // }),
           ],
         });
       })
@@ -1011,23 +1042,58 @@ function App() {
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
-    getDataRequest(stock, selectedTime, selectedTemp.id, selectedPattern);
+    getDataRequest(
+      stock,
+      selectedTime,
+      selectedTemp.id,
+      selectedPattern,
+      switchToggle
+    );
   };
 
   const handlePatternChange = (pattern) => {
     console.log("pattern", pattern);
     setSelectedPattern(pattern);
-    getDataRequest(selectedStock, selectedTime, selectedTemp.id, pattern);
+    getDataRequest(
+      selectedStock,
+      selectedTime,
+      selectedTemp.id,
+      pattern,
+      switchToggle
+    );
   };
 
   const hanldeSelectedTime = (time) => {
     setSelectTime(time);
-    getDataRequest(selectedStock, time, selectedTemp.id, selectedPattern);
+    getDataRequest(
+      selectedStock,
+      time,
+      selectedTemp.id,
+      selectedPattern,
+      switchToggle
+    );
   };
 
   const templateChange = (tempData) => {
     setSelectedTemp(tempData);
-    getDataRequest(selectedStock, selectedTime, tempData.id, selectedPattern);
+    getDataRequest(
+      selectedStock,
+      selectedTime,
+      tempData.id,
+      selectedPattern,
+      switchToggle
+    );
+  };
+
+  const handlSwitchToggle = (v) => {
+    getDataRequest(
+      selectedStock,
+      selectedTime,
+      selectedTemp.id,
+      selectedPattern,
+      v
+    );
+    setSwitchToggle(v);
   };
 
   return (
@@ -1035,6 +1101,8 @@ function App() {
       {loader ? <div className="loader"></div> : <></>}
       <div style={{ padding: "10px" }}>
         <Header
+          switchToggle={switchToggle}
+          handlSwitchToggle={handlSwitchToggle}
           graphType={graphType}
           handleGrapthType={handleGrapthType}
           templateChange={templateChange}
@@ -1054,7 +1122,57 @@ function App() {
             style={style}
             data={{ ...data, type: graphType }}
             layout={layout}
-            templates={mergedGraphs.length ? [...mergedGraphs] : []}
+            templates={[
+              ...(mergedGraphs.length ? [...mergedGraphs] : []),
+              ...(switchToggle
+                ? [
+                    {
+                      x: data?.x.map((m) => {
+                        if (!m) return null;
+                        else return m;
+                      }),
+                      y: data?.ConfrimHigh.map((m, i) => {
+                        if (!m) return null;
+                        else return data.high[i];
+                      }),
+                      xaxis: "x",
+                      name: "Confrim High",
+                      yaxis: "y",
+                      mode: "markers",
+                      type: "scatter",
+                      marker: {
+                        size: 4,
+                        color: "green",
+                        symbol: "diamond",
+                      },
+                    },
+                  ]
+                : []),
+              ...(switchToggle
+                ? [
+                    {
+                      x: data.x.map((m) => {
+                        if (!m) return null;
+                        else return new Date(m);
+                      }),
+                      y: data.ConfrimLow.map((m, i) => {
+                        if (!m) return null;
+                        else return data.low[i];
+                      }),
+                      xaxis: "x",
+                      name: "Confrim Low",
+                      yaxis: "y",
+                      mode: "markers",
+                      type: "scatter",
+                      marker: {
+                        size: 4,
+                        color: "red",
+                        symbol: "diamond",
+                      },
+                    },
+                  ]
+                : []),
+            ]}
             loader={loader}
           />
           {!loader &&
