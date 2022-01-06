@@ -23,6 +23,20 @@ const dummy = {
   yaxis: "y",
 };
 const rightMargin = 20;
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 // const candleDefault = 214 + rightMargin;
 
 function App() {
@@ -50,7 +64,8 @@ function App() {
       rangeslider: {
         visible: false,
       },
-      type: "date",
+      type: "category",
+      tickmode: "array",
     },
     yaxis: {
       domain: [0, 1],
@@ -953,12 +968,6 @@ function App() {
           ]);
         }
 
-        // switchToggle &&
-        //   setMergedGraphs([
-        //     ...mergedGraphs,
-
-        //   ]);
-
         setGraphData({
           ...dummy,
           high,
@@ -977,6 +986,27 @@ function App() {
               visible: false,
             },
             autorange: true,
+            tickvals: [
+              ...x.filter((f, i) => {
+                let s = i % 15 === 0;
+                let d = new Date(f);
+                return i % 15 === 0; //d.getDate() === 15 || d.getDate() === 30;
+              }),
+            ],
+            ticktext: [
+              ...x
+                .filter((f, i) => {
+                  // let s = i % 15 === 0;
+                  // let d = new Date(f);
+                  return i % 15 === 0;
+                })
+                .map((m) => {
+                  let d = new Date(m);
+                  let datee = months[d.getMonth()] + " " + d.getUTCFullYear();
+                  console.log("datee", datee);
+                  return datee;
+                }),
+            ],
           },
           yaxis: {
             ...layout.yaxis,
@@ -1198,7 +1228,11 @@ function App() {
                     rangeslider: {
                       visible: false,
                     },
-                    type: "date",
+                    type: "category",
+                    dtick: 30 * 24 * 60 * 60 * 1000,
+                    tickformat: "%d %B (%a)\n %Y",
+                    ticklen: 15,
+                    nticks: 10,
                   },
                   yaxis: {
                     domain: [0, 1],

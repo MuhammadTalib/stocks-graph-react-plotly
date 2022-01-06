@@ -11,11 +11,6 @@ export const Graph = ({ style, data, layout, templates, loader }) => {
     return <div className="loadingLabel">Loading...</div>;
   } else
     return (
-      <Plot
-        style={style}
-        data={[data, ...(templates || [])]}
-        layout={layout}
-        config={config}
-      />
+      <Plot style={style} data={[data, ...(templates || [])]} layout={layout} />
     );
 };
