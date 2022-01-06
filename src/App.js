@@ -184,7 +184,8 @@ function App() {
           open.push(m.open);
           close.push(m.close);
 
-          if (switchToggle) {
+          if (meta_trader_indicator) {
+            console.log("switchToggleswitchToggle");
             ConfrimHigh.push(m.indicators["Confrim High"]);
             ConfrimLow.push(m.indicators["Confrim Low"]);
           }
@@ -1003,7 +1004,6 @@ function App() {
                 .map((m) => {
                   let d = new Date(m);
                   let datee = months[d.getMonth()] + " " + d.getUTCFullYear();
-                  console.log("datee", datee);
                   return datee;
                 }),
             ],
@@ -1017,20 +1017,25 @@ function App() {
           },
           shapes: [
             ...high.map((shp, i) => {
-              if (patternData[i] && meta_trader_indicator) {
+              if (patternData[i]) {
                 let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
                 let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
+                let x0 = String(new Date(x[i - 1])); //- 0.5 * time.ms));
+                let x1 = String(new Date(x[i + 1])); //.getTime() + 0.5 * time.ms));
 
+                console.log("x0x1", x0, x1);
                 return {
                   type: "rect",
                   xref: "x",
                   yref: "y",
-                  x0: new Date(x[i] - 0.5 * time.ms),
+                  x0: x0,
                   y0: lowP,
-                  x1: new Date(x[i].getTime() + 0.5 * time.ms),
+                  x1,
+                  width: 1,
                   y1: highP,
                   fillcolor: "yellow",
                   opacity: 0.6,
+                  rightMargin: 3,
                   line: {
                     width: 2,
                     color: open[i] < close[i] ? "green" : "red",
@@ -1159,7 +1164,7 @@ function App() {
                     {
                       x: data?.x.map((m) => {
                         if (!m) return null;
-                        else return m;
+                        else return String(m);
                       }),
                       y: data?.ConfrimHigh.map((m, i) => {
                         if (!m) return null;
@@ -1193,7 +1198,6 @@ function App() {
                       name: "Confrim Low",
                       yaxis: "y",
                       mode: "markers",
-                      type: "scatter",
                       marker: {
                         size: 4,
                         color: "red",

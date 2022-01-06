@@ -84,7 +84,7 @@ const Header = ({
           fullWidth
           id="free-solo-2-demo"
           disableClearable={true}
-          options={[patterns]}
+          options={[...patterns]}
           onClose={() => {
             console.log("aytr");
           }}
