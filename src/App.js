@@ -171,7 +171,6 @@ function App() {
         let donchian_max0 = [];
 
         let HIST0 = [];
-        let HIST1 = [];
 
         let patternData = [];
 
@@ -241,7 +240,6 @@ function App() {
             EMA3.push(m.indicators?.EMA3);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
-          } else if (template === 6) {
           } else if (template === 7) {
             EMA0.push(m.indicators?.EMA0);
             MA0.push(m.indicators?.MA0);
@@ -249,14 +247,7 @@ function App() {
             RSI0.push(m.indicators?.RSI0);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
-          } else if (template === 8) {
-            MACD0.push(m.indicators?.MACD0);
-            MACDHIST0.push(m.indicators?.MACDHIST0);
-            MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
-            RSI0.push(m.indicators?.RSI0);
-            stochd0.push(m.indicators?.stochd0);
-            stochk0.push(m.indicators?.stochk0);
-          } else if (template === 9) {
+          } else if (template === 6) {
             EMA0.push(m.indicators?.EMA0);
             EMA1.push(m.indicators?.EMA1);
             EMA2.push(m.indicators?.EMA2);
@@ -264,7 +255,6 @@ function App() {
             EMA4.push(m.indicators?.EMA4);
             EMA5.push(m.indicators?.EMA5);
             HIST0.push(m.indicators?.HIST0);
-            HIST1.push(m.indicators?.HIST1);
           }
         });
 
@@ -337,14 +327,6 @@ function App() {
             stochd0.push(null);
             stochk0.push(null);
           } else if (template === 6) {
-          } else if (template === 8) {
-            MACD0.push(null);
-            MACDHIST0.push(null);
-            MACDSIGNAL0.push(null);
-            RSI0.push(null);
-            stochd0.push(null);
-            stochk0.push(null);
-          } else if (template === 9) {
             EMA0.push(null);
             EMA1.push(null);
             EMA2.push(null);
@@ -352,7 +334,6 @@ function App() {
             EMA4.push(null);
             EMA5.push(null);
             HIST0.push(null);
-            HIST1.push(null);
           }
         }
 
@@ -737,9 +718,6 @@ function App() {
               ],
             },
           ]);
-        } else if (template === 6) {
-          setMergedGraphs([]);
-          setSeparateGraphs([]);
         } else if (template === 7) {
           setMergedGraphs([
             {
@@ -807,76 +785,7 @@ function App() {
               ],
             },
           ]);
-        } else if (template === 8) {
-          setMergedGraphs([]);
-          setSeparateGraphs([
-            {
-              x: x,
-              y: RSI0,
-              name: "RSI0",
-              marker: {
-                color: "rgb(126,87,194)",
-              },
-              xaxis: "x",
-              yaxis: "y",
-            },
-            {
-              x: x,
-              y: stochd0,
-              name: "stochd",
-              marker: {
-                color: "rgb(255,109,0)",
-              },
-              xaxis: "x",
-              yaxis: "y",
-              templates: [
-                {
-                  x: x,
-                  y: stochk0,
-                  name: "stochk",
-                  xaxis: "x",
-                  yaxis: "y",
-                  marker: {
-                    color: "rgb(43,97,255)",
-                  },
-                },
-              ],
-            },
-            {
-              x: x,
-              y: MACD0,
-              name: "MACD0",
-              marker: {
-                color: "rgb(43,97,255)",
-              },
-              xaxis: "x",
-              yaxis: "y",
-              templates: [
-                {
-                  x: x,
-                  y: MACDSIGNAL0,
-                  name: "MACD SIGNAL",
-                  xaxis: "x",
-                  yaxis: "y",
-                  marker: {
-                    color: "rgb(255,109,0)",
-                  },
-                },
-                {
-                  x: x,
-                  y: MACDHIST0,
-                  type: "bar",
-                  name: "MACD HIST",
-                  xaxis: "x",
-                  yaxis: "y",
-                  marker: {
-                    color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
-                  },
-                },
-              ],
-            },
-          ]);
-        } else if (template === 9) {
+        } else if (template === 6) {
           setMergedGraphs([
             {
               x: x,
@@ -950,19 +859,6 @@ function App() {
                   m > 0 ? "rgb(38,165,154)" : "rgb(254,82,82)"
                 ), //"black",
               },
-              xaxis: "x",
-              yaxis: "y",
-            },
-            {
-              x: x,
-              y: HIST1,
-              type: "bar",
-              marker: {
-                color: HIST1.map((m, i) =>
-                  m > 0 ? "rgb(38,165,154)" : "rgb(254,82,82)"
-                ), //"black",
-              },
-              name: "HIST1",
               xaxis: "x",
               yaxis: "y",
             },
@@ -1249,7 +1145,6 @@ function App() {
                   },
                   opacity: 0.2,
                   autosize: true,
-                  height: 190,
                 }}
               />
             ))}

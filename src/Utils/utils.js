@@ -13,7 +13,5 @@ export const templates = [
   { name: "T4", id: 4 },
   { name: "T5", id: 5 },
   { name: "T6", id: 6 },
-  { name: "T7", id: 7 },
-  { name: "T8", id: 8 },
-  { name: "T9", id: 9 },
+  { name: "T7", id: 7 }
 ];
