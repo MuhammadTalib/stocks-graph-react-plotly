@@ -1072,8 +1072,8 @@ function App() {
                       mode: "markers",
                       type: "scatter",
                       marker: {
-                        size: 4,
-                        color: "green",
+                        size: 8,
+                        color: "blue",
                         symbol: "diamond",
                       },
                     },
@@ -1095,7 +1095,7 @@ function App() {
                       yaxis: "y",
                       mode: "markers",
                       marker: {
-                        size: 4,
+                        size: 8,
                         color: "red",
                         symbol: "diamond",
                       },
