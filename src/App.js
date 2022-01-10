@@ -1067,7 +1067,7 @@ function App() {
                         else return data.high[i];
                       }),
                       xaxis: "x",
-                      name: "Confrim High",
+                      name: "Confirm High",
                       yaxis: "y",
                       mode: "markers",
                       type: "scatter",
@@ -1091,7 +1091,7 @@ function App() {
                         else return data.low[i];
                       }),
                       xaxis: "x",
-                      name: "Confrim Low",
+                      name: "Confirm Low",
                       yaxis: "y",
                       mode: "markers",
                       marker: {

@@ -109,13 +109,12 @@ const Header = ({
             className={`btn ${graphType !== "ohlc" ? "templateBtn" : ""}`}
             onClick={() => handleGrapthType("candlestick")}
           >
-            <WaterfallChartIcon />
-          </Button>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="24" height="24" fill="currentColor"><path d="M17 11v6h3v-6h-3zm-.5-1h4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5z"></path><path d="M18 7h1v3.5h-1zm0 10.5h1V21h-1z"></path><path d="M9 8v12h3V8H9zm-.5-1h4a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5z"></path><path d="M10 4h1v3.5h-1zm0 16.5h1V24h-1z"></path></svg>          </Button>
           <Button
             className={`btn ${graphType === "ohlc" ? "templateBtn" : ""}`}
             onClick={() => handleGrapthType("ohlc")}
           >
-            <BarChartIcon />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="24" height="24"><g fill="none" stroke="currentColor" stroke-linecap="square"><path d="M10.5 7.5v15M7.5 20.5H10M13.5 11.5H11M19.5 6.5v15M16.5 9.5H19M22.5 16.5H20"></path></g></svg>
           </Button>
         </ButtonGroup>
       </Grid>
