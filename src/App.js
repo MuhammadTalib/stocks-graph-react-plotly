@@ -22,7 +22,7 @@ const dummy = {
   xaxis: "x",
   yaxis: "y",
 };
-const rightMargin = 20;
+const rightMargin = 23;
 const months = [
   "Jan",
   "Feb",
@@ -42,6 +42,8 @@ const months = [
 function App() {
   const [loader, setLoader] = useState(false);
 
+  const [a, setA] = useState(1);
+
   const [graphType, setGraphType] = useState("candlestick");
 
   const [mergedGraphs, setMergedGraphs] = useState([]);
@@ -58,7 +60,19 @@ function App() {
       l: 20,
     },
     showlegend: true,
-    legend: { orientation: "h" },
+    legend: {
+      x: 0,
+      y: 1,
+      traceorder: "normal",
+      font: {
+        family: "sans-serif",
+        size: 12,
+        color: "#000",
+      },
+      bgcolor: "#E2E2E211",
+      bordercolor: "#FFFFFF",
+      borderwidth: 2,
+    },
     xaxis: {
       domain: [0, 1],
       rangeslider: {
@@ -80,7 +94,7 @@ function App() {
     opacity: 0.2,
 
     autosize: true,
-    height: 550,
+    height: 630,
   });
 
   const handleGrapthType = (type) => {
@@ -103,11 +117,10 @@ function App() {
     pattern,
     meta_trader_indicator
   ) => {
-    console.log("meta_trader_indicator", meta_trader_indicator);
     setLoader(true);
     let url = `stocks?stock=${stock?.toLowerCase()}&interval=${time.name}`;
-    if (template > 0) {
-      url = url + `&template=${template}`;
+    if (template && template?.id > 0) {
+      url = url + `&template=${template.id}`;
     }
     if (pattern?.length) {
       url = url + `&pattern=${pattern}`;
@@ -176,6 +189,8 @@ function App() {
 
         let ConfrimHigh = [];
         let ConfrimLow = [];
+        let tempMerged = template.merged;
+        let resMerged = tempMerged;
 
         responseData?.forEach((m) => {
           high.push(m.high);
@@ -193,38 +208,25 @@ function App() {
             patternData.push(m[pattern]);
           }
           x.push(new Date(m.date));
-          if (template === 1) {
-            EMA0.push(m.indicators?.EMA0);
-            EMA1.push(m.indicators?.EMA1);
-            EMA2.push(m.indicators?.EMA2);
-          } else if (template === 2) {
-            EMA0.push(m.indicators?.EMA0);
-            EMA1.push(m.indicators?.EMA1);
-            EMA2.push(m.indicators?.EMA2);
-            EMA3.push(m.indicators?.EMA3);
-            EMA4.push(m.indicators?.EMA4);
-            EMA5.push(m.indicators?.EMA5);
-          } else if (template === 3 && m.indicators) {
+          Object.keys(tempMerged).forEach((key) => {
+            resMerged[key].data = [...resMerged[key].data, m.indicators[key]];
+          });
+          if (template.id === 1) {
+          } else if (template.id === 2) {
+          } else if (template.id === 3 && m.indicators) {
             R0.push(m.indicators["%R0"]);
             R1.push(m.indicators["%R1"]);
-            donchian_price0.push(m.indicators["donchian_price0"]);
-            donchian_min0.push(m.indicators["donchian_min0"]);
-            donchian_max0.push(m.indicators["donchian_max0"]);
             donchian0.push(m.indicators?.donchian0);
-          } else if (template === 4) {
+          } else if (template.id === 4) {
             MACD0.push(m.indicators?.MACD0);
             MACD1.push(m.indicators?.MACD1);
             MACD2.push(m.indicators?.MACD2);
             MACDSIGNAL0.push(m.indicators?.MACDSIGNAL0);
             MACDHIST0.push(m.indicators?.MACDHIST0);
             MACDSIGNAL2.push(m.indicators?.MACDSIGNAL2);
-            SMA0.push(m.indicators?.SMA0);
-            SMA1.push(m.indicators?.SMA1);
-            SMA2.push(m.indicators?.SMA2);
-            SMA3.push(m.indicators?.SMA3);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
-          } else if (template === 5) {
+          } else if (template.id === 5) {
             MACD0.push(m.indicators?.MACD0);
             MACD1.push(m.indicators?.MACD1);
             MACD2.push(m.indicators?.MACD2);
@@ -240,14 +242,14 @@ function App() {
             EMA3.push(m.indicators?.EMA3);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
-          } else if (template === 7) {
+          } else if (template.id === 7) {
             EMA0.push(m.indicators?.EMA0);
             MA0.push(m.indicators?.MA0);
             MA1.push(m.indicators?.MA1);
             RSI0.push(m.indicators?.RSI0);
             stochd0.push(m.indicators?.stochd0);
             stochk0.push(m.indicators?.stochk0);
-          } else if (template === 6) {
+          } else if (template.id === 6) {
             EMA0.push(m.indicators?.EMA0);
             EMA1.push(m.indicators?.EMA1);
             EMA2.push(m.indicators?.EMA2);
@@ -272,38 +274,28 @@ function App() {
           open.push(null);
           close.push(null);
           x.push(new Date(Date.now(x[x.length - 1]) + (i + 1) * time.ms));
-          if (template === 1) {
-            EMA0.push(null);
-            EMA1.push(null);
-            EMA2.push(null);
-          } else if (template === 2) {
-            EMA0.push(null);
-            EMA1.push(null);
-            EMA2.push(null);
-            EMA3.push(null);
-            EMA4.push(null);
-            EMA5.push(null);
-          } else if (template === 3) {
+          Object.keys(tempMerged).forEach((key) => {
+            resMerged[key].data = [...resMerged[key].data, null];
+          });
+          if (template.id === 1) {
+          } else if (template.id === 2) {
+          } else if (template.id === 3) {
             R0.push(null);
             R1.push(null);
             donchian0.push(null);
             donchian_price0.push(null);
             donchian_min0.push(null);
             donchian_max0.push(null);
-          } else if (template === 4) {
+          } else if (template.id === 4) {
             MACD0.push(null);
             MACD1.push(null);
             MACD2.push(null);
             MACDSIGNAL0.push(null);
             MACDHIST0.push(null);
             MACDSIGNAL2.push(null);
-            SMA0.push(null);
-            SMA1.push(null);
-            SMA2.push(null);
-            SMA3.push(null);
             stochd0.push(null);
             stochk0.push(null);
-          } else if (template === 5) {
+          } else if (template.id === 5) {
             MACD0.push(null);
             MACD1.push(null);
             MACD2.push(null);
@@ -319,14 +311,14 @@ function App() {
             EMA3.push(null);
             stochd0.push(null);
             stochk0.push(null);
-          } else if (template === 7) {
+          } else if (template.id === 7) {
             EMA0.push(null);
             MA0.push(null);
             MA1.push(null);
             RSI0.push(null);
             stochd0.push(null);
             stochk0.push(null);
-          } else if (template === 6) {
+          } else if (template.id === 6) {
             EMA0.push(null);
             EMA1.push(null);
             EMA2.push(null);
@@ -336,166 +328,16 @@ function App() {
             HIST0.push(null);
           }
         }
+        console.log("tempMerged", resMerged);
 
-        if (template === 0) {
+        if (template.id === 0) {
           setMergedGraphs([]);
           setSeparateGraphs([]);
-        } else if (template === 1) {
-          setMergedGraphs([
-            {
-              x: x,
-              y: EMA0.map((m) => {
-                if (!m) return null;
-                else return m;
-              }),
-              xaxis: "x",
-              name: "EMA0",
-              yaxis: "y",
-              mode: "line",
-              type: "scatter",
-              marker: {
-                size: 4,
-                color: "blue",
-                symbol: "diamond",
-              },
-            },
-            {
-              x: x,
-              y: EMA1.map((m) => {
-                if (!m) return null;
-                else return m;
-              }),
-              name: "EMA1",
-              xaxis: "x",
-              type: "scatter",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA2.map((m) => {
-                if (!m) return null;
-                else return m;
-              }),
-              name: "EMA2",
-              type: "scatter",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-          ]);
+        } else if (template.id === 1) {
           setSeparateGraphs([]);
-        } else if (template === 2) {
-          setMergedGraphs([
-            {
-              x: x,
-              y: EMA0,
-              name: "EMA0",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA1,
-              name: "EMA1",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA2,
-              name: "EMA2",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA3,
-              name: "EMA3",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "red",
-              },
-            },
-            {
-              x: x,
-              y: EMA4,
-              name: "EMA4",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "red",
-              },
-            },
-            {
-              x: x,
-              y: EMA5,
-              name: "EMA5",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "red",
-              },
-            },
-          ]);
+        } else if (template.id === 2) {
           setSeparateGraphs([]);
-        } else if (template === 3) {
-          setMergedGraphs([
-            {
-              x: x,
-              y: donchian_price0,
-              name: "DONCHAIN",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-                size: 12,
-              },
-              line: {
-                width: 1,
-              },
-            },
-            {
-              x: x,
-              y: donchian_min0,
-              name: "donchian min",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-              line: {
-                width: 2,
-              },
-            },
-            {
-              x: x,
-              y: donchian_max0,
-              name: "donchian max",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-              line: {
-                width: 2,
-              },
-            },
-          ]);
+        } else if (template.id === 3) {
           setSeparateGraphs([
             {
               x: x,
@@ -518,49 +360,7 @@ function App() {
               },
             },
           ]);
-        } else if (template === 4) {
-          setMergedGraphs([
-            {
-              x: x,
-              y: SMA0,
-              name: "SMA0",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "rgb(255,173,89)",
-              },
-            },
-            {
-              x: x,
-              y: SMA1,
-              name: "SMA1",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "rgb(253,91,252)",
-              },
-            },
-            {
-              x: x,
-              y: SMA2,
-              name: "SMA2",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "rgb(172,91,170)",
-              },
-            },
-            {
-              x: x,
-              y: SMA3,
-              name: "SMA3",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "rgb(89,89,89)",
-              },
-            },
-          ]);
+        } else if (template.id === 4) {
           setSeparateGraphs([
             {
               x: x,
@@ -571,7 +371,7 @@ function App() {
               },
               xaxis: "x",
               yaxis: "y",
-              templates: [
+              template: [
                 {
                   x: x,
                   y: MACDSIGNAL0,
@@ -618,49 +418,7 @@ function App() {
               ],
             },
           ]);
-        } else if (template === 5) {
-          setMergedGraphs([
-            {
-              x: x,
-              y: EMA0,
-              name: "EMA0",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA1,
-              name: "EMA1",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "rgb(255,0,56)",
-              },
-            },
-            {
-              x: x,
-              y: EMA2,
-              name: "EMA2",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "rgb(13,190,58)",
-              },
-            },
-            {
-              x: x,
-              y: EMA3,
-              name: "EMA3",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "black",
-              },
-            },
-          ]);
+        } else if (template.id === 5) {
           setSeparateGraphs([
             {
               x: x,
@@ -718,7 +476,7 @@ function App() {
               ],
             },
           ]);
-        } else if (template === 7) {
+        } else if (template.id === 7) {
           setMergedGraphs([
             {
               x: x,
@@ -785,69 +543,7 @@ function App() {
               ],
             },
           ]);
-        } else if (template === 6) {
-          setMergedGraphs([
-            {
-              x: x,
-              y: EMA0,
-              name: "EMA0",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA1,
-              name: "EMA1",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA2,
-              name: "EMA2",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "blue",
-              },
-            },
-            {
-              x: x,
-              y: EMA3,
-              name: "EMA3",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "red",
-              },
-            },
-            {
-              x: x,
-              y: EMA4,
-              name: "EMA4",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "red",
-              },
-            },
-            {
-              x: x,
-              y: EMA5,
-              name: "EMA5",
-              xaxis: "x",
-              yaxis: "y",
-              marker: {
-                color: "red",
-              },
-            },
-          ]);
+        } else if (template.id === 6) {
           setSeparateGraphs([
             {
               x: x,
@@ -865,6 +561,8 @@ function App() {
           ]);
         }
 
+        setSelectedTemp({ ...template, merged: resMerged });
+
         setGraphData({
           ...dummy,
           high,
@@ -874,6 +572,9 @@ function App() {
           x,
           ConfrimHigh,
           ConfrimLow,
+          EMA0,
+          EMA1,
+          EMA2,
         });
         setLayout({
           ...layout,
@@ -885,16 +586,12 @@ function App() {
             autorange: true,
             tickvals: [
               ...x.filter((f, i) => {
-                let s = i % 15 === 0;
-                let d = new Date(f);
                 return i % 15 === 0; //d.getDate() === 15 || d.getDate() === 30;
               }),
             ],
             ticktext: [
               ...x
                 .filter((f, i) => {
-                  // let s = i % 15 === 0;
-                  // let d = new Date(f);
                   return i % 15 === 0;
                 })
                 .map((m) => {
@@ -941,21 +638,6 @@ function App() {
               }
               return null;
             }),
-            // ...high.map((shp, i) => {
-            //   if (true && i % 10 == 0) {
-            //     return {
-            //       type: "path",
-            //       path:
-            //         "M 150 100 L " +
-            //         new Date(x[i].getTime() + 0.5 * time.ms) +
-            //         " 300 L 200 70 Z",
-            //       fillcolor: "rgba(255, 140, 184, 0.5)",
-            //       line: {
-            //         color: "rgb(255, 140, 184)",
-            //       },
-            //     };
-            //   }
-            // }),
           ],
         });
       })
@@ -976,7 +658,7 @@ function App() {
     getDataRequest(
       stock,
       selectedTime,
-      selectedTemp.id,
+      selectedTemp,
       selectedPattern,
       switchToggle
     );
@@ -988,7 +670,7 @@ function App() {
     getDataRequest(
       selectedStock,
       selectedTime,
-      selectedTemp.id,
+      selectedTemp,
       pattern,
       switchToggle
     );
@@ -999,7 +681,7 @@ function App() {
     getDataRequest(
       selectedStock,
       time,
-      selectedTemp.id,
+      selectedTemp,
       selectedPattern,
       switchToggle
     );
@@ -1010,7 +692,7 @@ function App() {
     getDataRequest(
       selectedStock,
       selectedTime,
-      tempData.id,
+      tempData,
       selectedPattern,
       switchToggle
     );
@@ -1020,17 +702,20 @@ function App() {
     getDataRequest(
       selectedStock,
       selectedTime,
-      selectedTemp.id,
+      selectedTemp,
       selectedPattern,
       v
     );
     setSwitchToggle(v);
   };
+  const onHover = ({ points: [point] }) => {
+    setA(point.pointIndex);
+  };
 
   return (
     <>
       {loader ? <div className="loader"></div> : <></>}
-      <div style={{ padding: "10px" }}>
+      <div>
         <Header
           switchToggle={switchToggle}
           handlSwitchToggle={handlSwitchToggle}
@@ -1050,11 +735,26 @@ function App() {
 
         <div id="fullscreen">
           <Graph
+            onHover={onHover}
             style={style}
             data={{ ...data, type: graphType }}
             layout={layout}
             templates={[
-              ...(mergedGraphs.length ? [...mergedGraphs] : []),
+              ...(selectedTemp.merged && Object.keys(selectedTemp.merged).length
+                ? [
+                    ...Object.keys(selectedTemp.merged).map((key) => {
+                      return {
+                        ...selectedTemp.merged[key],
+                        x: data?.x,
+                        y: selectedTemp.merged[key].data.map((m) => {
+                          if (!m) return null;
+                          else return m;
+                        }),
+                        name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[a]}`,
+                      };
+                    }),
+                  ]
+                : []),
               ...(switchToggle
                 ? [
                     {
@@ -1121,7 +821,7 @@ function App() {
                     l: 20,
                   },
                   showlegend: true,
-                  legend: { orientation: "h" },
+                  legend: { x: 1, xanchor: "right", y: 1 },
                   xaxis: {
                     domain: [0, 1],
                     autorange: true,
