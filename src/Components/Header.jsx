@@ -1,5 +1,3 @@
-import BarChartIcon from "@mui/icons-material/BarChart";
-import WaterfallChartIcon from "@mui/icons-material/WaterfallChart";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useState } from "react";
@@ -7,14 +5,11 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { getAllStocks } from "../services/api";
 import { Grid, TextField } from "@mui/material";
 import { times, templates } from "../Utils/utils";
-import Switch from "@mui/material/Switch";
 import "../App.css";
 const Header = ({
   handleGrapthType,
   graphType,
   templateChange,
-  templatesOptions,
-  data,
   selectedStock,
   handleStockChange,
   handlePatternChange,
@@ -44,12 +39,12 @@ const Header = ({
     <Grid
       container
       spacing={2}
-      direction="row"
-      alignItems="center"
-      textAlign="center"
       style={{ padding: "10px" }}
+      md={12}
+      xs={12}
+      sm={12}
     >
-      <Grid item xs={2}>
+      <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
           onChange={(event, newValue) => {
             handleStockChange(newValue);
@@ -75,8 +70,8 @@ const Header = ({
             />
           )}
         />
-      </Grid>{" "}
-      <Grid item xs={2}>
+      </Grid>
+      <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
           onChange={(event, newValue) => {
             handlePatternChange(newValue);
@@ -103,7 +98,7 @@ const Header = ({
           )}
         />
       </Grid>
-      <Grid item xs={1}>
+      <Grid item md={1} sm={2} xs={3}>
         <ButtonGroup variant="text" aria-label="text button group">
           <Button
             className={`btn ${graphType !== "ohlc" ? "templateBtn" : ""}`}
@@ -139,15 +134,26 @@ const Header = ({
           </Button>
         </ButtonGroup>
       </Grid>
-      <Grid item xs={1}>
-        <Switch
+      <Grid item md={2}>
+        <ButtonGroup variant="text" aria-label="text button group">
+          {[0, 1, 2, 3].map((t, i) => (
+            <Button
+              key={i}
+              onClick={() => handlSwitchToggle(t)}
+              className={`btn ${switchToggle === t ? "templateBtn" : ""}`}
+            >
+              {t}
+            </Button>
+          ))}
+        </ButtonGroup>
+        {/* <Switch
           checked={switchToggle}
           onClick={(e) => {
             console.log("console.log", e.target.checked);
             handlSwitchToggle(e.target.checked);
           }}
           size="small"
-        />
+        /> */}
       </Grid>
       <Grid item xs={2}>
         <ButtonGroup variant="text" aria-label="text button group">
@@ -164,7 +170,7 @@ const Header = ({
           ))}
         </ButtonGroup>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item md={3} xs={3}>
         <ButtonGroup variant="text" aria-label="text button group">
           {templates.map((m, i) => (
             <Button

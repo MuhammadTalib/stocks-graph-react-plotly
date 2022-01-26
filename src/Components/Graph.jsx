@@ -6,7 +6,6 @@ import "../App.css";
 const Plot = createPlotlyComponent(Plotly);
 
 export const Graph = ({ style, data, layout, templates, loader, onHover }) => {
-  const config = { responsive: true };
   if (loader) {
     return <div className="loadingLabel">Loading...</div>;
   } else
