@@ -1,11 +1,10 @@
-import React, { useCallback, useState, useEffect } from "react";
+import { makeStyles } from "@mui/styles";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
+import WatchList from "./Components/WatchList";
 import { getAllStocks } from "./services/api";
-import { templatesOptions } from "./templates/templates";
-import { useRef } from "react";
-import { makeStyles } from "@mui/styles";
 
 const dummy = {
   x: [],
@@ -21,8 +20,6 @@ const dummy = {
   low: [],
   open: [],
   type: "candlestick",
-  xaxis: "x",
-  yaxis: "y",
 };
 const rightMargin = 23;
 const months = [
@@ -63,7 +60,7 @@ const separateGraphLayout = {
     nticks: 10,
   },
   yaxis: {
-    domain: [0, 1],
+    domain: [0.25, 0.5],
     autorange: true,
     rangeslider: {
       visible: false,
@@ -84,17 +81,11 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
-
   const [loader, setLoader] = useState(false);
-
   const [a, setA] = useState(1);
-
   const [graphType, setGraphType] = useState("candlestick");
-
   const [separateGraphs, setSeparateGraphs] = useState([]);
-
   const style = { width: "100%", height: "100%" };
-
   const [layout, setLayout] = useState({
     dragmode: "zoom",
     margin: {
@@ -136,9 +127,9 @@ function App() {
       type: "linear",
     },
     opacity: 0.2,
-
     autosize: true,
-    height: 630,
+    width: window.innerWidth - 10,
+    height: window.innerHeight - 50,
   });
 
   const handleGrapthType = (type) => {
@@ -146,7 +137,7 @@ function App() {
   };
 
   const [selectedStock, setSelectStock] = useState("MMM");
-  const [selectedPattern, setSelectedPattern] = useState("");
+  const [selectedPattern, setSelectedPattern] = useState(null);
 
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
   const [selectedTemp, setSelectedTemp] = useState({
@@ -173,7 +164,6 @@ function App() {
       }
       getAllStocks(url)
         .then((res) => {
-          console.log("res=-=-=-=-", res.data?.data);
           setLoader(false);
           let responseData = [...res?.data?.data];
 
@@ -292,7 +282,7 @@ function App() {
               }
             }
           });
-
+          let tempLayout = layout;
           for (let i = 0; i < rightMargin; i++) {
             high.push(null);
             low.push(null);
@@ -305,11 +295,26 @@ function App() {
                   resMerged[key].data = [...resMerged[key].data, null];
                 });
               if (template.id === 1) {
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0, 1] },
+                };
               } else if (template.id === 2) {
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0, 1] },
+                };
               } else if (template.id === 3) {
                 R0.push(null);
                 R1.push(null);
                 donchian0.push(null);
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0.5, 1] },
+                  yaxis2: { ...layout.yaxis, domain: [0.25, 0.5] },
+                  yaxis3: { ...layout.yaxis, domain: [0, 0.25] },
+                  xaxis: { ...layout.xaxis },
+                };
               } else if (template.id === 4) {
                 MACD0.push(null);
                 MACD1.push(null);
@@ -319,6 +324,14 @@ function App() {
                 MACDSIGNAL2.push(null);
                 stochd0.push(null);
                 stochk0.push(null);
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0.45, 1] },
+                  yaxis2: { ...layout.yaxis, domain: [0.3, 0.45] },
+                  yaxis3: { ...layout.yaxis, domain: [0.15, 0.3] },
+                  yaxis4: { ...layout.yaxis, domain: [0, 0.15] },
+                  xaxis: { ...layout.xaxis },
+                };
               } else if (template.id === 5) {
                 MACD0.push(null);
                 MACD1.push(null);
@@ -335,6 +348,14 @@ function App() {
                 EMA3.push(null);
                 stochd0.push(null);
                 stochk0.push(null);
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0.45, 1] },
+                  yaxis2: { ...layout.yaxis, domain: [0.3, 0.45] },
+                  yaxis3: { ...layout.yaxis, domain: [0.15, 0.3] },
+                  yaxis4: { ...layout.yaxis, domain: [0, 0.15] },
+                  xaxis: { ...layout.xaxis },
+                };
               } else if (template.id === 7) {
                 EMA0.push(null);
                 MA0.push(null);
@@ -342,6 +363,13 @@ function App() {
                 RSI0.push(null);
                 stochd0.push(null);
                 stochk0.push(null);
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0.5, 1] },
+                  yaxis2: { ...layout.yaxis, domain: [0.25, 0.5] },
+                  yaxis3: { ...layout.yaxis, domain: [0, 0.25] },
+                  xaxis: { ...layout.xaxis },
+                };
               } else if (template.id === 6) {
                 EMA0.push(null);
                 EMA1.push(null);
@@ -350,6 +378,12 @@ function App() {
                 EMA4.push(null);
                 EMA5.push(null);
                 HIST0.push(null);
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0.3, 1] },
+                  yaxis2: { ...layout.yaxis, domain: [0, 0.3] },
+                  xaxis: { ...layout.xaxis },
+                };
               }
             }
           }
@@ -370,18 +404,16 @@ function App() {
                   marker: {
                     color: "blue",
                   },
-                  xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y2",
                 },
                 {
                   x: x,
                   y: R1,
                   name: "%R1",
-                  xaxis: "x",
-                  yaxis: "y",
                   marker: {
                     color: "red",
                   },
+                  yaxis: "y3",
                 },
               ]);
             } else if (template.id === 4) {
@@ -394,7 +426,7 @@ function App() {
                     color: "blue",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y2",
                   template: [
                     {
                       x: x,
@@ -414,7 +446,7 @@ function App() {
                   name: "MACD HIST",
                   type: "bar",
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y3",
                   marker: {
                     color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")), //"black",
                   },
@@ -427,7 +459,7 @@ function App() {
                     color: "rgb(153,42,173)",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y4",
                   templates: [
                     {
                       x: x,
@@ -452,7 +484,7 @@ function App() {
                     color: "blue",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y2",
                   templates: [
                     {
                       x: x,
@@ -472,7 +504,7 @@ function App() {
                   name: "MACDHIST",
                   type: "bar",
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y3",
                   marker: {
                     color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
                   },
@@ -485,7 +517,7 @@ function App() {
                     color: "rgb(153,42,173)",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y4",
                   templates: [
                     {
                       x: x,
@@ -510,7 +542,7 @@ function App() {
                     color: "blue",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y2",
                 },
                 {
                   x: x,
@@ -520,7 +552,7 @@ function App() {
                     color: "rgb(153,42,173)",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y3",
                   templates: [
                     {
                       x: x,
@@ -548,7 +580,7 @@ function App() {
                     ), //"black",
                   },
                   xaxis: "x",
-                  yaxis: "y",
+                  yaxis: "y2",
                 },
               ]);
             }
@@ -566,7 +598,7 @@ function App() {
             ConfrimLow,
           });
           setLayout({
-            ...layout,
+            ...tempLayout,
             xaxis: {
               ...layout.xaxis,
               rangeslider: {
@@ -589,13 +621,6 @@ function App() {
                     return datee;
                   }),
               ],
-            },
-            yaxis: {
-              ...layout.yaxis,
-              rangeslider: {
-                visible: false,
-              },
-              autorange: true,
             },
             shapes: [
               ...high.map((shp, i) => {
@@ -640,6 +665,28 @@ function App() {
   useEffect(() => {
     getDataRequest(selectedStock, selectedTime);
   }, [selectedStock, selectedTime]);
+
+  useEffect(() => {
+    let height = document.documentElement.clientHeight;
+    console.log("height", height);
+  }, []);
+
+  React.useEffect(() => {
+    function handleResize() {
+      if (
+        layout.width !== window.innerWidth - 10 ||
+        layout.height !== window.innerHeight - 50
+      ) {
+        console.log("resized to: ", window.innerWidth, "x", window.innerHeight);
+        setLayout({
+          ...layout,
+          width: window.innerWidth - 10,
+          height: window.innerHeight - 50,
+        });
+      }
+    }
+    window.addEventListener("resize", handleResize);
+  });
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
@@ -735,28 +782,26 @@ function App() {
     <div className="app-container">
       <div className={classes.container + " app-frame"}>
         <div
-          style={{ height: "100vh", overflowY: "scroll", overflowX: "hidden" }}
+          style={{ height: "100vh", overflowY: "hidden", overflowX: "hidden" }}
         >
           {loader ? <div className="loader"></div> : <></>}
           <div>
             <Header
-              switchToggle={switchToggle}
-              handlSwitchToggle={handlSwitchToggle}
-              graphType={graphType}
               handleGrapthType={handleGrapthType}
+              graphType={graphType}
               templateChange={templateChange}
-              templatesOptions={templatesOptions}
-              data={data}
               selectedStock={selectedStock}
+              handleStockChange={handleStockChange}
+              handlePatternChange={handlePatternChange}
               selectedTime={selectedTime}
               hanldeSelectedTime={hanldeSelectedTime}
-              handleStockChange={handleStockChange}
               selectedTemp={selectedTemp}
               selectedPattern={selectedPattern}
-              handlePatternChange={handlePatternChange}
+              handlSwitchToggle={handlSwitchToggle}
+              switchToggle={switchToggle}
             />
 
-            {data ? (
+            {data && layout ? (
               <div>
                 <Graph
                   onHover={onHover}
@@ -815,18 +860,25 @@ function App() {
                         ]
                       : []),
                   ]}
+                  separateGraphs={separateGraphs}
                   loader={loader}
                 />
-                {!loader &&
+                {/* {!loader &&
                   separateGraphs.map((m, i) => (
                     <Graph
                       key={i + "subGraph"}
                       templates={m.templates}
                       style={{ width: "100%" }}
                       data={{ ...m }}
-                      layout={separateGraphLayout}
+                      layout={{
+                        ...separateGraphLayout,
+                        yaxis: {
+                          ...separateGraphLayout.yaxis,
+                          domain: [0.25, 0.5],
+                        },
+                      }}
                     />
-                  ))}
+                  ))} */}
               </div>
             ) : (
               <></>
@@ -841,7 +893,9 @@ function App() {
         onMouseDown={(e) => e.preventDefault()}
       >
         <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-        <div className="app-sidebar-content"></div>
+        <div className="app-sidebar-content">
+          <WatchList />
+        </div>
       </div>
     </div>
   );
