@@ -74,6 +74,7 @@
 }
 
 .app-sidebar .app-sidebar-content {
+  margin: 10px;
   flex: 1;
 }
 

@@ -36,17 +36,10 @@ const Header = ({
   }, []);
 
   return (
-    <Grid
-      container
-      spacing={2}
-      style={{ padding: "10px" }}
-      md={12}
-      xs={12}
-      sm={12}
-    >
+    <Grid container spacing={2} style={{ padding: "10px" }}>
       <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
-          onChange={(event, newValue) => {
+          onChange={(_, newValue) => {
             handleStockChange(newValue);
           }}
           fullWidth
@@ -73,7 +66,7 @@ const Header = ({
       </Grid>
       <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
-          onChange={(event, newValue) => {
+          onChange={(_, newValue) => {
             handlePatternChange(newValue);
           }}
           fullWidth
@@ -146,14 +139,6 @@ const Header = ({
             </Button>
           ))}
         </ButtonGroup>
-        {/* <Switch
-          checked={switchToggle}
-          onClick={(e) => {
-            console.log("console.log", e.target.checked);
-            handlSwitchToggle(e.target.checked);
-          }}
-          size="small"
-        /> */}
       </Grid>
       <Grid item xs={2}>
         <ButtonGroup variant="text" aria-label="text button group">

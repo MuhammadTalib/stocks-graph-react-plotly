@@ -37,41 +37,6 @@ const months = [
   "Dec",
 ];
 
-const separateGraphLayout = {
-  dragmode: "zoom",
-  margin: {
-    r: 10,
-    t: 1,
-    b: 40,
-    l: 20,
-  },
-  showlegend: true,
-  legend: { x: 1, xanchor: "right", y: 1 },
-  xaxis: {
-    domain: [0, 1],
-    autorange: true,
-    rangeslider: {
-      visible: false,
-    },
-    type: "category",
-    dtick: 30 * 24 * 60 * 60 * 1000,
-    tickformat: "%d %B (%a)\n %Y",
-    ticklen: 15,
-    nticks: 10,
-  },
-  yaxis: {
-    domain: [0.25, 0.5],
-    autorange: true,
-    rangeslider: {
-      visible: false,
-    },
-    position: 1,
-    side: "bottom",
-  },
-  opacity: 0.2,
-  autosize: true,
-};
-
 const useStyles = makeStyles((theme) => ({
   container: (sidebarWidth) => {
     return { width: `calc(100% - ${sidebarWidth}px)` };
@@ -596,6 +561,7 @@ function App() {
             x,
             ConfrimHigh,
             ConfrimLow,
+            patternData,
           });
           setLayout({
             ...tempLayout,
@@ -617,41 +583,40 @@ function App() {
                   })
                   .map((m) => {
                     let d = new Date(m);
-                    let datee = months[d.getMonth()] + " " + d.getUTCFullYear();
-                    return datee;
+                    return months[d.getMonth()] + " " + d.getUTCFullYear();
                   }),
               ],
             },
-            shapes: [
-              ...high.map((shp, i) => {
-                if (patternData[i]) {
-                  let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
-                  let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
-                  let x0 = String(new Date(x[i - 1])); //- 0.5 * time.ms));
-                  let x1 = String(new Date(x[i + 1])); //.getTime() + 0.5 * time.ms));
+            // shapes: [
+            //   ...high.map((shp, i) => {
+            //     if (patternData[i]) {
+            //       let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
+            //       let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
+            //       let x0 = String(new Date(x[i - 1])); //- 0.5 * time.ms));
+            //       let x1 = String(new Date(x[i + 1])); //.getTime() + 0.5 * time.ms));
 
-                  return {
-                    type: "rect",
-                    xref: "x",
-                    yref: "y",
-                    x0: x0,
-                    y0: lowP,
-                    x1,
-                    width: 1,
-                    y1: highP,
-                    fillcolor: "yellow",
-                    opacity: 0.6,
-                    rightMargin: 3,
-                    line: {
-                      width: 2,
-                      color: open[i] < close[i] ? "green" : "red",
-                      opacity: 1,
-                    },
-                  };
-                }
-                return null;
-              }),
-            ],
+            //       return {
+            //         type: "rect",
+            //         xref: "x",
+            //         yref: "y",
+            //         x0: x0,
+            //         y0: lowP,
+            //         x1,
+            //         width: 1,
+            //         y1: highP,
+            //         fillcolor: "yellow",
+            //         opacity: 0.6,
+            //         rightMargin: 3,
+            //         line: {
+            //           width: 2,
+            //           color: open[i] < close[i] ? "green" : "red",
+            //           opacity: 1,
+            //         },
+            //       };
+            //     }
+            //     return null;
+            //   }),
+            // ],
           });
         })
         .catch((err) => {
@@ -859,26 +824,34 @@ function App() {
                           },
                         ]
                       : []),
+                    ...(data.patternData?.length
+                      ? [
+                          {
+                            x: data?.x,
+                            y: data.patternData.map((m, i) => {
+                              let perc10 = (data.high[0] / 100) * 1;
+                              if (m) {
+                                return data.high[i] + perc10;
+                              }
+                              return null;
+                            }),
+                            mode: "text",
+                            type: "scatter",
+                            name: "Team B",
+                            text: selectedPattern?.slice(0, 2),
+                            textfont: {
+                              family: "Times New Roman",
+                              color: "blue",
+                            },
+                            textposition: "bottom center",
+                            marker: { size: 12 },
+                          },
+                        ]
+                      : []),
                   ]}
                   separateGraphs={separateGraphs}
                   loader={loader}
                 />
-                {/* {!loader &&
-                  separateGraphs.map((m, i) => (
-                    <Graph
-                      key={i + "subGraph"}
-                      templates={m.templates}
-                      style={{ width: "100%" }}
-                      data={{ ...m }}
-                      layout={{
-                        ...separateGraphLayout,
-                        yaxis: {
-                          ...separateGraphLayout.yaxis,
-                          domain: [0.25, 0.5],
-                        },
-                      }}
-                    />
-                  ))} */}
               </div>
             ) : (
               <></>
