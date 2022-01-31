@@ -331,8 +331,16 @@ function App() {
                 tempLayout = {
                   ...tempLayout,
                   yaxis: { ...layout.yaxis, domain: [0.5, 1] },
-                  yaxis2: { ...layout.yaxis, domain: [0.25, 0.5] },
-                  yaxis3: { ...layout.yaxis, domain: [0, 0.25] },
+                  yaxis2: {
+                    ...layout.yaxis,
+                    autorange: false,
+                    domain: [0.25, 0.5],
+                    range: [20, 80],
+                  },
+                  yaxis3: {
+                    ...layout.yaxis,
+                    domain: [0, 0.25],
+                  },
                   xaxis: { ...layout.xaxis },
                 };
               } else if (template.id === 6) {
@@ -366,6 +374,7 @@ function App() {
                   x: x,
                   y: R0,
                   name: "%R0",
+                  type: "bar",
                   marker: {
                     color: "blue",
                   },
@@ -375,6 +384,7 @@ function App() {
                   x: x,
                   y: R1,
                   name: "%R1",
+                  type: "bar",
                   marker: {
                     color: "red",
                   },
@@ -392,13 +402,13 @@ function App() {
                   },
                   xaxis: "x",
                   yaxis: "y2",
-                  template: [
+                  templates: [
                     {
                       x: x,
                       y: MACDSIGNAL0,
                       name: "MACD SIGNAL",
                       xaxis: "x",
-                      yaxis: "y",
+                      yaxis: "y2",
                       marker: {
                         color: "black",
                       },
@@ -431,7 +441,7 @@ function App() {
                       y: stochk0,
                       name: "stochk",
                       xaxis: "x",
-                      yaxis: "y",
+                      yaxis: "y4",
                       marker: {
                         color: "rgb(13,0,255)",
                       },
@@ -456,7 +466,7 @@ function App() {
                       y: MACDSIGNAL0,
                       name: "MACD SIGNAL",
                       xaxis: "x",
-                      yaxis: "y",
+                      yaxis: "y2",
                       marker: {
                         color: "black",
                       },
@@ -489,7 +499,7 @@ function App() {
                       y: stochk0,
                       name: "stochk",
                       xaxis: "x",
-                      yaxis: "y",
+                      yaxis: "y4",
                       marker: {
                         color: "rgb(13,0,255)",
                       },
@@ -524,7 +534,7 @@ function App() {
                       y: stochk0,
                       name: "stochk",
                       xaxis: "x",
-                      yaxis: "y",
+                      yaxis: "y3",
                       marker: {
                         color: "rgb(13,0,255)",
                       },
@@ -856,6 +866,24 @@ function App() {
             ) : (
               <></>
             )}
+            {/* {!loader &&
+                  separateGraphs.map((m, i) => (
+                    <Graph
+                      key={i + "subGraph"}
+                      templates={m.templates}
+                      style={{ width: "100%" }}
+                      data={{ ...m }}
+                      layout={separateGraphLayout}
+                      layout={{
+                        ...separateGraphLayout,
+                        yaxis: {
+                          ...separateGraphLayout.yaxis,
+                          domain: [0.25, 0.5],
+                        },
+                      }}
+                    />
+                  ))}
+                  ))} */}
           </div>
         </div>
       </div>

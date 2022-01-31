@@ -1,5 +1,5 @@
 import * as Plotly from "plotly.js";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import createPlotlyComponent from "react-plotly.js/factory";
 import "../App.css";
 
@@ -14,6 +14,19 @@ export const Graph = ({
   onHover,
   separateGraphs,
 }) => {
+  let [bottomTemplate, setBottomTemplates] = useState([]);
+  useEffect(() => {
+    let temp = [];
+    separateGraphs?.length &&
+      separateGraphs.forEach((spG) => {
+        temp.push(spG);
+        spG?.templates?.length &&
+          spG.templates?.forEach((t) => {
+            temp.push(t);
+          });
+      });
+    setBottomTemplates(temp);
+  }, [separateGraphs]);
   if (loader) {
     return <div className="loadingLabel">Loading...</div>;
   } else
@@ -23,7 +36,8 @@ export const Graph = ({
         data={[
           data,
           ...(templates || []),
-          ...(separateGraphs?.length ? separateGraphs : []),
+          ...bottomTemplate,
+          // ...(separateGraphs?.length ? separateGraphs : []),
         ]}
         layout={layout}
       />
