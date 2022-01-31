@@ -275,7 +275,7 @@ function App() {
                 donchian0.push(null);
                 tempLayout = {
                   ...tempLayout,
-                  yaxis: { ...layout.yaxis, domain: [0.5, 1] },
+                  yaxis: { ...layout.yaxis, domain: [0.55, 1] },
                   yaxis2: { ...layout.yaxis, domain: [0.25, 0.5] },
                   yaxis3: { ...layout.yaxis, domain: [0, 0.25] },
                   xaxis: { ...layout.xaxis },
@@ -291,8 +291,13 @@ function App() {
                 stochk0.push(null);
                 tempLayout = {
                   ...tempLayout,
-                  yaxis: { ...layout.yaxis, domain: [0.45, 1] },
-                  yaxis2: { ...layout.yaxis, domain: [0.3, 0.45] },
+                  yaxis: { ...layout.yaxis, domain: [0.5, 1] },
+                  yaxis2: {
+                    ...layout.yaxis,
+                    domain: [0.3, 0.45],
+                    range: [-5, 5],
+                    autorange: false,
+                  },
                   yaxis3: { ...layout.yaxis, domain: [0.15, 0.3] },
                   yaxis4: { ...layout.yaxis, domain: [0, 0.15] },
                   xaxis: { ...layout.xaxis },
@@ -315,7 +320,7 @@ function App() {
                 stochk0.push(null);
                 tempLayout = {
                   ...tempLayout,
-                  yaxis: { ...layout.yaxis, domain: [0.45, 1] },
+                  yaxis: { ...layout.yaxis, domain: [0.5, 1] },
                   yaxis2: { ...layout.yaxis, domain: [0.3, 0.45] },
                   yaxis3: { ...layout.yaxis, domain: [0.15, 0.3] },
                   yaxis4: { ...layout.yaxis, domain: [0, 0.15] },
@@ -330,12 +335,12 @@ function App() {
                 stochk0.push(null);
                 tempLayout = {
                   ...tempLayout,
-                  yaxis: { ...layout.yaxis, domain: [0.5, 1] },
+                  yaxis: { ...layout.yaxis, domain: [0.55, 1] },
                   yaxis2: {
                     ...layout.yaxis,
-                    autorange: false,
                     domain: [0.25, 0.5],
                     range: [20, 80],
+                    autorange: false,
                   },
                   yaxis3: {
                     ...layout.yaxis,
@@ -353,7 +358,7 @@ function App() {
                 HIST0.push(null);
                 tempLayout = {
                   ...tempLayout,
-                  yaxis: { ...layout.yaxis, domain: [0.3, 1] },
+                  yaxis: { ...layout.yaxis, domain: [0.35, 1] },
                   yaxis2: { ...layout.yaxis, domain: [0, 0.3] },
                   xaxis: { ...layout.xaxis },
                 };
