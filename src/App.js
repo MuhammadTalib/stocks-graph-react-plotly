@@ -262,7 +262,12 @@ function App() {
                 Object.keys(tempMerged).forEach((key) => {
                   resMerged[key].data = [...resMerged[key].data, null];
                 });
-              if (template.id === 1) {
+              if (template.id === 0) {
+                tempLayout = {
+                  ...tempLayout,
+                  yaxis: { ...layout.yaxis, domain: [0, 1] },
+                };
+              } else if (template.id === 1) {
                 tempLayout = {
                   ...tempLayout,
                   yaxis: { ...layout.yaxis, domain: [0, 1] },
