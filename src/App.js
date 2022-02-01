@@ -44,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [cursor, setCursor] = useState("crosshair");
+
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
   const [loader, setLoader] = useState(false);
@@ -52,7 +56,7 @@ function App() {
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const style = { width: "100%", height: "100%" };
   const [layout, setLayout] = useState({
-    dragmode: "zoom",
+    dragmode: "pan",
     margin: {
       r: 10,
       t: 25,
@@ -71,7 +75,6 @@ function App() {
       },
       bgcolor: "#E2E2E211",
       bordercolor: "#FFFFFF",
-      borderwidth: 2,
     },
     xaxis: {
       domain: [0, 1],
@@ -451,6 +454,33 @@ function App() {
                         color: "rgb(13,0,255)",
                       },
                     },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 20),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+
+                      yaxis: "y4",
+                      line: {
+                        dash: "dash",
+                        width: 2,
+                        color: "red",
+                      },
+                    },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 80),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+                      yaxis: "y4",
+                      line: {
+                        color: "red",
+                        dash: "dash",
+                        width: 2,
+                      },
+                    },
                   ],
                 },
               ]);
@@ -509,6 +539,33 @@ function App() {
                         color: "rgb(13,0,255)",
                       },
                     },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 20),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+
+                      yaxis: "y4",
+                      line: {
+                        dash: "dash",
+                        width: 2,
+                        color: "red",
+                      },
+                    },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 80),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+                      yaxis: "y4",
+                      line: {
+                        color: "red",
+                        dash: "dash",
+                        width: 2,
+                      },
+                    },
                   ],
                 },
               ]);
@@ -523,6 +580,34 @@ function App() {
                   },
                   xaxis: "x",
                   yaxis: "y2",
+                  templates: [
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 60),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+                      yaxis: "y2",
+                      line: {
+                        dash: "dashdot",
+                        width: 2,
+                        color: "green",
+                      },
+                    },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 40),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+                      yaxis: "y2",
+                      line: {
+                        color: "red",
+                        dash: "dash",
+                        width: 2,
+                      },
+                    },
+                  ],
                 },
                 {
                   x: x,
@@ -542,6 +627,32 @@ function App() {
                       yaxis: "y3",
                       marker: {
                         color: "rgb(13,0,255)",
+                      },
+                    },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 20),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+                      yaxis: "y3",
+                      line: {
+                        dash: "dash",
+                        width: 2,
+                        color: "red",
+                      },
+                    },
+                    {
+                      x: x.slice(0, x.length - 4),
+                      y: x.map((m) => 80),
+                      mode: "lines",
+                      xaxis: "x",
+                      showlegend: false,
+                      yaxis: "y3",
+                      line: {
+                        color: "green",
+                        dash: "dashdot",
+                        width: 2,
                       },
                     },
                   ],
@@ -724,6 +835,14 @@ function App() {
   };
   const onHover = ({ points: [point] }) => {
     setA(point.pointIndex);
+    setCursor("pointer");
+  };
+  const onUnhover = () => {
+    setCursor("crosshair");
+  };
+  const onClick = () => {
+    console.log("on click grag");
+    setCursor("grabbing");
   };
 
   const sidebarRef = useRef(null);
@@ -782,10 +901,27 @@ function App() {
             />
 
             {data && layout ? (
-              <div>
+              <div
+                style={{
+                  cursor,
+                }}
+                onMouseUp={() => {
+                  console.log("on mouse up");
+                }}
+                // onClick={() => {
+                //   console.log("on click up");
+                //   setCursor("grabbing");
+                // }}
+                // onMouseDown={() => {
+                //   console.log("on click down");
+                //   setCursor("grabbing");
+                // }}
+              >
                 <Graph
                   onHover={onHover}
-                  style={style}
+                  onUnhover={onUnhover}
+                  onClick={onClick}
+                  style={{ ...style }}
                   data={{ ...data, type: graphType }}
                   layout={layout}
                   templates={[

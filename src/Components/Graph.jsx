@@ -11,8 +11,10 @@ export const Graph = ({
   layout,
   templates,
   loader,
-  onHover,
   separateGraphs,
+  onHover,
+  onUnhover,
+  onClick,
 }) => {
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
@@ -32,14 +34,15 @@ export const Graph = ({
   } else
     return (
       <Plot
+        onClick={onClick}
         onHover={onHover}
-        data={[
-          data,
-          ...(templates || []),
-          ...bottomTemplate,
-          // ...(separateGraphs?.length ? separateGraphs : []),
-        ]}
+        onUnhover={onUnhover}
+        data={[data, ...(templates || []), ...bottomTemplate]}
         layout={layout}
+        config={{
+          scrollZoom: true,
+        }}
+        useResizeHandler={true}
       />
     );
 };

@@ -91,3 +91,7 @@
   width: 3px;
   background: #c1c3c5b4;
 }
+
+.cursor-move {
+  cursor: inherit !important;
+}
