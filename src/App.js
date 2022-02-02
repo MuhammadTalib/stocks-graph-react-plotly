@@ -203,6 +203,7 @@ function App() {
                     m.indicators[key],
                   ];
                 });
+
               if (template.id === 3 && m.indicators) {
                 R0.push(m.indicators["%R0"]);
                 R1.push(m.indicators["%R1"]);
