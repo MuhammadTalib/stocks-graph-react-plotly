@@ -763,10 +763,10 @@ function App() {
     getDataRequest(selectedStock, selectedTime);
   }, [selectedStock, selectedTime]);
 
-  useEffect(() => {
-    let height = document.documentElement.clientHeight;
-    console.log("height", height);
-  }, []);
+  // useEffect(() => {
+  //   let height = document.documentElement.clientHeight;
+  //   console.log("height", height);
+  // }, []);
 
   React.useEffect(() => {
     function handleResize() {
@@ -783,7 +783,7 @@ function App() {
       }
     }
     window.addEventListener("resize", handleResize);
-  });
+  }, [window.innerWidth, window.innerHeight]);
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
@@ -875,6 +875,8 @@ function App() {
   );
 
   React.useEffect(() => {
+    console.log("resizeeeeg");
+
     window.addEventListener("mousemove", resize);
     window.addEventListener("mouseup", stopResizing);
     return () => {
@@ -1042,7 +1044,10 @@ function App() {
       >
         <div className="app-sidebar-resizer" onMouseDown={startResizing} />
         <div className="app-sidebar-content">
-          <WatchList />
+          <WatchList
+            selectedStock={selectedStock}
+            handleStockChange={handleStockChange}
+          />
         </div>
       </div>
     </div>

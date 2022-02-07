@@ -1,12 +1,28 @@
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Button, Divider, Grid, Menu } from "@mui/material";
-import Fade from "@mui/material/Fade";
-import MenuItem from "@mui/material/MenuItem";
-import React, { useState } from "react";
+import { Grid, TextField } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import React, { useEffect, useMemo, useState } from "react";
+import { getAllStocks } from "../services/api";
 import { times } from "../Utils/utils";
+import "../App.css";
 
-const WatchList = () => {
-  let categories = ["Watch List", "L1", "L2", "L3", "L4"];
+let categories = ["Watch List", "L1", "L2", "L3", "L4"];
+
+const WatchList = ({ handleStockChange, selectedStock }) => {
+  let [stocks, setStocks] = useState([]);
+
+  useEffect(() => {
+    console.log("getAllStocks");
+    getAllStocks("stocks/available").then((res) => {
+      console.log("res", res);
+      setStocks(res?.data?.list || []);
+    });
+  }, []);
 
   const [selectedCategory, setSelectedCategory] = useState("Watch List");
   const [selectedTime, setSelectedTime] = useState("1d");
@@ -29,88 +45,141 @@ const WatchList = () => {
   const handleTimeClose = () => {
     setTimeanchorEl(null);
   };
-  return (
-    <Grid container>
-      <Grid item md={12} sm={12} xs={12}>
-        <Grid item md={6} sm={6} xs={6}>
-          <Button
-            id="fade-button"
-            fullWidth
-            aria-controls={open ? "fade-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-            endIcon={<KeyboardArrowDownIcon />}
-          >
-            {selectedCategory}
-          </Button>
-          <Menu
-            id="fade-menu"
-            fullWidth
-            MenuListProps={{
-              "aria-labelledby": "fade-button",
+  const stock = useMemo(() => {
+    return (
+      <Grid container>
+        {console.log("logging")}
+        <Grid container item md={12} sm={12} xs={12} spacing={2}>
+          <Grid item md={5} sm={5} xs={5}>
+            <Autocomplete
+              onChange={(_, newValue) => {
+                setSelectedCategory(newValue);
+              }}
+              fullWidth
+              id="free-solo-2-demo"
+              disableClearable={true}
+              options={categories}
+              value={selectedCategory}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Categrories"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          {/* <Grid item md={2} sm={2} xs={2}>
+          <Autocomplete
+            onChange={(_, newValue) => {
+              setSelectedTime(newValue);
             }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            TransitionComponent={Fade}
-          >
-            {categories.map((m, i) => {
-              return (
-                <div key={i}>
-                  <MenuItem style={{ width: "220px" }} onClick={handleClose}>
-                    {m}
-                  </MenuItem>{" "}
-                  <Divider />
-                </div>
-              );
-            })}
-          </Menu>
+            fullWidth
+            disableClearable={true}
+            getOptionLabel={(option) => option?.name}
+            options={times}
+            value={selectedTime}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Time"
+                variant="standard"
+                InputProps={{
+                  ...params.InputProps,
+                  type: "search",
+                }}
+              />
+            )}
+          />
+        </Grid> */}
+          <Grid item md={5} sm={5} xs={5}>
+            <Autocomplete
+              fullWidth
+              options={[]}
+              defaultValue={times.find((v) => v[0])}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Strategies"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          <Grid item md={6} sm={6} xs={6}>
+            <Autocomplete
+              onChange={(_, newValue) => {
+                handleStockChange(newValue);
+              }}
+              fullWidth
+              id="free-solo-2-demo"
+              disableClearable={true}
+              options={stocks}
+              getOptionLabel={(option) => option}
+              value={selectedStock}
+              defaultValue={stocks.find((v) => v[0])}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Stock"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                />
+              )}
+            />
+          </Grid>
         </Grid>
-        <Grid item md={2} sm={2} xs={2}>
-          <Button
-            id="fade-button"
-            aria-controls={open ? "fade-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleTimeClick}
-            endIcon={<KeyboardArrowDownIcon />}
-          >
-            {selectedTime}
-          </Button>
-          <Menu
-            id="fade-menu"
-            MenuListProps={{
-              "aria-labelledby": "fade-button",
-            }}
-            anchorEl={timeanchorEl}
-            open={openTime}
-            onClose={handleTimeClose}
-            TransitionComponent={Fade}
-          >
-            {times.map((m, i) => {
-              return (
-                <div key={i}>
-                  <MenuItem
-                    key={i}
-                    style={{ width: "120px" }}
-                    onClick={handleClose}
-                  >
-                    {m.name}
-                  </MenuItem>{" "}
-                  <Divider />
-                </div>
-              );
-            })}
-          </Menu>
-        </Grid>
-      </Grid>
 
-      <Grid item md={12} sm={12} xs={12}>
-        {/* <WatchListTable /> */}
+        <Grid item md={12} sm={12} xs={12}>
+          <div>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {["Symbol", "Time"].map((column, index) => (
+                      <TableCell key={index}>{column}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {stocks.map((row, index) => {
+                    return (
+                      <TableRow
+                        className={
+                          row === selectedStock ? "selectedRowStyle" : ""
+                        }
+                        hover
+                        key={index}
+                        onClick={() => {
+                          handleStockChange(row);
+                        }}
+                      >
+                        <TableCell>{row}</TableCell>
+                        <TableCell>{selectedTime}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  }, [stocks, selectedStock]);
+
+  return stock;
 };
 
 export default WatchList;

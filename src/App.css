@@ -95,3 +95,9 @@
 .cursor-move {
   cursor: inherit !important;
 }
+.selectedRowStyle {
+  background-color: #96c7f9;
+}
+.selectedRowStyle :hover {
+  background-color: #96c7f9;
+}
