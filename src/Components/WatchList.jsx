@@ -13,38 +13,41 @@ import "../App.css";
 
 let categories = ["Watch List", "L1", "L2", "L3", "L4"];
 
-const WatchList = ({ handleStockChange, selectedStock }) => {
-  let [stocks, setStocks] = useState([]);
-
+const WatchList = ({
+  handleStockChange,
+  selectedStock,
+  stocks,
+  setStocks,
+  height,
+  setSelectStockIndex,
+  scrollableListRef,
+  placeSelectedItemInTheMiddle,
+}) => {
   useEffect(() => {
     console.log("getAllStocks");
     getAllStocks("stocks/available").then((res) => {
       console.log("res", res);
       setStocks(res?.data?.list || []);
+      setSelectStockIndex(0);
+      handleStockChange(res?.data?.list[0]);
     });
   }, []);
 
   const [selectedCategory, setSelectedCategory] = useState("Watch List");
   const [selectedTime, setSelectedTime] = useState("1d");
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [timeanchorEl, setTimeanchorEl] = React.useState(null);
+  const handleKeyDown = (e) => {
+    console.log("handleKeyDown");
 
-  const open = Boolean(anchorEl);
-  const openTime = Boolean(timeanchorEl);
+    const { cursor, result } = this.state;
+    // arrow up/down button should select next/previous list element
+    if (e.keyCode === 38 && cursor > 0) {
+      console.log("up");
+    } else if (e.keyCode === 40 && cursor < result.length - 1) {
+      console.log("down");
+    }
+  };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleTimeClick = (event) => {
-    setTimeanchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleTimeClose = () => {
-    setTimeanchorEl(null);
-  };
   const stock = useMemo(() => {
     return (
       <Grid container>
@@ -73,30 +76,30 @@ const WatchList = ({ handleStockChange, selectedStock }) => {
               )}
             />
           </Grid>
-          {/* <Grid item md={2} sm={2} xs={2}>
-          <Autocomplete
-            onChange={(_, newValue) => {
-              setSelectedTime(newValue);
-            }}
-            fullWidth
-            disableClearable={true}
-            getOptionLabel={(option) => option?.name}
-            options={times}
-            value={selectedTime}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Time"
-                variant="standard"
-                InputProps={{
-                  ...params.InputProps,
-                  type: "search",
-                }}
-              />
-            )}
-          />
-        </Grid> */}
-          <Grid item md={5} sm={5} xs={5}>
+          <Grid item md={3} sm={3} xs={3}>
+            <Autocomplete
+              onChange={(_, newValue) => {
+                setSelectedTime(newValue);
+              }}
+              fullWidth
+              disableClearable={true}
+              getOptionLabel={(option) => (option?.name ? option?.name : "1d")}
+              options={times}
+              value={selectedTime}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Time"
+                  variant="standard"
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          <Grid item md={4} sm={4} xs={4}>
             <Autocomplete
               fullWidth
               options={[]}
@@ -114,37 +117,16 @@ const WatchList = ({ handleStockChange, selectedStock }) => {
               )}
             />
           </Grid>
-          <Grid item md={6} sm={6} xs={6}>
-            <Autocomplete
-              onChange={(_, newValue) => {
-                handleStockChange(newValue);
-              }}
-              fullWidth
-              id="free-solo-2-demo"
-              disableClearable={true}
-              options={stocks}
-              getOptionLabel={(option) => option}
-              value={selectedStock}
-              defaultValue={stocks.find((v) => v[0])}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Stock"
-                  variant="standard"
-                  InputProps={{
-                    ...params.InputProps,
-                    type: "search",
-                  }}
-                />
-              )}
-            />
-          </Grid>
         </Grid>
 
         <Grid item md={12} sm={12} xs={12}>
-          <div>
-            <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
+          <div onKeyPress={handleKeyDown}>
+            <TableContainer sx={{ maxHeight: height - 20, margin: "10px 0px" }}>
+              <Table
+                ref={scrollableListRef}
+                stickyHeader
+                aria-label="sticky table"
+              >
                 <TableHead>
                   <TableRow>
                     {["Symbol", "Time"].map((column, index) => (
@@ -153,21 +135,20 @@ const WatchList = ({ handleStockChange, selectedStock }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {stocks.map((row, index) => {
+                  {stocks.slice(0, 60).map((row, index) => {
                     return (
-                      <TableRow
-                        className={
-                          row === selectedStock ? "selectedRowStyle" : ""
-                        }
-                        hover
+                      <RenderRow
                         key={index}
-                        onClick={() => {
-                          handleStockChange(row);
-                        }}
-                      >
-                        <TableCell>{row}</TableCell>
-                        <TableCell>{selectedTime}</TableCell>
-                      </TableRow>
+                        row={row}
+                        index={index}
+                        selectedStock={selectedStock}
+                        handleStockChange={handleStockChange}
+                        setSelectStockIndex={setSelectStockIndex}
+                        selectedTime={selectedTime}
+                        placeSelectedItemInTheMiddle={
+                          placeSelectedItemInTheMiddle
+                        }
+                      />
                     );
                   })}
                 </TableBody>
@@ -183,3 +164,30 @@ const WatchList = ({ handleStockChange, selectedStock }) => {
 };
 
 export default WatchList;
+
+const RenderRow = ({
+  row,
+  index,
+  selectedStock,
+  handleStockChange,
+  selectedTime,
+  placeSelectedItemInTheMiddle,
+  setSelectStockIndex,
+}) => {
+  return (
+    <TableRow
+      className={row === selectedStock ? "selectedRowStyle" : ""}
+      active={row === selectedStock}
+      key={index}
+      onClick={() => {
+        placeSelectedItemInTheMiddle(index);
+        handleStockChange(row);
+        setSelectStockIndex(index);
+      }}
+      focus={row === selectedStock}
+    >
+      <TableCell>{row}</TableCell>
+      <TableCell>{selectedTime}</TableCell>
+    </TableRow>
+  );
+};

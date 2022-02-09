@@ -5,6 +5,9 @@ import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
 import { getAllStocks } from "./services/api";
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+import { theme } from "./theme";
+import { ContactSupportOutlined } from "@mui/icons-material";
 
 const dummy = {
   x: [],
@@ -44,10 +47,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [hovered, setHovered] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  let [stocks, setStocks] = useState([]);
   const [cursor, setCursor] = useState("crosshair");
-
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
   const [loader, setLoader] = useState(false);
@@ -55,6 +56,8 @@ function App() {
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const style = { width: "100%", height: "100%" };
+  const scrollableListRef = useRef(null);
+
   const [layout, setLayout] = useState({
     dragmode: "pan",
     margin: {
@@ -105,6 +108,8 @@ function App() {
   };
 
   const [selectedStock, setSelectStock] = useState("MMM");
+  const [selectedStockIndex, setSelectStockIndex] = useState(0);
+
   const [selectedPattern, setSelectedPattern] = useState(null);
 
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
@@ -763,12 +768,8 @@ function App() {
     getDataRequest(selectedStock, selectedTime);
   }, [selectedStock, selectedTime]);
 
-  // useEffect(() => {
-  //   let height = document.documentElement.clientHeight;
-  //   console.log("height", height);
-  // }, []);
-
   React.useEffect(() => {
+    console.log("resining");
     function handleResize() {
       if (
         layout.width !== window.innerWidth - 10 ||
@@ -787,13 +788,13 @@ function App() {
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
-    getDataRequest(
-      stock,
-      selectedTime,
-      selectedTemp,
-      selectedPattern,
-      switchToggle
-    );
+    // getDataRequest(
+    //   stock,
+    //   selectedTime,
+    //   selectedTemp,
+    //   selectedPattern,
+    //   switchToggle
+    // );
   };
 
   const handlePatternChange = (pattern) => {
@@ -875,8 +876,6 @@ function App() {
   );
 
   React.useEffect(() => {
-    console.log("resizeeeeg");
-
     window.addEventListener("mousemove", resize);
     window.addEventListener("mouseup", stopResizing);
     return () => {
@@ -885,172 +884,198 @@ function App() {
     };
   }, [resize, stopResizing]);
 
-  return (
-    <div className="app-container">
-      <div className={classes.container + " app-frame"}>
-        <div
-          style={{ height: "100vh", overflowY: "hidden", overflowX: "hidden" }}
-        >
-          {loader ? <div className="loader"></div> : <></>}
-          <div>
-            <Header
-              handleGrapthType={handleGrapthType}
-              graphType={graphType}
-              templateChange={templateChange}
-              selectedStock={selectedStock}
-              handleStockChange={handleStockChange}
-              handlePatternChange={handlePatternChange}
-              selectedTime={selectedTime}
-              hanldeSelectedTime={hanldeSelectedTime}
-              selectedTemp={selectedTemp}
-              selectedPattern={selectedPattern}
-              handlSwitchToggle={handlSwitchToggle}
-              switchToggle={switchToggle}
-            />
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 38) {
+      console.log("up");
+      handleStockChange(stocks[selectedStockIndex - 1]);
+      setSelectStockIndex(selectedStockIndex - 1);
+      placeSelectedItemInTheMiddle(selectedStockIndex - 1);
+    } else if (e.keyCode === 40) {
+      console.log("down");
+      handleStockChange(stocks[selectedStockIndex + 1]);
+      setSelectStockIndex(selectedStockIndex + 1);
+      placeSelectedItemInTheMiddle(selectedStockIndex + 1);
+    }
+  };
+  const placeSelectedItemInTheMiddle = (index) => {
+    const LIST_ITEM_HEIGHT = 21;
+    const NUM_OF_VISIBLE_LIST_ITEMS = 15;
 
-            {data && layout ? (
-              <div
-                style={{
-                  cursor,
-                }}
-                onMouseUp={() => {
-                  console.log("on mouse up");
-                }}
-                // onClick={() => {
-                //   console.log("on click up");
-                //   setCursor("grabbing");
-                // }}
-                // onMouseDown={() => {
-                //   console.log("on click down");
-                //   setCursor("grabbing");
-                // }}
-              >
-                <Graph
-                  onHover={onHover}
-                  onUnhover={onUnhover}
-                  onClick={onClick}
-                  style={{ ...style }}
-                  data={{ ...data, type: graphType }}
-                  layout={layout}
-                  templates={[
-                    ...(selectedTemp.merged &&
-                    Object.keys(selectedTemp.merged).length
-                      ? [
-                          ...Object.keys(selectedTemp.merged).map((key) => {
-                            return {
-                              ...selectedTemp.merged[key],
-                              x: data?.x,
-                              y: selectedTemp.merged[key].data.map((m) => {
-                                if (!m) return null;
-                                else return m;
-                              }),
-                              name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[a]}`,
-                            };
-                          }),
-                        ]
-                      : []),
-                    ...(switchToggle
-                      ? [
-                          {
-                            x: data?.x,
-                            y: data?.ConfrimHigh.map((m, i) => {
-                              if (!m) return null;
-                              else return data.high[i];
-                            }),
-                            name: "Confirm High",
-                            mode: "markers",
-                            marker: {
-                              color: "blue",
-                              symbol: "diamond",
-                            },
-                          },
-                        ]
-                      : []),
-                    ...(switchToggle
-                      ? [
-                          {
-                            x: data?.x,
-                            y: data.ConfrimLow.map((m, i) => {
-                              if (!m) return null;
-                              else return data.low[i];
-                            }),
-                            name: "Confirm Low",
-                            mode: "markers",
-                            marker: {
-                              color: "red",
-                              symbol: "diamond",
-                            },
-                          },
-                        ]
-                      : []),
-                    ...(data.patternData?.length
-                      ? [
-                          {
-                            x: data?.x,
-                            y: data.patternData.map((m, i) => {
-                              let perc10 = (data.high[0] / 100) * 1;
-                              if (m) {
-                                return data.high[i] + perc10;
-                              }
-                              return null;
-                            }),
-                            mode: "text",
-                            type: "scatter",
-                            name: "Team B",
-                            text: selectedPattern?.slice(0, 2),
-                            textfont: {
-                              family: "Times New Roman",
-                              color: "blue",
-                            },
-                            textposition: "bottom center",
-                            marker: { size: 12 },
-                          },
-                        ]
-                      : []),
-                  ]}
-                  separateGraphs={separateGraphs}
-                  loader={loader}
+    const amountToScroll =
+      LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS + index * LIST_ITEM_HEIGHT;
+    scrollableListRef.current.scrollTo(amountToScroll, 0);
+  };
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <div className="app-container">
+          <div className={classes.container + " app-frame"}>
+            <div
+              style={{
+                height: "100vh",
+                overflowY: "hidden",
+                overflowX: "hidden",
+              }}
+            >
+              {loader ? <div className="loader"></div> : <></>}
+              <div>
+                <Header
+                  handleGrapthType={handleGrapthType}
+                  graphType={graphType}
+                  templateChange={templateChange}
+                  selectedStock={selectedStock}
+                  handleStockChange={handleStockChange}
+                  handlePatternChange={handlePatternChange}
+                  selectedTime={selectedTime}
+                  hanldeSelectedTime={hanldeSelectedTime}
+                  selectedTemp={selectedTemp}
+                  selectedPattern={selectedPattern}
+                  handlSwitchToggle={handlSwitchToggle}
+                  switchToggle={switchToggle}
                 />
-              </div>
-            ) : (
-              <></>
-            )}
-            {/* {!loader &&
-                  separateGraphs.map((m, i) => (
+
+                {data && layout ? (
+                  <div
+                    style={{
+                      cursor,
+                    }}
+                    onMouseUp={() => {
+                      console.log("on mouse up");
+                    }}
+                    // onClick={() => {
+                    //   console.log("on click up");
+                    //   setCursor("grabbing");
+                    // }}
+                    // onMouseDown={() => {
+                    //   console.log("on click down");
+                    //   setCursor("grabbing");
+                    // }}
+                  >
                     <Graph
-                      key={i + "subGraph"}
-                      templates={m.templates}
-                      style={{ width: "100%" }}
-                      data={{ ...m }}
-                      layout={separateGraphLayout}
-                      layout={{
-                        ...separateGraphLayout,
-                        yaxis: {
-                          ...separateGraphLayout.yaxis,
-                          domain: [0.25, 0.5],
-                        },
-                      }}
+                      onHover={onHover}
+                      onUnhover={onUnhover}
+                      onClick={onClick}
+                      style={{ ...style }}
+                      data={{ ...data, type: graphType }}
+                      layout={layout}
+                      templates={[
+                        ...(selectedTemp.merged &&
+                        Object.keys(selectedTemp.merged).length
+                          ? [
+                              ...Object.keys(selectedTemp.merged).map((key) => {
+                                return {
+                                  ...selectedTemp.merged[key],
+                                  x: data?.x,
+                                  y: selectedTemp.merged[key].data.map((m) => {
+                                    if (!m) return null;
+                                    else return m;
+                                  }),
+                                  name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[a]}`,
+                                };
+                              }),
+                            ]
+                          : []),
+                        ...(switchToggle
+                          ? [
+                              {
+                                x: data?.x,
+                                y: data?.ConfrimHigh.map((m, i) => {
+                                  if (!m) return null;
+                                  else return data.high[i];
+                                }),
+                                name: "Confirm High",
+                                mode: "markers",
+                                marker: {
+                                  color: "blue",
+                                  symbol: "diamond",
+                                },
+                              },
+                            ]
+                          : []),
+                        ...(switchToggle
+                          ? [
+                              {
+                                x: data?.x,
+                                y: data.ConfrimLow.map((m, i) => {
+                                  if (!m) return null;
+                                  else return data.low[i];
+                                }),
+                                name: "Confirm Low",
+                                mode: "markers",
+                                marker: {
+                                  color: "red",
+                                  symbol: "diamond",
+                                },
+                              },
+                            ]
+                          : []),
+                        ...(data.patternData?.length
+                          ? [
+                              {
+                                x: data?.x,
+                                y: data.patternData.map((m, i) => {
+                                  let perc10 = (data.high[0] / 100) * 1;
+                                  if (m) {
+                                    return data.high[i] + perc10;
+                                  }
+                                  return null;
+                                }),
+                                mode: "text",
+                                type: "scatter",
+                                name: "Team B",
+                                text: selectedPattern?.slice(0, 2),
+                                textfont: {
+                                  family: "Times New Roman",
+                                  color: "blue",
+                                },
+                                textposition: "bottom center",
+                                marker: { size: 12 },
+                              },
+                            ]
+                          : []),
+                      ]}
+                      separateGraphs={separateGraphs}
+                      loader={loader}
                     />
-                  ))}
-                  ))} */}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+          </div>
+          <div
+            onKeyDown={handleKeyDown}
+            ref={sidebarRef}
+            className="app-sidebar"
+            style={{ width: sidebarWidth + "px" }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <div className="app-sidebar-resizer" onMouseDown={startResizing} />
+            <div className="app-sidebar-content">
+              <WatchList
+                selectedStock={selectedStock}
+                handleStockChange={handleStockChange}
+                stocks={stocks}
+                setStocks={setStocks}
+                selectedStockIndex={selectedStockIndex}
+                setSelectStockIndex={setSelectStockIndex}
+                height={layout.height}
+                scrollableListRef={scrollableListRef}
+                placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        ref={sidebarRef}
-        className="app-sidebar"
-        style={{ width: sidebarWidth + "px" }}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-        <div className="app-sidebar-content">
-          <WatchList
-            selectedStock={selectedStock}
-            handleStockChange={handleStockChange}
-          />
-        </div>
-      </div>
-    </div>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

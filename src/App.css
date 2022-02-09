@@ -96,8 +96,20 @@
   cursor: inherit !important;
 }
 .selectedRowStyle {
-  background-color: #96c7f9;
+  background-color: #b3d6f9;
 }
-.selectedRowStyle :hover {
-  background-color: #96c7f9;
+.selectedRowStyle :active {
+  background-color: #b3d6f9;
+}
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #484848;
 }
