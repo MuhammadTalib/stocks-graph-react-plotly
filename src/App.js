@@ -866,6 +866,22 @@ function App() {
   const resize = React.useCallback(
     (mouseMoveEvent) => {
       if (isResizing) {
+        console.log(
+          "sodebar resizing",
+          window.innerWidth -
+            (sidebarRef.current.getBoundingClientRect().right -
+              mouseMoveEvent.clientX) -
+            10
+        );
+        setLayout({
+          ...layout,
+          width:
+            window.innerWidth -
+            (sidebarRef.current.getBoundingClientRect().right -
+              mouseMoveEvent.clientX) -
+            10,
+          height: window.innerHeight - 50,
+        });
         setSidebarWidth(
           sidebarRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX
@@ -949,14 +965,6 @@ function App() {
                     onMouseUp={() => {
                       console.log("on mouse up");
                     }}
-                    // onClick={() => {
-                    //   console.log("on click up");
-                    //   setCursor("grabbing");
-                    // }}
-                    // onMouseDown={() => {
-                    //   console.log("on click down");
-                    //   setCursor("grabbing");
-                    // }}
                   >
                     <Graph
                       onHover={onHover}
