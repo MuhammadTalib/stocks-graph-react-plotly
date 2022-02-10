@@ -1,4 +1,4 @@
-import { Grid, TextField } from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,6 +10,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { getAllStocks } from "../services/api";
 import { times } from "../Utils/utils";
 import "../App.css";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { visuallyHidden } from "@mui/utils";
 
 let categories = ["Watch List", "L1", "L2", "L3", "L4"];
 
@@ -47,6 +49,50 @@ const WatchList = ({
       console.log("down");
     }
   };
+
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("Symbol");
+  const createSortHandler = (property) => (event) => {
+    handleRequestSort(event, property);
+  };
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+
+    setStocks(
+      stableSort(stocks, getComparator(isAsc ? "desc" : "asc", property))
+    );
+  };
+  function descendingComparator(a, b, orderBy) {
+    if (b < a) {
+      return -1;
+    }
+    if (b > a) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  // This method is created for cross-browser compatibility, if you don't
+  // need to support IE11, you can use Array.prototype.sort() directly
+  function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) {
+        return order;
+      }
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+  }
 
   const stock = useMemo(() => {
     return (
@@ -129,8 +175,31 @@ const WatchList = ({
               >
                 <TableHead>
                   <TableRow>
-                    {["Symbol", "Time"].map((column, index) => (
-                      <TableCell key={index}>{column}</TableCell>
+                    {[
+                      { label: "Symbol", numeric: false },
+                      { label: "Time", numeric: false },
+                    ].map((column, index) => (
+                      <TableCell
+                        key={index}
+                        align={column.numeric ? "right" : "left"}
+                        sortDirection={orderBy === column.label ? order : false}
+                      >
+                        <TableSortLabel
+                          active={orderBy === column.label}
+                          direction={orderBy === column.label ? order : "asc"}
+                          onClick={createSortHandler(column.label)}
+                        >
+                          {column.label}
+                          {orderBy === column.id ? (
+                            <Box component="span" sx={visuallyHidden}>
+                              {order === "desc"
+                                ? "sorted descending"
+                                : "sorted ascending"}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      </TableCell>
+                      // <TableCell key={index}>{column}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
@@ -158,7 +227,7 @@ const WatchList = ({
         </Grid>
       </Grid>
     );
-  }, [stocks, selectedStock]);
+  }, [stocks, selectedStock, order, orderBy]);
 
   return stock;
 };
