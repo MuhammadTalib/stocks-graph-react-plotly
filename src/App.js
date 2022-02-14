@@ -1,3 +1,4 @@
+import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
@@ -5,9 +6,7 @@ import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
 import { getAllStocks } from "./services/api";
-import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import { theme } from "./theme";
-import { ContactSupportOutlined } from "@mui/icons-material";
 
 const dummy = {
   x: [],
@@ -124,6 +123,8 @@ function App() {
 
   const getDataRequest = useCallback(
     async (stock, time, template, pattern, meta_trader_indicator) => {
+      document.querySelector('[data-title="Autoscale"]')?.click();
+
       setLoader(true);
       let url = `stocks?stock=${stock?.toLowerCase()}&interval=${time.name}`;
       if (template && template?.id > 0) {

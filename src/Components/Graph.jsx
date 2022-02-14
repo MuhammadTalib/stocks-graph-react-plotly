@@ -6,7 +6,6 @@ import "../App.css";
 const Plot = createPlotlyComponent(Plotly);
 
 export const Graph = ({
-  style,
   data,
   layout,
   templates,
