@@ -20,14 +20,14 @@ const Header = ({
   handlSwitchToggle,
   switchToggle,
 }) => {
-  let [stocks, setStocks] = useState([]);
+  // let [stocks, setStocks] = useState([]);
   let [patterns, setPatterns] = useState([]);
 
   useEffect(() => {
-    getAllStocks("stocks/available").then((res) => {
-      console.log("res", res);
-      setStocks(res?.data?.list || []);
-    });
+    // getAllStocks("stocks/available").then((res) => {
+    //   console.log("res", res);
+    //   setStocks(res?.data?.list || []);
+    // });
 
     getAllStocks("stocks/patterns").then((res) => {
       console.log("res", res);
@@ -37,7 +37,7 @@ const Header = ({
 
   return (
     <Grid container spacing={2} style={{ padding: "10px" }}>
-      <Grid item md={2} sm={6} xs={12}>
+      {/* <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
           onChange={(_, newValue) => {
             handleStockChange(newValue);
@@ -63,7 +63,7 @@ const Header = ({
             />
           )}
         />
-      </Grid>
+      </Grid> */}
       <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
           onChange={(_, newValue) => {
@@ -140,7 +140,7 @@ const Header = ({
           ))}
         </ButtonGroup>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={3}>
         <ButtonGroup variant="text" aria-label="text button group">
           {times.map((t, i) => (
             <Button
@@ -155,7 +155,7 @@ const Header = ({
           ))}
         </ButtonGroup>
       </Grid>
-      <Grid item md={3} xs={3}>
+      <Grid item md={4} xs={4}>
         <ButtonGroup variant="text" aria-label="text button group">
           {templates.map((m, i) => (
             <Button

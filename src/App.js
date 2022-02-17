@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  let [stocks, setStocks] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const [cursor, setCursor] = useState("crosshair");
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
@@ -54,6 +54,8 @@ function App() {
   const [a, setA] = useState(1);
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("FOREX");
+
   const style = { width: "100%", height: "100%" };
   const scrollableListRef = useRef(null);
 
@@ -126,7 +128,9 @@ function App() {
       document.querySelector('[data-title="Autoscale"]')?.click();
 
       setLoader(true);
-      let url = `stocks?stock=${stock?.toLowerCase()}&interval=${time.name}`;
+      let url = `stocks?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
+        stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
+      }&interval=${time.name}`;
       if (template && template?.id > 0) {
         url = url + `&template=${template.id}`;
       }
@@ -472,7 +476,6 @@ function App() {
                       mode: "lines",
                       xaxis: "x",
                       showlegend: false,
-
                       yaxis: "y4",
                       line: {
                         dash: "dash",
@@ -762,12 +765,17 @@ function App() {
           setSeparateGraphs([]);
           setGraphData(null);
         });
+      document.querySelector('[data-title="Autoscale"]')?.click();
     }
   );
 
   useEffect(() => {
     getDataRequest(selectedStock, selectedTime);
-  }, [selectedStock, selectedTime]);
+  }, [selectedStock, selectedTime, selectedCategory]);
+
+  const handleSelectedCategory = (category) => {
+    setSelectedCategory(category);
+  };
 
   React.useEffect(() => {
     console.log("resining");
@@ -1031,14 +1039,19 @@ function App() {
                                 x: data?.x,
                                 y: data.patternData.map((m, i) => {
                                   let perc10 = (data.high[0] / 100) * 1;
+
                                   if (m) {
-                                    return data.high[i] + perc10;
+                                    return data.close[i] > data.open[i]
+                                      ? data.high[i] - perc10
+                                      : data.high[i] + perc10;
                                   }
                                   return null;
                                 }),
+                                hovertemplate: `${selectedPattern}`,
+
                                 mode: "text",
                                 type: "scatter",
-                                name: "Team B",
+                                name: " ",
                                 text: selectedPattern?.slice(0, 2),
                                 textfont: {
                                   family: "Times New Roman",
@@ -1079,6 +1092,8 @@ function App() {
                 height={layout.height}
                 scrollableListRef={scrollableListRef}
                 placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
               />
             </div>
           </div>

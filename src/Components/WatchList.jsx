@@ -13,8 +13,6 @@ import "../App.css";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
 
-let categories = ["Watch List", "L1", "L2", "L3", "L4"];
-
 const WatchList = ({
   handleStockChange,
   selectedStock,
@@ -24,23 +22,30 @@ const WatchList = ({
   setSelectStockIndex,
   scrollableListRef,
   placeSelectedItemInTheMiddle,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     console.log("getAllStocks");
-    getAllStocks("stocks/available").then((res) => {
-      console.log("res", res);
+    getAllStocks("/stocks/watchlish").then((res) => {
+      setCategories(res?.data?.list);
+    });
+  }, []);
+
+  useEffect(() => {
+    getAllStocks("stocks/watchlish/" + selectedCategory).then((res) => {
+      console.log(res?.data?.list);
       setStocks(res?.data?.list || []);
       setSelectStockIndex(0);
       handleStockChange(res?.data?.list[0]);
     });
-  }, []);
+  }, [selectedCategory]);
 
-  const [selectedCategory, setSelectedCategory] = useState("Watch List");
   const [selectedTime, setSelectedTime] = useState("1d");
 
   const handleKeyDown = (e) => {
-    console.log("handleKeyDown");
-
     const { cursor, result } = this.state;
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
@@ -65,10 +70,10 @@ const WatchList = ({
     );
   };
   function descendingComparator(a, b, orderBy) {
-    if (b < a) {
+    if (b.name < a.name) {
       return -1;
     }
-    if (b > a) {
+    if (b.name > a.name) {
       return 1;
     }
     return 0;
@@ -101,13 +106,16 @@ const WatchList = ({
         <Grid container item md={12} sm={12} xs={12} spacing={2}>
           <Grid item md={5} sm={5} xs={5}>
             <Autocomplete
+              blurOnSelect
               onChange={(_, newValue) => {
+                console.log("newValue", newValue);
                 setSelectedCategory(newValue);
               }}
               fullWidth
               id="free-solo-2-demo"
-              disableClearable={true}
               options={categories}
+              disableListWrap
+              onHighlightChange={() => {}}
               value={selectedCategory}
               renderInput={(params) => (
                 <TextField
@@ -124,6 +132,7 @@ const WatchList = ({
           </Grid>
           <Grid item md={3} sm={3} xs={3}>
             <Autocomplete
+              blurOnSelect
               onChange={(_, newValue) => {
                 setSelectedTime(newValue);
               }}
@@ -147,6 +156,7 @@ const WatchList = ({
           </Grid>
           <Grid item md={4} sm={4} xs={4}>
             <Autocomplete
+              blurOnSelect
               fullWidth
               options={[]}
               defaultValue={times.find((v) => v[0])}
@@ -177,6 +187,7 @@ const WatchList = ({
                   <TableRow>
                     {[
                       { label: "Symbol", numeric: false },
+                      { label: "Sources", numeric: false },
                       { label: "Time", numeric: false },
                     ].map((column, index) => (
                       <TableCell
@@ -217,6 +228,8 @@ const WatchList = ({
                         placeSelectedItemInTheMiddle={
                           placeSelectedItemInTheMiddle
                         }
+                        setStocks={setStocks}
+                        stocks={stocks}
                       />
                     );
                   })}
@@ -227,7 +240,15 @@ const WatchList = ({
         </Grid>
       </Grid>
     );
-  }, [stocks, selectedStock, order, orderBy]);
+  }, [
+    stocks,
+    selectedStock,
+    order,
+    orderBy,
+    selectedCategory,
+    categories,
+    stocks,
+  ]);
 
   return stock;
 };
@@ -235,6 +256,7 @@ const WatchList = ({
 export default WatchList;
 
 const RenderRow = ({
+  key,
   row,
   index,
   selectedStock,
@@ -242,20 +264,57 @@ const RenderRow = ({
   selectedTime,
   placeSelectedItemInTheMiddle,
   setSelectStockIndex,
+  setStocks,
+  stocks,
 }) => {
   return (
     <TableRow
-      className={row === selectedStock ? "selectedRowStyle" : ""}
-      active={row === selectedStock}
+      className={row.name === selectedStock.name ? "selectedRowStyle" : ""}
+      active={row.name === selectedStock.name}
       key={index}
       onClick={() => {
         placeSelectedItemInTheMiddle(index);
         handleStockChange(row);
         setSelectStockIndex(index);
       }}
-      focus={row === selectedStock}
+      focus={row.name === selectedStock.name}
     >
-      <TableCell>{row}</TableCell>
+      <TableCell>{row.name}</TableCell>
+      <TableCell>
+        <Autocomplete
+          fullWidth
+          onKeyDown={() => {
+            console.log("onKeyDown");
+          }}
+          options={row.sources}
+          onChange={(e, v) => {
+            console.log("onChange");
+
+            setStocks(
+              stocks.map((m, i) => {
+                if (key === i) {
+                  return { ...m, selectedSource: v };
+                }
+                return m;
+              })
+            );
+          }}
+          blurOnSelect
+          value={row?.selectedSource || row.sources[0]}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Source"
+              variant="standard"
+              InputProps={{
+                ...params.InputProps,
+                type: "search",
+              }}
+            />
+          )}
+        />
+      </TableCell>
+
       <TableCell>{selectedTime}</TableCell>
     </TableRow>
   );
