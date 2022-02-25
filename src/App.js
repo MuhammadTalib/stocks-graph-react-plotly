@@ -55,6 +55,7 @@ function App() {
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
+  const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
 
   const style = { width: "100%", height: "100%" };
   const scrollableListRef = useRef(null);
@@ -992,6 +993,8 @@ function App() {
                   selectedPattern={selectedPattern}
                   handlSwitchToggle={handlSwitchToggle}
                   switchToggle={switchToggle}
+                  toggleFirstDayLine={toggleFirstDayLine}
+                  setToggleFirstDayLine={setToggleFirstDayLine}
                 />
 
                 {data && layout ? (
@@ -1011,6 +1014,7 @@ function App() {
                       style={{ ...style }}
                       data={{ ...data, type: graphType }}
                       layout={layout}
+                      toggleFirstDayLine={toggleFirstDayLine}
                       templates={[
                         ...(selectedTemp.merged &&
                         Object.keys(selectedTemp.merged).length

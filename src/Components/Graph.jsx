@@ -15,6 +15,7 @@ export const Graph = ({
   onUnhover,
   onClick,
   rightMargin,
+  toggleFirstDayLine,
 }) => {
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
@@ -41,36 +42,38 @@ export const Graph = ({
         layout={{
           ...layout,
           shapes: [
-            ...data.x
-              .slice(0, data.x.length - rightMargin)
-              .map((dateStr, dateIndex) => {
-                let date_ = new Date(dateStr);
-                let date1 = date_.getDate();
-                let date2 = new Date(data.x[dateIndex - 1]).getDate();
-                let date3 = new Date(data.x[dateIndex - 2]).getDate();
+            ...(toggleFirstDayLine
+              ? data.x
+                  .slice(0, data.x.length - rightMargin)
+                  .map((dateStr, dateIndex) => {
+                    let date_ = new Date(dateStr);
+                    let date1 = date_.getDate();
+                    let date2 = new Date(data.x[dateIndex - 1]).getDate();
+                    let date3 = new Date(data.x[dateIndex - 2]).getDate();
 
-                if (
-                  date1 === 1 ||
-                  (date1 === 2 && date2 !== 1) ||
-                  (date1 === 3 && date3 !== 1 && date2 !== 2)
-                ) {
-                  console.log("date_", date_.getDate(), dateStr);
-                  return {
-                    type: "line",
-                    text: "ddd",
-                    x0: String(dateStr),
-                    y0: 0,
-                    x1: String(dateStr),
-                    yref: "paper",
-                    y1: 1,
-                    line: {
-                      color: "grey",
-                      width: 1.5,
-                      dash: "dot",
-                    },
-                  };
-                }
-              }),
+                    if (
+                      date1 === 1 ||
+                      (date1 === 2 && date2 !== 1) ||
+                      (date1 === 3 && date3 !== 1 && date2 !== 2)
+                    ) {
+                      console.log("date_", date_.getDate(), dateStr);
+                      return {
+                        type: "line",
+                        text: "ddd",
+                        x0: String(dateStr),
+                        y0: 0,
+                        x1: String(dateStr),
+                        yref: "paper",
+                        y1: 1,
+                        line: {
+                          color: "grey",
+                          width: 1.5,
+                          dash: "dot",
+                        },
+                      };
+                    }
+                  })
+              : []),
           ],
         }}
         config={{

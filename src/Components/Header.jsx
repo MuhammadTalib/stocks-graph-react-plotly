@@ -3,7 +3,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { getAllStocks } from "../services/api";
-import { Grid, TextField } from "@mui/material";
+import { FormControlLabel, Grid, Switch, TextField } from "@mui/material";
 import { times, templates } from "../Utils/utils";
 import "../App.css";
 const Header = ({
@@ -19,6 +19,8 @@ const Header = ({
   selectedPattern,
   handlSwitchToggle,
   switchToggle,
+  toggleFirstDayLine,
+  setToggleFirstDayLine,
 }) => {
   // let [stocks, setStocks] = useState([]);
   let [patterns, setPatterns] = useState([]);
@@ -91,6 +93,19 @@ const Header = ({
           )}
         />
       </Grid>
+      <Grid item md={1} sm={6} xs={12}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={toggleFirstDayLine}
+              onChange={(e) => {
+                setToggleFirstDayLine(e.target.checked);
+              }}
+            />
+          }
+          label="1st"
+        />
+      </Grid>
       <Grid item md={1} sm={2} xs={3}>
         <ButtonGroup variant="text" aria-label="text button group">
           <Button
@@ -140,7 +155,7 @@ const Header = ({
           ))}
         </ButtonGroup>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={2}>
         <ButtonGroup variant="text" aria-label="text button group">
           {times.map((t, i) => (
             <Button
