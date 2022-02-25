@@ -210,7 +210,6 @@ const WatchList = ({
                           ) : null}
                         </TableSortLabel>
                       </TableCell>
-                      // <TableCell key={index}>{column}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
@@ -281,15 +280,14 @@ const RenderRow = ({
     >
       <TableCell>{row.name}</TableCell>
       <TableCell>
-        <Autocomplete
+        {row?.sources?.length && row.sources[0]}{" "}
+        {/* <Autocomplete
           fullWidth
           onKeyDown={() => {
             console.log("onKeyDown");
           }}
           options={row.sources}
           onChange={(e, v) => {
-            console.log("onChange");
-
             setStocks(
               stocks.map((m, i) => {
                 if (key === i) {
@@ -312,7 +310,7 @@ const RenderRow = ({
               }}
             />
           )}
-        />
+        /> */}
       </TableCell>
 
       <TableCell>{selectedTime}</TableCell>
