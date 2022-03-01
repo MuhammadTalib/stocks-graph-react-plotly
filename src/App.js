@@ -1,6 +1,6 @@
 import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
@@ -148,7 +148,7 @@ function App() {
     if (meta_trader_indicator) {
       url = url + `&meta_template=${meta_trader_indicator}`;
     }
-    getAllStocks(url)
+    await getAllStocks(url)
       .then((res) => {
         setLoader(false);
         let responseData = [...res?.data?.data];
@@ -799,7 +799,13 @@ function App() {
   };
 
   useEffect(() => {
-    getDataRequest(selectedStock, selectedTime);
+    getDataRequest(
+      selectedStock,
+      selectedTime,
+      selectedTemp,
+      selectedPattern,
+      switchToggle
+    );
   }, [selectedStock, selectedTime, selectedCategory]);
 
   const handleSelectedCategory = (category) => {
