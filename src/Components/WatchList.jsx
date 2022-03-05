@@ -214,7 +214,7 @@ const WatchList = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {stocks.slice(0, 60).map((row, index) => {
+                  {stocks.map((row, index) => {
                     return (
                       <RenderRow
                         key={index}
