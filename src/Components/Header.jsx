@@ -10,8 +10,8 @@ const Header = ({
   handleGrapthType,
   graphType,
   templateChange,
-  selectedStock,
-  handleStockChange,
+  setEnableDualChart,
+  enableDualChart,
   handlePatternChange,
   selectedTime,
   hanldeSelectedTime,
@@ -181,6 +181,12 @@ const Header = ({
               {m.name}
             </Button>
           ))}
+          <Button
+            onClick={() => setEnableDualChart(!enableDualChart)}
+            className={`btn ${enableDualChart ? "templateBtn" : ""}`}
+          >
+            Dual Chart
+          </Button>
         </ButtonGroup>
       </Grid>
     </Grid>

@@ -16,6 +16,7 @@ export const Graph = ({
   onClick,
   rightMargin,
   toggleFirstDayLine,
+  onDoubleClick
 }) => {
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
@@ -36,6 +37,7 @@ export const Graph = ({
     return (
       <Plot
         onClick={onClick}
+        onDoubleClick={onDoubleClick}
         onHover={onHover}
         onUnhover={onUnhover}
         data={[data, ...(templates || []), ...bottomTemplate]}
@@ -56,7 +58,7 @@ export const Graph = ({
                       (date1 === 2 && date2 !== 1) ||
                       (date1 === 3 && date3 !== 1 && date2 !== 2)
                     ) {
-                      console.log("date_", date_.getDate(), dateStr);
+                      
                       return {
                         type: "line",
                         text: "ddd",
