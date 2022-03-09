@@ -860,7 +860,7 @@ function App() {
               setToggleFirstDayLine={setToggleFirstDayLine}
             />
 
-            {data && layout ? (
+            {data && data.x?.length && layout ? (
               <div
                 style={{
                   cursor,
