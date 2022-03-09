@@ -5,6 +5,37 @@ export const times = [
   { name: "1mo", ms: 2629746000 },
 ];
 
+export const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+export const dummy = {
+  x: [],
+  name: "main",
+  close: [],
+  decreasing: {
+    fillcolor: "black",
+    line: { color: "black", width: 1 },
+  },
+  high: [],
+  increasing: { fillcolor: "white", line: { color: "black", width: 1 } },
+  line: { color: "rgba(31,119,180,1)" },
+  low: [],
+  open: [],
+  type: "candlestick",
+};
+
 export const templates = [
   {
     name: "T0",
@@ -334,3 +365,140 @@ export const templates = [
     },
   },
 ];
+
+export const drawPatternData = (data, selectedPattern) => {
+  return data.patternData?.length
+    ? [
+        {
+          x: data?.x,
+          y: data.patternData.map((m, i) => {
+            let perc10 = (data.high[i] - data.low[i]) / 10;
+            if (m) {
+              return data.close[i] < data.open[i]
+                ? data.low[i] - perc10
+                : data.high[i] + perc10;
+            }
+            return null;
+          }),
+          hovertemplate: `${selectedPattern}`,
+
+          mode: "text",
+          type: "scatter",
+          name: " ",
+          text: selectedPattern?.slice(0, 2),
+          textfont: {
+            family: "Times New Roman",
+            color: "blue",
+          },
+          textposition: "bottom center",
+          marker: { size: 12 },
+        },
+      ]
+    : [];
+};
+
+export const drawConfirmHighAndLow = (switchToggle, data) => {
+  return [
+    ...(switchToggle
+      ? [
+          {
+            x: data?.x,
+            y: data?.ConfrimHigh.map((m, i) => {
+              if (!m) return null;
+              else return data.high[i];
+            }),
+            name: "Confirm High",
+            mode: "markers",
+            marker: {
+              color: "blue",
+              symbol: "diamond",
+            },
+          },
+        ]
+      : []),
+    ...(switchToggle
+      ? [
+          {
+            x: data?.x,
+            y: data.ConfrimLow.map((m, i) => {
+              if (!m) return null;
+              else return data.low[i];
+            }),
+            name: "Confirm Low",
+            mode: "markers",
+            marker: {
+              color: "red",
+              symbol: "diamond",
+            },
+          },
+        ]
+      : []),
+  ];
+};
+export const T0 = {
+  id: 0,
+  name: "T0",
+  merged: {},
+};
+
+export const initialLayout = {
+  dragmode: "pan",
+  margin: {
+    r: 10,
+    t: 25,
+    b: 40,
+    l: 20,
+  },
+  showlegend: true,
+  legend: {
+    x: 0,
+    y: 1,
+    traceorder: "normal",
+    font: {
+      family: "sans-serif",
+      size: 12,
+      color: "#000",
+    },
+    bgcolor: "#E2E2E211",
+    bordercolor: "#FFFFFF",
+  },
+  xaxis: {
+    domain: [0, 1],
+    rangeslider: {
+      visible: false,
+    },
+    type: "category",
+    tickmode: "array",
+  },
+  yaxis: {
+    domain: [0, 1],
+    autorange: true,
+    rangeslider: {
+      visible: false,
+    },
+    position: 1,
+    side: "bottom",
+    type: "linear",
+  },
+  opacity: 0.2,
+  autosize: true,
+  width: window.innerWidth - 10,
+  height: window.innerHeight - 50,
+};
+export const drawMergedChart = (selectedTemp, data, a) => {
+  return selectedTemp.merged && Object.keys(selectedTemp.merged).length
+    ? [
+        ...Object.keys(selectedTemp.merged).map((key) => {
+          return {
+            ...selectedTemp.merged[key],
+            x: data?.x,
+            y: selectedTemp.merged[key].data.map((m) => {
+              if (!m) return null;
+              else return m;
+            }),
+            name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[a]}`,
+          };
+        }),
+      ]
+    : [];
+};

@@ -1,4 +1,3 @@
-import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
@@ -6,40 +5,20 @@ import { Graph } from "./Components/Graph";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
 import { getAllStocks } from "./services/api";
-import { theme } from "./theme";
+import {
+  drawConfirmHighAndLow,
+  drawMergedChart,
+  drawPatternData,
+  dummy,
+  initialLayout,
+  months,
+  T0,
+} from "./Utils/utils";
 
-const dummy = {
-  x: [],
-  name: "main",
-  close: [],
-  decreasing: {
-    fillcolor: "black",
-    line: { color: "black", width: 1 },
-  },
-  high: [],
-  increasing: { fillcolor: "white", line: { color: "black", width: 1 } },
-  line: { color: "rgba(31,119,180,1)" },
-  low: [],
-  open: [],
-  type: "candlestick",
-};
 const rightMargin = 23;
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sept",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+const style = { width: "100%", height: "100%" };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {
     return { width: `calc(100% - ${sidebarWidth}px)` };
   },
@@ -51,78 +30,24 @@ function App() {
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
   const [loader, setLoader] = useState(false);
-  const [a, setA] = useState(1);
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
   const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
-
-  const style = { width: "100%", height: "100%" };
   const scrollableListRef = useRef(null);
-
-  const [layout, setLayout] = useState({
-    dragmode: "pan",
-    margin: {
-      r: 10,
-      t: 25,
-      b: 40,
-      l: 20,
-    },
-    showlegend: true,
-    legend: {
-      x: 0,
-      y: 1,
-      traceorder: "normal",
-      font: {
-        family: "sans-serif",
-        size: 12,
-        color: "#000",
-      },
-      bgcolor: "#E2E2E211",
-      bordercolor: "#FFFFFF",
-    },
-    xaxis: {
-      domain: [0, 1],
-      rangeslider: {
-        visible: false,
-      },
-      type: "category",
-      tickmode: "array",
-    },
-    yaxis: {
-      domain: [0, 1],
-      autorange: true,
-      rangeslider: {
-        visible: false,
-      },
-      position: 1,
-      side: "bottom",
-      type: "linear",
-    },
-    opacity: 0.2,
-    autosize: true,
-    width: window.innerWidth - 10,
-    height: window.innerHeight - 50,
-  });
+  const [layout, setLayout] = useState(initialLayout);
+  const [selectedStock, setSelectStock] = useState("MMM");
+  const [selectedStockIndex, setSelectStockIndex] = useState(0);
+  const [selectedPattern, setSelectedPattern] = useState(null);
+  const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
+  const [selectedTemp, setSelectedTemp] = useState(T0);
+  const [switchToggle, setSwitchToggle] = useState(0);
+  const [data, setGraphData] = useState({ ...dummy });
+  const [a, setA] = useState(1);
 
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
-
-  const [selectedStock, setSelectStock] = useState("MMM");
-  const [selectedStockIndex, setSelectStockIndex] = useState(0);
-
-  const [selectedPattern, setSelectedPattern] = useState(null);
-
-  const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
-  const [selectedTemp, setSelectedTemp] = useState({
-    id: 0,
-    name: "T0",
-    merged: {},
-  });
-  const [switchToggle, setSwitchToggle] = useState(0);
-
-  const [data, setGraphData] = useState({ ...dummy });
 
   const getDataRequest = async (
     stock,
@@ -722,7 +647,7 @@ function App() {
             autorange: true,
             tickvals: [
               ...x.filter((f, i) => {
-                return i % 15 === 0; //d.getDate() === 15 || d.getDate() === 30;
+                return i % 15 === 0;
               }),
             ],
             ticktext: [
@@ -736,58 +661,6 @@ function App() {
                 }),
             ],
           },
-          // shapes: [
-          //   ...data.x.slice(0, data.x.length - rightMargin).map((dateStr) => {
-          //     let date_ = new Date(dateStr);
-          //     let date1 = date_.getDate();
-          //     if (date1 === 1) {
-          //       console.log("date_", date_.getDate(), dateStr);
-          //       return {
-          //         type: "line",
-          //         text: "ddd",
-          //         x0: String(dateStr),
-          //         y0: 0,
-          //         x1: String(dateStr),
-          //         yref: "paper",
-          //         y1: 1,
-          //         line: {
-          //           color: "grey",
-          //           width: 1.5,
-          //           dash: "dot",
-          //         },
-          //       };
-          //     }
-          //   }),
-
-          // ...high.map((shp, i) => {
-          //   if (patternData[i]) {
-          //     let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
-          //     let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
-          //     let x0 = String(new Date(x[i - 1])); //- 0.5 * time.ms));
-          //     let x1 = String(new Date(x[i + 1])); //.getTime() + 0.5 * time.ms));
-
-          //     return {
-          //       type: "rect",
-          //       xref: "x",
-          //       yref: "y",
-          //       x0: x0,
-          //       y0: lowP,
-          //       x1,
-          //       width: 1,
-          //       y1: highP,
-          //       fillcolor: "yellow",
-          //       opacity: 0.6,
-          //       rightMargin: 3,
-          //       line: {
-          //         width: 2,
-          //         color: open[i] < close[i] ? "green" : "red",
-          //         opacity: 1,
-          //       },
-          //     };
-          //   }
-          //   return null;
-          // }),
-          // ],
         });
       })
       .catch((err) => {
@@ -813,13 +686,11 @@ function App() {
   };
 
   React.useEffect(() => {
-    console.log("resining");
     function handleResize() {
       if (
         layout.width !== window.innerWidth - 10 ||
         layout.height !== window.innerHeight - 50
       ) {
-        console.log("resized to: ", window.innerWidth, "x", window.innerHeight);
         setLayout({
           ...layout,
           width: window.innerWidth - 10,
@@ -832,13 +703,6 @@ function App() {
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
-    // getDataRequest(
-    //   stock,
-    //   selectedTime,
-    //   selectedTemp,
-    //   selectedPattern,
-    //   switchToggle
-    // );
   };
 
   const handlePatternChange = (pattern) => {
@@ -910,13 +774,6 @@ function App() {
   const resize = React.useCallback(
     (mouseMoveEvent) => {
       if (isResizing) {
-        console.log(
-          "sodebar resizing",
-          window.innerWidth -
-            (sidebarRef.current.getBoundingClientRect().right -
-              mouseMoveEvent.clientX) -
-            10
-        );
         setLayout({
           ...layout,
           width:
@@ -957,6 +814,7 @@ function App() {
       placeSelectedItemInTheMiddle(selectedStockIndex + 1);
     }
   };
+
   const placeSelectedItemInTheMiddle = (index) => {
     const LIST_ITEM_HEIGHT = 21;
     const NUM_OF_VISIBLE_LIST_ITEMS = 15;
@@ -965,6 +823,7 @@ function App() {
       LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS + index * LIST_ITEM_HEIGHT;
     scrollableListRef.current.scrollTo(amountToScroll, 0);
   };
+
   React.useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -973,172 +832,89 @@ function App() {
   });
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <div className="app-container">
-          <div className={classes.container + " app-frame"}>
-            <div
-              style={{
-                height: "100vh",
-                overflowY: "hidden",
-                overflowX: "hidden",
-              }}
-            >
-              {loader ? <div className="loader"></div> : <></>}
-              <div>
-                <Header
-                  handleGrapthType={handleGrapthType}
-                  graphType={graphType}
-                  templateChange={templateChange}
-                  selectedStock={selectedStock}
-                  handleStockChange={handleStockChange}
-                  handlePatternChange={handlePatternChange}
-                  selectedTime={selectedTime}
-                  hanldeSelectedTime={hanldeSelectedTime}
-                  selectedTemp={selectedTemp}
-                  selectedPattern={selectedPattern}
-                  handlSwitchToggle={handlSwitchToggle}
-                  switchToggle={switchToggle}
+    <div className="app-container">
+      <div className={classes.container + " app-frame"}>
+        <div
+          style={{
+            height: "100vh",
+            overflowY: "hidden",
+            overflowX: "hidden",
+          }}
+        >
+          {loader ? <div className="loader"></div> : <></>}
+          <div>
+            <Header
+              handleGrapthType={handleGrapthType}
+              graphType={graphType}
+              templateChange={templateChange}
+              selectedStock={selectedStock}
+              handleStockChange={handleStockChange}
+              handlePatternChange={handlePatternChange}
+              selectedTime={selectedTime}
+              hanldeSelectedTime={hanldeSelectedTime}
+              selectedTemp={selectedTemp}
+              selectedPattern={selectedPattern}
+              handlSwitchToggle={handlSwitchToggle}
+              switchToggle={switchToggle}
+              toggleFirstDayLine={toggleFirstDayLine}
+              setToggleFirstDayLine={setToggleFirstDayLine}
+            />
+
+            {data && layout ? (
+              <div
+                style={{
+                  cursor,
+                }}
+              >
+                <Graph
+                  onHover={onHover}
+                  rightMargin={rightMargin}
+                  onUnhover={onUnhover}
+                  onClick={onClick}
+                  style={{ ...style }}
+                  data={{ ...data, type: graphType }}
+                  layout={layout}
                   toggleFirstDayLine={toggleFirstDayLine}
-                  setToggleFirstDayLine={setToggleFirstDayLine}
+                  templates={[
+                    ...drawMergedChart(selectedTemp, data, a), //templates T1 , T2 , T3
+                    ...drawConfirmHighAndLow(switchToggle, data), //0 1 2 3
+                    ...drawPatternData(data, selectedPattern), //
+                  ]}
+                  separateGraphs={separateGraphs}
+                  loader={loader}
                 />
-
-                {data && layout ? (
-                  <div
-                    style={{
-                      cursor,
-                    }}
-                    onMouseUp={() => {
-                      console.log("on mouse up");
-                    }}
-                  >
-                    <Graph
-                      onHover={onHover}
-                      rightMargin={rightMargin}
-                      onUnhover={onUnhover}
-                      onClick={onClick}
-                      style={{ ...style }}
-                      data={{ ...data, type: graphType }}
-                      layout={layout}
-                      toggleFirstDayLine={toggleFirstDayLine}
-                      templates={[
-                        ...(selectedTemp.merged &&
-                        Object.keys(selectedTemp.merged).length
-                          ? [
-                              ...Object.keys(selectedTemp.merged).map((key) => {
-                                return {
-                                  ...selectedTemp.merged[key],
-                                  x: data?.x,
-                                  y: selectedTemp.merged[key].data.map((m) => {
-                                    if (!m) return null;
-                                    else return m;
-                                  }),
-                                  name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[a]}`,
-                                };
-                              }),
-                            ]
-                          : []),
-                        ...(switchToggle
-                          ? [
-                              {
-                                x: data?.x,
-                                y: data?.ConfrimHigh.map((m, i) => {
-                                  if (!m) return null;
-                                  else return data.high[i];
-                                }),
-                                name: "Confirm High",
-                                mode: "markers",
-                                marker: {
-                                  color: "blue",
-                                  symbol: "diamond",
-                                },
-                              },
-                            ]
-                          : []),
-                        ...(switchToggle
-                          ? [
-                              {
-                                x: data?.x,
-                                y: data.ConfrimLow.map((m, i) => {
-                                  if (!m) return null;
-                                  else return data.low[i];
-                                }),
-                                name: "Confirm Low",
-                                mode: "markers",
-                                marker: {
-                                  color: "red",
-                                  symbol: "diamond",
-                                },
-                              },
-                            ]
-                          : []),
-                        ...(data.patternData?.length
-                          ? [
-                              {
-                                x: data?.x,
-                                y: data.patternData.map((m, i) => {
-                                  let perc10 = (data.high[0] / 100) * 1;
-
-                                  if (m) {
-                                    return data.close[i] > data.open[i]
-                                      ? data.high[i] - perc10
-                                      : data.high[i] + perc10;
-                                  }
-                                  return null;
-                                }),
-                                hovertemplate: `${selectedPattern}`,
-
-                                mode: "text",
-                                type: "scatter",
-                                name: " ",
-                                text: selectedPattern?.slice(0, 2),
-                                textfont: {
-                                  family: "Times New Roman",
-                                  color: "blue",
-                                },
-                                textposition: "bottom center",
-                                marker: { size: 12 },
-                              },
-                            ]
-                          : []),
-                      ]}
-                      separateGraphs={separateGraphs}
-                      loader={loader}
-                    />
-                  </div>
-                ) : (
-                  <></>
-                )}
               </div>
-            </div>
-          </div>
-          <div
-            onKeyDown={handleKeyDown}
-            ref={sidebarRef}
-            className="app-sidebar"
-            style={{ width: sidebarWidth + "px" }}
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-            <div className="app-sidebar-content">
-              <WatchList
-                selectedStock={selectedStock}
-                handleStockChange={handleStockChange}
-                stocks={stocks}
-                setStocks={setStocks}
-                selectedStockIndex={selectedStockIndex}
-                setSelectStockIndex={setSelectStockIndex}
-                height={layout.height}
-                scrollableListRef={scrollableListRef}
-                placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-              />
-            </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
-      </ThemeProvider>
-    </StyledEngineProvider>
+      </div>
+      <div
+        onKeyDown={handleKeyDown}
+        ref={sidebarRef}
+        className="app-sidebar"
+        style={{ width: sidebarWidth + "px" }}
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <div className="app-sidebar-resizer" onMouseDown={startResizing} />
+        <div className="app-sidebar-content">
+          <WatchList
+            selectedStock={selectedStock}
+            handleStockChange={handleStockChange}
+            stocks={stocks}
+            setStocks={setStocks}
+            selectedStockIndex={selectedStockIndex}
+            setSelectStockIndex={setSelectStockIndex}
+            height={layout.height}
+            scrollableListRef={scrollableListRef}
+            placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 
