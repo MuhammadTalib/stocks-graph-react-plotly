@@ -1,14 +1,21 @@
 import { DefaultChart } from "./DefaultChart";
-import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
-import { theme } from "./theme";
-import { getDataRequestService, rightMargin, dummy, defaultLayout } from "./AppServices";
+import {
+  drawConfirmHighAndLow,
+  drawMergedChart,
+  drawPatternData,
+  dummy,
+  initialLayout,
+  T0,
+  rightMargin,
+  getDataRequestService
+} from "./Utils/utils";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {
     return { width: `calc(100% - ${sidebarWidth}px)` };
   },
@@ -21,7 +28,7 @@ function App() {
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
   const [loader, setLoader] = useState(false);
-  const [a, setA] = useState(1);
+  
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
@@ -29,28 +36,22 @@ function App() {
   const [enableDualChart, setEnableDualChart] = useState(false);
 
   const style = { width: "100%", height: "100%" };
-  const scrollableListRef = useRef(null);
 
-  const [layout, setLayout] = useState({...defaultLayout});
+  const [layout, setLayout] = useState({ ...initialLayout });
+
+  const scrollableListRef = useRef(null);
+  const [selectedStock, setSelectStock] = useState("MMM");
+  const [selectedStockIndex, setSelectStockIndex] = useState(0);
+  const [selectedPattern, setSelectedPattern] = useState(null);
+  const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
+  const [selectedTemp, setSelectedTemp] = useState(T0);
+  const [switchToggle, setSwitchToggle] = useState(0);
+  const [data, setGraphData] = useState({ ...dummy });
+  const [pointIndex, setPointIndex] = useState(1);
 
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
-
-  const [selectedStock, setSelectStock] = useState("MMM");
-  const [selectedStockIndex, setSelectStockIndex] = useState(0);
-
-  const [selectedPattern, setSelectedPattern] = useState(null);
-
-  const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
-  const [selectedTemp, setSelectedTemp] = useState({
-    id: 0,
-    name: "T0",
-    merged: {},
-  });
-  const [switchToggle, setSwitchToggle] = useState(0);
-
-  const [data, setGraphData] = useState({ ...dummy });
 
   const getDataRequest = getDataRequestService(
     selectedCategory,
@@ -94,13 +95,6 @@ function App() {
 
   const handleStockChange = (stock) => {
     setSelectStock(stock);
-    // getDataRequest(
-    //   stock,
-    //   selectedTime,
-    //   selectedTemp,
-    //   selectedPattern,
-    //   switchToggle
-    // );
   };
 
   const handlePatternChange = (pattern) => {
@@ -147,7 +141,7 @@ function App() {
     setSwitchToggle(v);
   };
   const onHover = ({ points: [point] }) => {
-    setA(point.pointIndex);
+    setPointIndex(point.pointIndex);
     setCursor("pointer");
   };
   const onUnhover = () => {
@@ -237,6 +231,7 @@ function App() {
       placeSelectedItemInTheMiddle(selectedStockIndex + 1);
     }
   };
+
   const placeSelectedItemInTheMiddle = (index) => {
     const LIST_ITEM_HEIGHT = 21;
     const NUM_OF_VISIBLE_LIST_ITEMS = 15;
@@ -245,6 +240,7 @@ function App() {
       LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS + index * LIST_ITEM_HEIGHT;
     scrollableListRef.current.scrollTo(amountToScroll, 0);
   };
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -252,39 +248,43 @@ function App() {
     };
   });
 
-
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <div className="app-container">
-          <div className={classes.container + " app-frame"}>
-            <div
-              style={{
-                height: "100vh",
-                overflowY: "hidden",
-                overflowX: "hidden",
-              }}
-            >
-              <div>
-                <Header
-                  setEnableDualChart={setEnableDualChart}
-                  enableDualChart={enableDualChart}
-                  handleGrapthType={handleGrapthType}
-                  graphType={graphType}
-                  templateChange={templateChange}
-                  selectedStock={selectedStock}
-                  handleStockChange={handleStockChange}
-                  handlePatternChange={handlePatternChange}
-                  selectedTime={selectedTime}
-                  hanldeSelectedTime={hanldeSelectedTime}
-                  selectedTemp={selectedTemp}
-                  selectedPattern={selectedPattern}
-                  handlSwitchToggle={handlSwitchToggle}
-                  switchToggle={switchToggle}
-                  toggleFirstDayLine={toggleFirstDayLine}
-                  setToggleFirstDayLine={setToggleFirstDayLine}
-                />
+      <div className="app-container">
+        <div className={classes.container + " app-frame"}>
+          <div
+            style={{
+              height: "100vh",
+              overflowY: "hidden",
+              overflowX: "hidden",
+            }}
+          >
+            <div>
+              <Header
+                setEnableDualChart={setEnableDualChart}
+                enableDualChart={enableDualChart}
+                handleGrapthType={handleGrapthType}
+                graphType={graphType}
+                templateChange={templateChange}
+                selectedStock={selectedStock}
+                handleStockChange={handleStockChange}
+                handlePatternChange={handlePatternChange}
+                selectedTime={selectedTime}
+                hanldeSelectedTime={hanldeSelectedTime}
+                selectedTemp={selectedTemp}
+                selectedPattern={selectedPattern}
+                handlSwitchToggle={handlSwitchToggle}
+                switchToggle={switchToggle}
+                toggleFirstDayLine={toggleFirstDayLine}
+                setToggleFirstDayLine={setToggleFirstDayLine}
+                templates={[
+                  ...drawMergedChart(selectedTemp, data, pointIndex), //templates T1 , T2 , T3
+                  ...drawConfirmHighAndLow(switchToggle, data), //0 1 2 3
+                  ...drawPatternData(data, selectedPattern), //
+                ]}
+                separateGraphs={separateGraphs}
+              />
 
+              {data && data?.x?.length && layout ? (
                 <div
                   style={{
                     display: "flex",
@@ -303,12 +303,12 @@ function App() {
                   >
                     <DefaultChart
                       type="default"
+                      rightMargin={rightMargin}
                       onHover={onHover}
                       onDoubleClick={(e) => setCurrentSelected(e)}
-                      rightMargin={rightMargin}
                       onUnhover={onUnhover}
                       onClick={onClick}
-                      a={a}
+                      pointIndex={pointIndex}
                       graphType={graphType}
                       style={style}
                       data={data}
@@ -339,54 +339,58 @@ function App() {
                         onHover={onHover}
                         onDoubleClick={(e) => setCurrentSelected(e)}
                         rightMargin={rightMargin}
-                        onUnhover={onUnhover}
-                        onClick={onClick}
-                        a={a}
                         graphType={graphType}
                         style={style}
-                        data={data}
                         enableDualChart={enableDualChart}
                         selectedTemp={selectedTemp}
                         layout={layout}
                         toggleFirstDayLine={toggleFirstDayLine}
                         switchToggle={switchToggle}
                         selectedPattern={selectedPattern}
+                        // need these props
+                        onUnhover={onUnhover}
+                        onClick={onClick}
+                        pointIndex={pointIndex}
+                        data={data}
                         separateGraphs={separateGraphs}
                         loader={loader}
                       />
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-          </div>
-          <div
-            onKeyDown={handleKeyDown}
-            ref={sidebarRef}
-            className="app-sidebar"
-            style={{ width: sidebarWidth + "px" }}
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-            <div className="app-sidebar-content">
-              <WatchList
-                selectedStock={selectedStock}
-                handleStockChange={handleStockChange}
-                stocks={stocks}
-                setStocks={setStocks}
-                selectedStockIndex={selectedStockIndex}
-                setSelectStockIndex={setSelectStockIndex}
-                height={layout.height}
-                scrollableListRef={scrollableListRef}
-                placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-              />
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
-      </ThemeProvider>
-    </StyledEngineProvider>
+      
+        <div
+        onKeyDown={handleKeyDown}
+        ref={sidebarRef}
+        className="app-sidebar"
+        style={{ width: sidebarWidth + "px" }}
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <div className="app-sidebar-resizer" onMouseDown={startResizing} />
+        <div className="app-sidebar-content">
+          <WatchList
+            selectedStock={selectedStock}
+            handleStockChange={handleStockChange}
+            stocks={stocks}
+            setStocks={setStocks}
+            selectedStockIndex={selectedStockIndex}
+            setSelectStockIndex={setSelectStockIndex}
+            height={layout.height}
+            scrollableListRef={scrollableListRef}
+            placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        </div>
+      </div>
+      </div>
+    
   );
 }
 

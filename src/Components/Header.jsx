@@ -22,15 +22,9 @@ const Header = ({
   toggleFirstDayLine,
   setToggleFirstDayLine,
 }) => {
-  // let [stocks, setStocks] = useState([]);
   let [patterns, setPatterns] = useState([]);
 
   useEffect(() => {
-    // getAllStocks("stocks/available").then((res) => {
-    //   console.log("res", res);
-    //   setStocks(res?.data?.list || []);
-    // });
-
     getAllStocks("stocks/patterns").then((res) => {
       console.log("res", res);
       setPatterns(res?.data?.list || []);
@@ -39,33 +33,6 @@ const Header = ({
 
   return (
     <Grid container spacing={2} style={{ padding: "10px" }}>
-      {/* <Grid item md={2} sm={6} xs={12}>
-        <Autocomplete
-          onChange={(_, newValue) => {
-            handleStockChange(newValue);
-          }}
-          fullWidth
-          id="free-solo-2-demo"
-          disableClearable={true}
-          options={stocks}
-          onClose={() => {
-            console.log("aytr");
-          }}
-          value={selectedStock}
-          defaultValue={stocks.find((v) => v[0])}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Stock"
-              variant="standard"
-              InputProps={{
-                ...params.InputProps,
-                type: "search",
-              }}
-            />
-          )}
-        />
-      </Grid> */}
       <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
           onChange={(_, newValue) => {

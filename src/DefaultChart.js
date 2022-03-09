@@ -6,7 +6,7 @@ export function DefaultChart({
   rightMargin,
   onUnhover,
   onClick,
-  a,
+  pointIndex,
   graphType,
   style,
   data,
@@ -19,9 +19,8 @@ export function DefaultChart({
   loader,
   enableDualChart,
   type,
-  onDoubleClick
+  onDoubleClick,
 }) {
-    
   let width = "100%";
   if (type === "default") {
     width = enableDualChart ? "50%" : "100%";
@@ -29,7 +28,7 @@ export function DefaultChart({
 
   if (type === "secondary") {
     width = enableDualChart ? "50%" : "0px";
-}
+  }
 
   return (
     <Graph
@@ -38,7 +37,7 @@ export function DefaultChart({
       onUnhover={onUnhover}
       onClick={onClick}
       onDoubleClick={() => onDoubleClick(type)}
-      style={{ ...style, border : "1px solid red"}}
+      style={{ ...style, border: "1px solid red" }}
       data={{ ...data, type: graphType }}
       layout={layout}
       toggleFirstDayLine={toggleFirstDayLine}
@@ -53,7 +52,7 @@ export function DefaultChart({
                     if (!m) return null;
                     else return m;
                   }),
-                  name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[a]}`,
+                  name: `${selectedTemp.merged[key].name} ${selectedTemp.merged[key].data[pointIndex]}`,
                 };
               }),
             ]

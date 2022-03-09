@@ -47,7 +47,6 @@ const WatchList = ({
 
   const handleKeyDown = (e) => {
     const { cursor, result } = this.state;
-    // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
       console.log("up");
     } else if (e.keyCode === 40 && cursor < result.length - 1) {
@@ -85,8 +84,6 @@ const WatchList = ({
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
 
-  // This method is created for cross-browser compatibility, if you don't
-  // need to support IE11, you can use Array.prototype.sort() directly
   function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -279,39 +276,7 @@ const RenderRow = ({
       focus={row.name === selectedStock.name}
     >
       <TableCell>{row.name}</TableCell>
-      <TableCell>
-        {row?.sources?.length && row.sources[0]}{" "}
-        {/* <Autocomplete
-          fullWidth
-          onKeyDown={() => {
-            console.log("onKeyDown");
-          }}
-          options={row.sources}
-          onChange={(e, v) => {
-            setStocks(
-              stocks.map((m, i) => {
-                if (key === i) {
-                  return { ...m, selectedSource: v };
-                }
-                return m;
-              })
-            );
-          }}
-          blurOnSelect
-          value={row?.selectedSource || row.sources[0]}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Source"
-              variant="standard"
-              InputProps={{
-                ...params.InputProps,
-                type: "search",
-              }}
-            />
-          )}
-        /> */}
-      </TableCell>
+      <TableCell>{row?.sources?.length && row.sources[0]} </TableCell>
 
       <TableCell>{selectedTime}</TableCell>
     </TableRow>
