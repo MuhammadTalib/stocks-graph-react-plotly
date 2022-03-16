@@ -373,29 +373,61 @@ export const templates = [
 export const drawPatternData = (data, selectedPattern) => {
   return data.patternData?.length
     ? [
+        // {
+        //   x: data?.x,
+        //   y: data.patternData.map((m, i) => {
+        //     let perc10 = (data.high[i] - data.low[i]) / 10;
+        //     if (m) {
+        //       return data.close[i] < data.open[i]
+        //         ? data.low[i] - perc10
+        //         : data.high[i] + perc10;
+        //     }
+        //     return null;
+        //   }),
+        //   hovertemplate: `${selectedPattern}`,
+
+        //   mode: "text",
+        //   type: "scatter",
+        //   name: " ",
+        //   text: selectedPattern?.slice(0, 2),
+        //   textfont: {
+        //     family: "Times New Roman",
+        //     color: "blue",
+        //   },
+        //   textposition: "bottom center",
+        //   marker: { size: 12 },
+        // },
         {
           x: data?.x,
-          y: data.patternData.map((m, i) => {
-            let perc10 = (data.high[i] - data.low[i]) / 10;
+          y: data?.patternData.map((m, i) => {
             if (m) {
-              return data.close[i] < data.open[i]
-                ? data.low[i] - perc10
-                : data.high[i] + perc10;
+              if (data.close[i] < data.open[i]) {
+                return data.low[i];
+              }
+              return data.high[i];
             }
-            return null;
           }),
-          hovertemplate: `${selectedPattern}`,
-
-          mode: "text",
-          type: "scatter",
-          name: " ",
-          text: selectedPattern?.slice(0, 2),
-          textfont: {
-            family: "Times New Roman",
-            color: "blue",
+          name: "Pattern",
+          mode: "markers",
+          marker: {
+            color: data?.patternData.map((m, i) => {
+              if (m) {
+                if (data.close[i] < data.open[i]) {
+                  return "red";
+                }
+                return "green";
+              }
+            }),
+            symbol: data?.patternData.map((m, i) => {
+              if (m) {
+                if (data.close[i] < data.open[i]) {
+                  return "triangle-down";
+                }
+                return "triangle-up";
+              }
+            }),
+            size: 7,
           },
-          textposition: "bottom center",
-          marker: { size: 12 },
         },
       ]
     : [];
@@ -1123,56 +1155,55 @@ export function getDataRequestService(
                 }),
             ],
           },
-          // shapes: [
-          //   ...data.x.slice(0, data.x.length - rightMargin).map((dateStr) => {
-          //     let date_ = new Date(dateStr);
-          //     let date1 = date_.getDate();
-          //     if (date1 === 1) {
-          //
-          //       return {
-          //         type: "line",
-          //         text: "ddd",
-          //         x0: String(dateStr),
-          //         y0: 0,
-          //         x1: String(dateStr),
-          //         yref: "paper",
-          //         y1: 1,
-          //         line: {
-          //           color: "grey",
-          //           width: 1.5,
-          //           dash: "dot",
-          //         },
-          //       };
-          //     }
-          //   }),
-          // ...high.map((shp, i) => {
-          //   if (patternData[i]) {
-          //     let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
-          //     let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
-          //     let x0 = String(new Date(x[i - 1])); //- 0.5 * time.ms));
-          //     let x1 = String(new Date(x[i + 1])); //.getTime() + 0.5 * time.ms));
-          //     return {
-          //       type: "rect",
-          //       xref: "x",
-          //       yref: "y",
-          //       x0: x0,
-          //       y0: lowP,
-          //       x1,
-          //       width: 1,
-          //       y1: highP,
-          //       fillcolor: "yellow",
-          //       opacity: 0.6,
-          //       rightMargin: 3,
-          //       line: {
-          //         width: 2,
-          //         color: open[i] < close[i] ? "green" : "red",
-          //         opacity: 1,
-          //       },
-          //     };
-          //   }
-          //   return null;
-          // }),
-          // ],
+          shapes: [
+            // ...data.x.slice(0, data.x.length - rightMargin).map((dateStr) => {
+            //   let date_ = new Date(dateStr);
+            //   let date1 = date_.getDate();
+            //   if (date1 === 1) {
+            //     return {
+            //       type: "line",
+            //       text: "ddd",
+            //       x0: String(dateStr),
+            //       y0: 0,
+            //       x1: String(dateStr),
+            //       yref: "paper",
+            //       y1: 1,
+            //       line: {
+            //         color: "grey",
+            //         width: 1.5,
+            //         dash: "dot",
+            //       },
+            //     };
+            //   }
+            // }),
+            ...high.map((shp, i) => {
+              if (patternData[i]) {
+                let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
+                let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
+                let x0 = String(new Date(x[i - 1])); //- 0.5 * time.ms));
+                let x1 = String(new Date(x[i + 1])); //.getTime() + 0.5 * time.ms));
+                return {
+                  type: "rect",
+                  xref: "x",
+                  yref: "y",
+                  x0: x0,
+                  y0: lowP,
+                  x1,
+                  width: 1,
+                  y1: highP,
+                  fillcolor: "yellow",
+                  opacity: 0.6,
+                  rightMargin: 3,
+                  line: {
+                    width: 2,
+                    color: open[i] < close[i] ? "green" : "red",
+                    opacity: 1,
+                  },
+                };
+              }
+              return null;
+            }),
+          ],
         });
       })
       .catch((err) => {

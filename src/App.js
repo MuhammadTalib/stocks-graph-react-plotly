@@ -12,7 +12,7 @@ import {
   initialLayout,
   T0,
   rightMargin,
-  getDataRequestService
+  getDataRequestService,
 } from "./Utils/utils";
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +28,7 @@ function App() {
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
   const [loader, setLoader] = useState(false);
-  
+
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
@@ -36,9 +36,7 @@ function App() {
   const [enableDualChart, setEnableDualChart] = useState(false);
 
   const style = { width: "100%", height: "100%" };
-
   const [layout, setLayout] = useState({ ...initialLayout });
-
   const scrollableListRef = useRef(null);
   const [selectedStock, setSelectStock] = useState("MMM");
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
@@ -249,123 +247,117 @@ function App() {
   });
 
   return (
-      <div className="app-container">
-        <div className={classes.container + " app-frame"}>
-          <div
-            style={{
-              height: "100vh",
-              overflowY: "hidden",
-              overflowX: "hidden",
-            }}
-          >
-            <div>
-              <Header
-                setEnableDualChart={setEnableDualChart}
-                enableDualChart={enableDualChart}
-                handleGrapthType={handleGrapthType}
-                graphType={graphType}
-                templateChange={templateChange}
-                selectedStock={selectedStock}
-                handleStockChange={handleStockChange}
-                handlePatternChange={handlePatternChange}
-                selectedTime={selectedTime}
-                hanldeSelectedTime={hanldeSelectedTime}
-                selectedTemp={selectedTemp}
-                selectedPattern={selectedPattern}
-                handlSwitchToggle={handlSwitchToggle}
-                switchToggle={switchToggle}
-                toggleFirstDayLine={toggleFirstDayLine}
-                setToggleFirstDayLine={setToggleFirstDayLine}
-                templates={[
-                  ...drawMergedChart(selectedTemp, data, pointIndex), //templates T1 , T2 , T3
-                  ...drawConfirmHighAndLow(switchToggle, data), //0 1 2 3
-                  ...drawPatternData(data, selectedPattern), //
-                ]}
-                separateGraphs={separateGraphs}
-              />
+    <div className="app-container">
+      <div className={classes.container + " app-frame"}>
+        <div
+          style={{
+            height: "100vh",
+            overflowY: "hidden",
+            overflowX: "hidden",
+          }}
+        >
+          <div>
+            <Header
+              setEnableDualChart={setEnableDualChart}
+              enableDualChart={enableDualChart}
+              handleGrapthType={handleGrapthType}
+              graphType={graphType}
+              templateChange={templateChange}
+              selectedStock={selectedStock}
+              handleStockChange={handleStockChange}
+              handlePatternChange={handlePatternChange}
+              selectedTime={selectedTime}
+              hanldeSelectedTime={hanldeSelectedTime}
+              selectedTemp={selectedTemp}
+              selectedPattern={selectedPattern}
+              handlSwitchToggle={handlSwitchToggle}
+              switchToggle={switchToggle}
+              toggleFirstDayLine={toggleFirstDayLine}
+              setToggleFirstDayLine={setToggleFirstDayLine}
+              separateGraphs={separateGraphs}
+            />
 
-              {data && data?.x?.length && layout ? (
+            {data && data?.x?.length && layout ? (
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
                 <div
+                  id="default-chart"
                   style={{
-                    display: "flex",
+                    cursor,
+                    border:
+                      currentSelected === "default"
+                        ? "4px solid #438695"
+                        : "none",
                   }}
+                  onMouseUp={() => {}}
                 >
+                  <DefaultChart
+                    type="default"
+                    rightMargin={rightMargin}
+                    onHover={onHover}
+                    onDoubleClick={(e) => setCurrentSelected(e)}
+                    onUnhover={onUnhover}
+                    onClick={onClick}
+                    pointIndex={pointIndex}
+                    graphType={graphType}
+                    style={style}
+                    data={data}
+                    enableDualChart={enableDualChart}
+                    selectedTemp={selectedTemp}
+                    layout={layout}
+                    toggleFirstDayLine={toggleFirstDayLine}
+                    switchToggle={switchToggle}
+                    selectedPattern={selectedPattern}
+                    separateGraphs={separateGraphs}
+                    loader={loader}
+                  />
+                </div>
+                {enableDualChart && (
                   <div
-                    id="default-chart"
+                    id="secondary-chart"
                     style={{
                       cursor,
                       border:
-                        currentSelected === "default"
+                        currentSelected === "secondary"
                           ? "4px solid #438695"
                           : "none",
                     }}
                     onMouseUp={() => {}}
                   >
                     <DefaultChart
-                      type="default"
-                      rightMargin={rightMargin}
+                      type="secondary"
                       onHover={onHover}
                       onDoubleClick={(e) => setCurrentSelected(e)}
-                      onUnhover={onUnhover}
-                      onClick={onClick}
-                      pointIndex={pointIndex}
+                      rightMargin={rightMargin}
                       graphType={graphType}
                       style={style}
-                      data={data}
                       enableDualChart={enableDualChart}
                       selectedTemp={selectedTemp}
                       layout={layout}
                       toggleFirstDayLine={toggleFirstDayLine}
                       switchToggle={switchToggle}
                       selectedPattern={selectedPattern}
+                      onUnhover={onUnhover}
+                      onClick={onClick}
+                      pointIndex={pointIndex}
+                      data={data}
                       separateGraphs={separateGraphs}
                       loader={loader}
                     />
                   </div>
-                  {enableDualChart && (
-                    <div
-                      id="secondary-chart"
-                      style={{
-                        cursor,
-                        border:
-                          currentSelected === "secondary"
-                            ? "4px solid #438695"
-                            : "none",
-                      }}
-                      onMouseUp={() => {}}
-                    >
-                      <DefaultChart
-                        type="secondary"
-                        onHover={onHover}
-                        onDoubleClick={(e) => setCurrentSelected(e)}
-                        rightMargin={rightMargin}
-                        graphType={graphType}
-                        style={style}
-                        enableDualChart={enableDualChart}
-                        selectedTemp={selectedTemp}
-                        layout={layout}
-                        toggleFirstDayLine={toggleFirstDayLine}
-                        switchToggle={switchToggle}
-                        selectedPattern={selectedPattern}
-                        // need these props
-                        onUnhover={onUnhover}
-                        onClick={onClick}
-                        pointIndex={pointIndex}
-                        data={data}
-                        separateGraphs={separateGraphs}
-                        loader={loader}
-                      />
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
-      
-        <div
+      </div>
+
+      <div
         onKeyDown={handleKeyDown}
         ref={sidebarRef}
         className="app-sidebar"
@@ -389,8 +381,7 @@ function App() {
           />
         </div>
       </div>
-      </div>
-    
+    </div>
   );
 }
 

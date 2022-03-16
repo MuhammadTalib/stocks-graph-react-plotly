@@ -16,7 +16,7 @@ export const Graph = ({
   onClick,
   rightMargin,
   toggleFirstDayLine,
-  onDoubleClick
+  onDoubleClick,
 }) => {
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
@@ -31,7 +31,7 @@ export const Graph = ({
       });
     setBottomTemplates(temp);
   }, [separateGraphs]);
-  console.log('loader: ', loader);
+  console.log("loader: ", loader);
   if (loader) {
     return <div className="loadingLabel">Loading...</div>;
   } else
@@ -59,7 +59,6 @@ export const Graph = ({
                       (date1 === 2 && date2 !== 1) ||
                       (date1 === 3 && date3 !== 1 && date2 !== 2)
                     ) {
-                      
                       return {
                         type: "line",
                         text: "ddd",
