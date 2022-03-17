@@ -401,7 +401,7 @@ export const drawPatternData = (data, selectedPattern) => {
           x: data?.x,
           y: data?.patternData.map((m, i) => {
             if (m) {
-              if (data.close[i] < data.open[i]) {
+              if (data.close[i] > data.open[i]) {
                 return data.low[i];
               }
               return data.high[i];
@@ -409,6 +409,7 @@ export const drawPatternData = (data, selectedPattern) => {
           }),
           name: "Pattern",
           mode: "markers",
+          dy: 10,
           marker: {
             color: data?.patternData.map((m, i) => {
               if (m) {
@@ -418,6 +419,12 @@ export const drawPatternData = (data, selectedPattern) => {
                 return "green";
               }
             }),
+            margin: {
+              r: 10,
+              t: 25,
+              b: 40,
+              l: 20,
+            },
             symbol: data?.patternData.map((m, i) => {
               if (m) {
                 if (data.close[i] < data.open[i]) {
@@ -427,6 +434,7 @@ export const drawPatternData = (data, selectedPattern) => {
               }
             }),
             size: 7,
+            pad: { b: "8px" },
           },
         },
       ]

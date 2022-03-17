@@ -163,13 +163,6 @@ function App() {
   const resize = React.useCallback(
     (mouseMoveEvent) => {
       if (isResizing) {
-        console.log(
-          "sodebar resizing",
-          window.innerWidth -
-            (sidebarRef.current.getBoundingClientRect().right -
-              mouseMoveEvent.clientX) -
-            10
-        );
         let w =
           window.innerWidth -
           (sidebarRef.current.getBoundingClientRect().right -
