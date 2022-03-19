@@ -32,7 +32,7 @@ const Header = ({
   }, []);
 
   return (
-    <Grid container spacing={2} style={{ padding: "10px" }}>
+    <Grid container spacing={2} style={{ position: "fixed", padding: "10px" }}>
       <Grid item md={2} sm={6} xs={12}>
         <Autocomplete
           onChange={(_, newValue) => {
@@ -64,6 +64,7 @@ const Header = ({
         <FormControlLabel
           control={
             <Switch
+              disabled={selectedTime.name !== "1d"}
               checked={toggleFirstDayLine}
               onChange={(e) => {
                 setToggleFirstDayLine(e.target.checked);
@@ -111,7 +112,7 @@ const Header = ({
       </Grid>
       <Grid item md={2}>
         <ButtonGroup variant="text" aria-label="text button group">
-          {[0, 1, 2, 3].map((t, i) => (
+          {[0, 1, 2, 3, 4].map((t, i) => (
             <Button
               key={i}
               onClick={() => handlSwitchToggle(t)}

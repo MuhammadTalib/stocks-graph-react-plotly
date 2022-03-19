@@ -24,6 +24,7 @@ const WatchList = ({
   placeSelectedItemInTheMiddle,
   selectedCategory,
   setSelectedCategory,
+  hanldeSelectedTime,
 }) => {
   const [categories, setCategories] = useState([]);
 
@@ -43,7 +44,10 @@ const WatchList = ({
     });
   }, [selectedCategory]);
 
-  const [selectedTime, setSelectedTime] = useState("1d");
+  const [selectedTime, setSelectedTime] = useState({
+    name: "1d",
+    ms: 86400000,
+  });
 
   const handleKeyDown = (e) => {
     const { cursor, result } = this.state;
@@ -131,11 +135,16 @@ const WatchList = ({
             <Autocomplete
               blurOnSelect
               onChange={(_, newValue) => {
+                console.log("newValue", newValue);
                 setSelectedTime(newValue);
+                hanldeSelectedTime(newValue);
               }}
               fullWidth
               disableClearable={true}
-              getOptionLabel={(option) => (option?.name ? option?.name : "1d")}
+              getOptionLabel={(option) => {
+                console.log("option", option);
+                return option ? option?.name : null;
+              }}
               options={times}
               value={selectedTime}
               renderInput={(params) => (
@@ -244,6 +253,7 @@ const WatchList = ({
     selectedCategory,
     categories,
     stocks,
+    selectedTime,
   ]);
 
   return stock;
@@ -252,7 +262,6 @@ const WatchList = ({
 export default WatchList;
 
 const RenderRow = ({
-  key,
   row,
   index,
   selectedStock,
@@ -260,8 +269,6 @@ const RenderRow = ({
   selectedTime,
   placeSelectedItemInTheMiddle,
   setSelectStockIndex,
-  setStocks,
-  stocks,
 }) => {
   return (
     <TableRow
@@ -277,8 +284,7 @@ const RenderRow = ({
     >
       <TableCell>{row.name}</TableCell>
       <TableCell>{row?.sources?.length && row.sources[0]} </TableCell>
-
-      <TableCell>{selectedTime}</TableCell>
+      <TableCell>{selectedTime.name}</TableCell>
     </TableRow>
   );
 };
