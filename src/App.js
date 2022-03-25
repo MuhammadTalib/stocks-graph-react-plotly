@@ -317,6 +317,7 @@ function App() {
                     id="secondary-chart"
                     style={{
                       cursor,
+                      marginTop: "52px",
                       border:
                         currentSelected === "secondary"
                           ? "4px solid #438695"
