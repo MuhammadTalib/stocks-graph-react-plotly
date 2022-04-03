@@ -592,6 +592,7 @@ export function getDataRequestService(
         let EMA3 = [];
         let EMA4 = [];
         let EMA5 = [];
+        let volume = [];
 
         let MACD0 = [];
         let MACD1 = [];
@@ -648,8 +649,9 @@ export function getDataRequestService(
                   m.indicators[key],
                 ];
               });
-
-            if (template.id === 3 && m.indicators) {
+            if (template.id === 1 && m.indicators) {
+              volume.push(m.indicators["Volume EMA"]);
+            } else if (template.id === 3 && m.indicators) {
               R0.push(m.indicators["%R0"]);
               R1.push(m.indicators["%R1"]);
               donchian0.push(m.indicators?.donchian0);
@@ -716,7 +718,8 @@ export function getDataRequestService(
             } else if (template.id === 1) {
               tempLayout = {
                 ...tempLayout,
-                yaxis: { ...layout.yaxis, domain: [0, 1] },
+                yaxis: { ...layout.yaxis, domain: [0.3, 1] },
+                yaxis2: { ...layout.yaxis, domain: [0, 0.25] },
               };
             } else if (template.id === 2) {
               tempLayout = {
@@ -824,7 +827,17 @@ export function getDataRequestService(
           if (template.id === 0) {
             setSeparateGraphs([]);
           } else if (template.id === 1) {
-            setSeparateGraphs([]);
+            setSeparateGraphs([
+              {
+                x: x,
+                y: volume,
+                name: "Volume",
+                marker: {
+                  color: "#9fa5c5",
+                },
+                yaxis: "y2",
+              },
+            ]);
           } else if (template.id === 2) {
             setSeparateGraphs([]);
           } else if (template.id === 3) {

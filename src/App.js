@@ -1,19 +1,10 @@
-import { DefaultChart } from "./DefaultChart";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
+import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
-import {
-  drawConfirmHighAndLow,
-  drawMergedChart,
-  drawPatternData,
-  dummy,
-  initialLayout,
-  T0,
-  rightMargin,
-  getDataRequestService,
-} from "./Utils/utils";
+import { dummy, getDataRequestService, initialLayout, T0 } from "./Utils/utils";
 
 const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {
@@ -23,29 +14,22 @@ const useStyles = makeStyles(() => ({
 
 function App() {
   const [stocks, setStocks] = useState([]);
-  const [cursor, setCursor] = useState("crosshair");
-  const [currentSelected, setCurrentSelected] = useState("");
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
   const [loader, setLoader] = useState(false);
-
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
   const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
   const [enableDualChart, setEnableDualChart] = useState(false);
-
-  const style = { width: "100%", height: "100%" };
   const [layout, setLayout] = useState({ ...initialLayout });
   const scrollableListRef = useRef(null);
   const [selectedStock, setSelectStock] = useState("MMM");
-  const [selectedStockIndex, setSelectStockIndex] = useState(0);
   const [selectedPattern, setSelectedPattern] = useState(null);
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
   const [data, setGraphData] = useState({ ...dummy });
-  const [pointIndex, setPointIndex] = useState(1);
 
   const handleGrapthType = (type) => {
     setGraphType(type);
@@ -69,11 +53,14 @@ function App() {
       selectedPattern,
       switchToggle
     );
-  }, [selectedStock, selectedTime, selectedCategory]);
-
-  const handleSelectedCategory = (category) => {
-    setSelectedCategory(category);
-  };
+  }, [
+    selectedStock,
+    selectedTime,
+    selectedCategory,
+    selectedPattern,
+    switchToggle,
+    selectedTemp.id,
+  ]);
 
   React.useEffect(() => {
     function handleResize() {
@@ -91,19 +78,12 @@ function App() {
     window.addEventListener("resize", handleResize);
   }, [window.innerWidth, window.innerHeight]);
 
-  const handleStockChange = (stock) => {
-    setSelectStock(stock);
-  };
-
   const handlePatternChange = (pattern) => {
     setSelectedPattern(pattern);
-    getDataRequest(
-      selectedStock,
-      selectedTime,
-      selectedTemp,
-      pattern,
-      switchToggle
-    );
+  };
+
+  const handleStockChange = (stock) => {
+    setSelectStock(stock);
   };
 
   const hanldeSelectedTime = (time) => {
@@ -111,84 +91,15 @@ function App() {
       setToggleFirstDayLine(false);
     }
     setSelectTime(time);
-    getDataRequest(
-      selectedStock,
-      time,
-      selectedTemp,
-      selectedPattern,
-      switchToggle
-    );
   };
 
   const templateChange = (tempData) => {
     setSelectedTemp(tempData);
-    getDataRequest(
-      selectedStock,
-      selectedTime,
-      tempData,
-      selectedPattern,
-      switchToggle
-    );
   };
 
   const handlSwitchToggle = (v) => {
-    getDataRequest(
-      selectedStock,
-      selectedTime,
-      selectedTemp,
-      selectedPattern,
-      v
-    );
     setSwitchToggle(v);
   };
-  const onHover = ({ points: [point] }) => {
-    setPointIndex(point.pointIndex);
-    setCursor("pointer");
-  };
-  const onUnhover = () => {
-    setCursor("crosshair");
-  };
-  const onClick = () => {
-    setCursor("grabbing");
-  };
-
-  const sidebarRef = useRef(null);
-  const [isResizing, setIsResizing] = useState(false);
-
-  const startResizing = React.useCallback((mouseDownEvent) => {
-    setIsResizing(true);
-  }, []);
-
-  const stopResizing = React.useCallback(() => {
-    setIsResizing(false);
-  }, []);
-
-  const resize = React.useCallback(
-    (mouseMoveEvent) => {
-      if (isResizing) {
-        let w =
-          window.innerWidth -
-          (sidebarRef.current.getBoundingClientRect().right -
-            mouseMoveEvent.clientX) -
-          10;
-
-        if (enableDualChart) {
-          w = w / 2;
-        }
-
-        setLayout({
-          ...layout,
-          width: w,
-          height: window.innerHeight - 50,
-        });
-        setSidebarWidth(
-          sidebarRef.current.getBoundingClientRect().right -
-            mouseMoveEvent.clientX
-        );
-      }
-    },
-    [isResizing]
-  );
 
   useEffect(() => {
     let n = enableDualChart ? 2 : 1;
@@ -205,42 +116,13 @@ function App() {
     });
   }, [enableDualChart]);
 
-  useEffect(() => {
-    window.addEventListener("mousemove", resize);
-    window.addEventListener("mouseup", stopResizing);
-    return () => {
-      window.removeEventListener("mousemove", resize);
-      window.removeEventListener("mouseup", stopResizing);
-    };
-  }, [resize, stopResizing]);
-
-  const handleKeyDown = (e) => {
-    if (e.keyCode === 38) {
-      handleStockChange(stocks[selectedStockIndex - 1]);
-      setSelectStockIndex(selectedStockIndex - 1);
-      placeSelectedItemInTheMiddle(selectedStockIndex - 1);
-    } else if (e.keyCode === 40) {
-      handleStockChange(stocks[selectedStockIndex + 1]);
-      setSelectStockIndex(selectedStockIndex + 1);
-      placeSelectedItemInTheMiddle(selectedStockIndex + 1);
-    }
-  };
-
   const placeSelectedItemInTheMiddle = (index) => {
     const LIST_ITEM_HEIGHT = 21;
     const NUM_OF_VISIBLE_LIST_ITEMS = 15;
-
     const amountToScroll =
       LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS + index * LIST_ITEM_HEIGHT;
     scrollableListRef.current.scrollTo(amountToScroll, 0);
   };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  });
 
   return (
     <div className="app-container">
@@ -252,134 +134,58 @@ function App() {
             overflowX: "hidden",
           }}
         >
-          <div>
-            <Header
-              setEnableDualChart={setEnableDualChart}
-              enableDualChart={enableDualChart}
-              handleGrapthType={handleGrapthType}
-              graphType={graphType}
-              templateChange={templateChange}
-              selectedStock={selectedStock}
-              handleStockChange={handleStockChange}
-              handlePatternChange={handlePatternChange}
-              selectedTime={selectedTime}
-              hanldeSelectedTime={hanldeSelectedTime}
-              selectedTemp={selectedTemp}
-              selectedPattern={selectedPattern}
-              handlSwitchToggle={handlSwitchToggle}
-              switchToggle={switchToggle}
-              toggleFirstDayLine={toggleFirstDayLine}
-              setToggleFirstDayLine={setToggleFirstDayLine}
-              separateGraphs={separateGraphs}
-            />
-
-            {data && data?.x?.length && layout ? (
-              <div
-                style={{
-                  display: "flex",
-                }}
-              >
-                <div
-                  id="default-chart"
-                  style={{
-                    cursor,
-                    marginTop: "52px",
-                    border:
-                      currentSelected === "default"
-                        ? "4px solid #438695"
-                        : "none",
-                  }}
-                  onMouseUp={() => {}}
-                >
-                  <DefaultChart
-                    type="default"
-                    rightMargin={rightMargin}
-                    onHover={onHover}
-                    onDoubleClick={(e) => setCurrentSelected(e)}
-                    onUnhover={onUnhover}
-                    onClick={onClick}
-                    pointIndex={pointIndex}
-                    graphType={graphType}
-                    style={style}
-                    data={data}
-                    enableDualChart={enableDualChart}
-                    selectedTemp={selectedTemp}
-                    layout={layout}
-                    toggleFirstDayLine={toggleFirstDayLine}
-                    switchToggle={switchToggle}
-                    selectedPattern={selectedPattern}
-                    separateGraphs={separateGraphs}
-                    loader={loader}
-                  />
-                </div>
-                {enableDualChart && (
-                  <div
-                    id="secondary-chart"
-                    style={{
-                      cursor,
-                      marginTop: "52px",
-                      border:
-                        currentSelected === "secondary"
-                          ? "4px solid #438695"
-                          : "none",
-                    }}
-                    onMouseUp={() => {}}
-                  >
-                    <DefaultChart
-                      type="secondary"
-                      onHover={onHover}
-                      onDoubleClick={(e) => setCurrentSelected(e)}
-                      rightMargin={rightMargin}
-                      graphType={graphType}
-                      style={style}
-                      enableDualChart={enableDualChart}
-                      selectedTemp={selectedTemp}
-                      layout={layout}
-                      toggleFirstDayLine={toggleFirstDayLine}
-                      switchToggle={switchToggle}
-                      selectedPattern={selectedPattern}
-                      onUnhover={onUnhover}
-                      onClick={onClick}
-                      pointIndex={pointIndex}
-                      data={data}
-                      separateGraphs={separateGraphs}
-                      loader={loader}
-                    />
-                  </div>
-                )}
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div
-        onKeyDown={handleKeyDown}
-        ref={sidebarRef}
-        className="app-sidebar"
-        style={{ width: sidebarWidth + "px" }}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-        <div className="app-sidebar-content">
-          <WatchList
+          <Header
+            setEnableDualChart={setEnableDualChart}
+            enableDualChart={enableDualChart}
+            handleGrapthType={handleGrapthType}
+            graphType={graphType}
+            templateChange={templateChange}
             selectedStock={selectedStock}
             handleStockChange={handleStockChange}
-            stocks={stocks}
-            setStocks={setStocks}
-            selectedStockIndex={selectedStockIndex}
-            setSelectStockIndex={setSelectStockIndex}
-            height={layout.height}
-            scrollableListRef={scrollableListRef}
-            placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
+            handlePatternChange={handlePatternChange}
+            selectedTime={selectedTime}
             hanldeSelectedTime={hanldeSelectedTime}
+            selectedTemp={selectedTemp}
+            selectedPattern={selectedPattern}
+            handlSwitchToggle={handlSwitchToggle}
+            switchToggle={switchToggle}
+            toggleFirstDayLine={toggleFirstDayLine}
+            setToggleFirstDayLine={setToggleFirstDayLine}
+            separateGraphs={separateGraphs}
+          />
+
+          <GraphRenderer
+            data={data}
+            layout={layout}
+            loader={loader}
+            enableDualChart={enableDualChart}
+            graphType={graphType}
+            selectedTemp={selectedTemp}
+            separateGraphs={separateGraphs}
+            toggleFirstDayLine={toggleFirstDayLine}
+            switchToggle={switchToggle}
+            selectedPattern={selectedPattern}
           />
         </div>
       </div>
+
+      <WatchList
+        selectedStock={selectedStock}
+        handleStockChange={handleStockChange}
+        stocks={stocks}
+        setStocks={setStocks}
+        height={layout.height}
+        scrollableListRef={scrollableListRef}
+        placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        hanldeSelectedTime={hanldeSelectedTime}
+        setLayout={setLayout}
+        layout={layout}
+        setSidebarWidth={setSidebarWidth}
+        sidebarWidth={sidebarWidth}
+        enableDualChart={enableDualChart}
+      />
     </div>
   );
 }

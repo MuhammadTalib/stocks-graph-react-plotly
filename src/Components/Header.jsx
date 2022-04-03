@@ -1,11 +1,11 @@
+import { FormControlLabel, Grid, Switch, TextField } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useState } from "react";
-import Autocomplete from "@mui/material/Autocomplete";
-import { getAllStocks } from "../services/api";
-import { FormControlLabel, Grid, Switch, TextField } from "@mui/material";
-import { times, templates } from "../Utils/utils";
 import "../App.css";
+import { getAllStocks } from "../services/api";
+import { templates, times } from "../Utils/utils";
 const Header = ({
   handleGrapthType,
   graphType,
@@ -91,7 +91,7 @@ const Header = ({
               <path d="M18 7h1v3.5h-1zm0 10.5h1V21h-1z"></path>
               <path d="M9 8v12h3V8H9zm-.5-1h4a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5z"></path>
               <path d="M10 4h1v3.5h-1zm0 16.5h1V24h-1z"></path>
-            </svg>{" "}
+            </svg>
           </Button>
           <Button
             className={`btn ${graphType === "ohlc" ? "templateBtn" : ""}`}

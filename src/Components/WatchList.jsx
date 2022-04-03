@@ -6,12 +6,13 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import React, { useEffect, useMemo, useState } from "react";
-import { getAllStocks } from "../services/api";
-import { times } from "../Utils/utils";
-import "../App.css";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import "../App.css";
+import { getAllStocks } from "../services/api";
+import { times } from "../Utils/utils";
+import WatchListRow from "./WatchListRow";
 
 const WatchList = ({
   handleStockChange,
@@ -19,14 +20,19 @@ const WatchList = ({
   stocks,
   setStocks,
   height,
-  setSelectStockIndex,
   scrollableListRef,
   placeSelectedItemInTheMiddle,
   selectedCategory,
   setSelectedCategory,
   hanldeSelectedTime,
+  setLayout,
+  layout,
+  setSidebarWidth,
+  sidebarWidth,
+  enableDualChart,
 }) => {
   const [categories, setCategories] = useState([]);
+  const [selectedStockIndex, setSelectStockIndex] = useState(0);
 
   useEffect(() => {
     console.log("getAllStocks");
@@ -50,11 +56,16 @@ const WatchList = ({
   });
 
   const handleKeyDown = (e) => {
-    const { cursor, result } = this.state;
-    if (e.keyCode === 38 && cursor > 0) {
-      console.log("up");
-    } else if (e.keyCode === 40 && cursor < result.length - 1) {
-      console.log("down");
+    if (e.keyCode === 38) {
+      hanldeSelectedTime(selectedTime);
+      handleStockChange(stocks[selectedStockIndex - 1]);
+      setSelectStockIndex(selectedStockIndex - 1);
+      placeSelectedItemInTheMiddle(selectedStockIndex - 1);
+    } else if (e.keyCode === 40) {
+      hanldeSelectedTime(selectedTime);
+      handleStockChange(stocks[selectedStockIndex + 1]);
+      setSelectStockIndex(selectedStockIndex + 1);
+      placeSelectedItemInTheMiddle(selectedStockIndex + 1);
     }
   };
 
@@ -72,6 +83,7 @@ const WatchList = ({
       stableSort(stocks, getComparator(isAsc ? "desc" : "asc", property))
     );
   };
+
   function descendingComparator(a, b, orderBy) {
     if (b.name < a.name) {
       return -1;
@@ -103,13 +115,11 @@ const WatchList = ({
   const stock = useMemo(() => {
     return (
       <Grid container>
-        {console.log("logging")}
         <Grid container item md={12} sm={12} xs={12} spacing={2}>
           <Grid item md={5} sm={5} xs={5}>
             <Autocomplete
               blurOnSelect
               onChange={(_, newValue) => {
-                console.log("newValue", newValue);
                 setSelectedCategory(newValue);
               }}
               fullWidth
@@ -222,7 +232,7 @@ const WatchList = ({
                 <TableBody>
                   {stocks.map((row, index) => {
                     return (
-                      <RenderRow
+                      <WatchListRow
                         key={index}
                         row={row}
                         index={index}
@@ -235,6 +245,7 @@ const WatchList = ({
                         }
                         setStocks={setStocks}
                         stocks={stocks}
+                        hanldeSelectedTime={hanldeSelectedTime}
                       />
                     );
                   })}
@@ -256,35 +267,71 @@ const WatchList = ({
     selectedTime,
   ]);
 
-  return stock;
+  const sidebarRef = useRef(null);
+  const [isResizing, setIsResizing] = useState(false);
+
+  const resize = React.useCallback(
+    (mouseMoveEvent) => {
+      if (isResizing) {
+        let w =
+          window.innerWidth -
+          (sidebarRef.current.getBoundingClientRect().right -
+            mouseMoveEvent.clientX) -
+          10;
+
+        if (enableDualChart) {
+          w = w / 2;
+        }
+
+        setLayout({
+          ...layout,
+          width: w,
+          height: window.innerHeight - 50,
+        });
+        setSidebarWidth(
+          sidebarRef.current.getBoundingClientRect().right -
+            mouseMoveEvent.clientX
+        );
+      }
+    },
+    [layout, enableDualChart, isResizing]
+  );
+
+  const stopResizing = React.useCallback(() => {
+    setIsResizing(false);
+  }, []);
+  const startResizing = React.useCallback((mouseDownEvent) => {
+    setIsResizing(true);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
+    };
+  }, [resize, stopResizing]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  return (
+    <div
+      onKeyDown={handleKeyDown}
+      ref={sidebarRef}
+      className="app-sidebar"
+      style={{ width: sidebarWidth + "px" }}
+      onMouseDown={(e) => e.preventDefault()}
+    >
+      <div className="app-sidebar-resizer" onMouseDown={startResizing} />
+      <div className="app-sidebar-content"> {stock} </div>
+    </div>
+  );
 };
 
 export default WatchList;
-
-const RenderRow = ({
-  row,
-  index,
-  selectedStock,
-  handleStockChange,
-  selectedTime,
-  placeSelectedItemInTheMiddle,
-  setSelectStockIndex,
-}) => {
-  return (
-    <TableRow
-      className={row.name === selectedStock.name ? "selectedRowStyle" : ""}
-      active={row.name === selectedStock.name}
-      key={index}
-      onClick={() => {
-        placeSelectedItemInTheMiddle(index);
-        handleStockChange(row);
-        setSelectStockIndex(index);
-      }}
-      focus={row.name === selectedStock.name}
-    >
-      <TableCell>{row.name}</TableCell>
-      <TableCell>{row?.sources?.length && row.sources[0]} </TableCell>
-      <TableCell>{selectedTime.name}</TableCell>
-    </TableRow>
-  );
-};
