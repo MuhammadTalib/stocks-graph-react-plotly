@@ -53,6 +53,7 @@ function App() {
       selectedPattern,
       switchToggle
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedStock,
     selectedTime,
@@ -76,6 +77,7 @@ function App() {
       }
     }
     window.addEventListener("resize", handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.innerWidth, window.innerHeight]);
 
   const handlePatternChange = (pattern) => {
@@ -114,6 +116,7 @@ function App() {
       ...layout,
       width: w,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableDualChart]);
 
   const placeSelectedItemInTheMiddle = (index) => {

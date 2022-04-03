@@ -48,6 +48,7 @@ const WatchList = ({
       setSelectStockIndex(0);
       handleStockChange(res?.data?.list[0]);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
   const [selectedTime, setSelectedTime] = useState({
@@ -256,6 +257,7 @@ const WatchList = ({
         </Grid>
       </Grid>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     stocks,
     selectedStock,
@@ -294,6 +296,7 @@ const WatchList = ({
         );
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [layout, enableDualChart, isResizing]
   );
 

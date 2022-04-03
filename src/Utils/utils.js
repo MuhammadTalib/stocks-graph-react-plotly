@@ -34,7 +34,6 @@ export const dummy = {
   },
   high: [],
   increasing: { fillcolor: "white", line: { color: "black", width: 1 } },
-  line: { color: "rgba(31,119,180,1)" },
   low: [],
   open: [],
   type: "candlestick",
@@ -530,8 +529,62 @@ export const initialLayout = {
   height: window.innerHeight - 50,
 };
 export const drawMergedChart = (selectedTemp, data, a) => {
+  let mergedCandles = [];
+  if (selectedTemp.id === 6) {
+    mergedCandles = [
+      {
+        ...dummy,
+        high:
+          data.elder_impulse_system && data.elder_impulse_system.length
+            ? data.realHigh &&
+              data.realHigh.map((f_, iindex) => {
+                if (!data.elder_impulse_system[iindex]) return f_;
+                if (data.elder_impulse_system[iindex].is_red === 1) return f_;
+                return null;
+              })
+            : data.realHigh,
+        low: data.low,
+        open: data.open,
+        close: data.close,
+        decreasing: {
+          fillcolor: "red",
+          line: { color: "red", width: 1 },
+        },
+        increasing: { fillcolor: "white", line: { color: "red", width: 1 } },
+        x: data.x,
+        ConfrimHigh: data.ConfrimHigh,
+        ConfrimLow: data.ConfrimLow,
+        patternData: data.patternData,
+      },
+      {
+        ...dummy,
+        high:
+          data.elder_impulse_system && data.elder_impulse_system.length
+            ? data.realHigh &&
+              data.realHigh.map((f_, iindex) => {
+                if (!data.elder_impulse_system[iindex]) return f_;
+                if (data.elder_impulse_system[iindex].is_green === 1) return f_;
+                return null;
+              })
+            : data.realHigh,
+        low: data.low,
+        open: data.open,
+        close: data.close,
+        decreasing: {
+          fillcolor: "green",
+          line: { color: "green", width: 1 },
+        },
+        increasing: { fillcolor: "white", line: { color: "green", width: 1 } },
+        x: data.x,
+        ConfrimHigh: data.ConfrimHigh,
+        ConfrimLow: data.ConfrimLow,
+        patternData: data.patternData,
+      },
+    ];
+  }
   return selectedTemp.merged && Object.keys(selectedTemp.merged).length
     ? [
+        ...mergedCandles,
         ...Object.keys(selectedTemp.merged).map((key) => {
           return {
             ...selectedTemp.merged[key],
@@ -614,11 +667,9 @@ export function getDataRequestService(
         let R0 = [];
         let R1 = [];
         let donchian0 = [];
-
         let HIST0 = [];
-
         let patternData = [];
-
+        let elder_impulse_system = [];
         let ConfrimHigh = [];
         let ConfrimLow = [];
         let tempMerged = template && template.merged;
@@ -695,6 +746,7 @@ export function getDataRequestService(
               EMA4.push(m.indicators?.EMA4);
               EMA5.push(m.indicators?.EMA5);
               HIST0.push(m.indicators?.HIST0);
+              elder_impulse_system.push(m.indicators?.elder_impulse_system);
             }
           }
         });
@@ -1143,7 +1195,18 @@ export function getDataRequestService(
 
         setGraphData({
           ...dummy,
-          high,
+          realHigh: high,
+          high: elder_impulse_system.length
+            ? high.map((f_, iindex) => {
+                if (!elder_impulse_system[iindex]) return f_;
+                if (
+                  elder_impulse_system[iindex].is_red !== 1 ||
+                  elder_impulse_system[iindex].is_green !== 1
+                )
+                  return f_;
+                return null;
+              })
+            : high,
           low,
           open,
           close,
@@ -1151,6 +1214,7 @@ export function getDataRequestService(
           ConfrimHigh,
           ConfrimLow,
           patternData,
+          elder_impulse_system,
         });
         setLayout({
           ...tempLayout,
