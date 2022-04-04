@@ -369,42 +369,32 @@ export const templates = [
   },
 ];
 
+function arrayMax(array) {
+  return array.reduce(function (a, b) {
+    return Math.max(a, b);
+  });
+}
+
+function arrayMin(array) {
+  return array.reduce(function (a, b) {
+    return Math.min(a, b);
+  });
+}
+
 export const drawPatternData = (data, selectedPattern) => {
   return data.patternData?.length
     ? [
-        // {
-        //   x: data?.x,
-        //   y: data.patternData.map((m, i) => {
-        //     let perc10 = (data.high[i] - data.low[i]) / 10;
-        //     if (m) {
-        //       return data.close[i] < data.open[i]
-        //         ? data.low[i] - perc10
-        //         : data.high[i] + perc10;
-        //     }
-        //     return null;
-        //   }),
-        //   hovertemplate: `${selectedPattern}`,
-
-        //   mode: "text",
-        //   type: "scatter",
-        //   name: " ",
-        //   text: selectedPattern?.slice(0, 2),
-        //   textfont: {
-        //     family: "Times New Roman",
-        //     color: "blue",
-        //   },
-        //   textposition: "bottom center",
-        //   marker: { size: 12 },
-        // },
         {
           x: data?.x,
           y: data?.patternData.map((m, i) => {
+            let perc10 = ((data.max - data.min) / 100) * 2.5; //((data.high[i] - data.low[i]) / 100) * 10;
             if (m) {
               if (data.close[i] > data.open[i]) {
-                return data.low[i];
+                return data.low[i] - perc10;
               }
-              return data.high[i];
+              return data.high[i] + perc10;
             }
+            return null;
           }),
           name: "Pattern",
           mode: "markers",
@@ -417,6 +407,7 @@ export const drawPatternData = (data, selectedPattern) => {
                 }
                 return "green";
               }
+              return null;
             }),
             margin: {
               r: 10,
@@ -431,9 +422,9 @@ export const drawPatternData = (data, selectedPattern) => {
                 }
                 return "triangle-up";
               }
+              return null;
             }),
             size: 7,
-            pad: { b: "8px" },
           },
         },
       ]
@@ -528,12 +519,14 @@ export const initialLayout = {
   width: window.innerWidth - 10,
   height: window.innerHeight - 50,
 };
+
 export const drawMergedChart = (selectedTemp, data, a) => {
   let mergedCandles = [];
   if (selectedTemp.id === 6) {
     mergedCandles = [
       {
         ...dummy,
+        name: "Red price",
         high:
           data.elder_impulse_system && data.elder_impulse_system.length
             ? data.realHigh &&
@@ -548,9 +541,9 @@ export const drawMergedChart = (selectedTemp, data, a) => {
         close: data.close,
         decreasing: {
           fillcolor: "red",
-          line: { color: "red", width: 1 },
+          line: { color: "black", width: 1 },
         },
-        increasing: { fillcolor: "white", line: { color: "red", width: 1 } },
+        increasing: { fillcolor: "red", line: { color: "black", width: 1 } },
         x: data.x,
         ConfrimHigh: data.ConfrimHigh,
         ConfrimLow: data.ConfrimLow,
@@ -558,6 +551,7 @@ export const drawMergedChart = (selectedTemp, data, a) => {
       },
       {
         ...dummy,
+        name: "Green price",
         high:
           data.elder_impulse_system && data.elder_impulse_system.length
             ? data.realHigh &&
@@ -572,9 +566,9 @@ export const drawMergedChart = (selectedTemp, data, a) => {
         close: data.close,
         decreasing: {
           fillcolor: "green",
-          line: { color: "green", width: 1 },
+          line: { color: "black", width: 1 },
         },
-        increasing: { fillcolor: "white", line: { color: "green", width: 1 } },
+        increasing: { fillcolor: "green", line: { color: "black", width: 1 } },
         x: data.x,
         ConfrimHigh: data.ConfrimHigh,
         ConfrimLow: data.ConfrimLow,
@@ -1211,10 +1205,20 @@ export function getDataRequestService(
           open,
           close,
           x,
+          increasing:
+            template.id === 6
+              ? { fillcolor: "blue", line: { color: "black", width: 1 } }
+              : dummy.increasing,
+          decreasing:
+            template.id === 6
+              ? { fillcolor: "blue", line: { color: "black", width: 1 } }
+              : dummy.decreasing,
           ConfrimHigh,
           ConfrimLow,
           patternData,
           elder_impulse_system,
+          max: arrayMax(high),
+          min: arrayMin(low.filter((f) => f !== 0 && f !== null)),
         });
         setLayout({
           ...tempLayout,

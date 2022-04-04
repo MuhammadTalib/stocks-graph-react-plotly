@@ -74,6 +74,7 @@ export const Graph = ({
                         },
                       };
                     }
+                    return null;
                   })
               : []),
           ],

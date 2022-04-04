@@ -12,7 +12,8 @@ const WatchListRow = ({
   hanldeSelectedTime,
 }) => {
   return (
-    row && (
+    row &&
+    selectedStock && (
       <TableRow
         className={row.name === selectedStock.name ? "selectedRowStyle" : ""}
         active={row.name === selectedStock.name}
