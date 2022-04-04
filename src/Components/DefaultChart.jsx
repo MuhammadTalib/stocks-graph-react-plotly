@@ -46,7 +46,7 @@ export function DefaultChart({
       layout={layout}
       toggleFirstDayLine={toggleFirstDayLine}
       templates={[
-        ...drawMergedChart(selectedTemp, data, pointIndex), //templates T1 , T2 , T3
+        ...drawMergedChart(selectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
         ...drawConfirmHighAndLow(switchToggle, data), //0 1 2 3
         ...drawPatternData(data, selectedPattern), //
       ]}

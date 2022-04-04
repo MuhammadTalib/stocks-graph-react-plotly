@@ -4,7 +4,8 @@ import "./App.css";
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
-import { dummy, getDataRequestService, initialLayout, T0 } from "./Utils/utils";
+import { dummy, T0 } from "./Utils/defaults";
+import { getDataRequestService, initialLayout } from "./Utils/utils";
 
 const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {
@@ -42,7 +43,8 @@ function App() {
     setSeparateGraphs,
     setSelectedTemp,
     setGraphData,
-    setLayout
+    setLayout,
+    graphType
   );
 
   useEffect(() => {
@@ -61,6 +63,7 @@ function App() {
     selectedPattern,
     switchToggle,
     selectedTemp.id,
+    graphType,
   ]);
 
   React.useEffect(() => {

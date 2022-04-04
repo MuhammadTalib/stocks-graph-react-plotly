@@ -11,7 +11,8 @@ import { visuallyHidden } from "@mui/utils";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../App.css";
 import { getAllStocks } from "../services/api";
-import { times } from "../Utils/utils";
+import { times } from "../Utils/defaults";
+import { getComparator, stableSort } from "../Utils/sorting";
 import WatchListRow from "./WatchListRow";
 
 const WatchList = ({
@@ -84,34 +85,6 @@ const WatchList = ({
       stableSort(stocks, getComparator(isAsc ? "desc" : "asc", property))
     );
   };
-
-  function descendingComparator(a, b, orderBy) {
-    if (b.name < a.name) {
-      return -1;
-    }
-    if (b.name > a.name) {
-      return 1;
-    }
-    return 0;
-  }
-
-  function getComparator(order, orderBy) {
-    return order === "desc"
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
-      }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
 
   const stock = useMemo(() => {
     return (

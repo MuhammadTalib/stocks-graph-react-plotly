@@ -5,7 +5,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import { getAllStocks } from "../services/api";
-import { templates, times } from "../Utils/utils";
+import { templates, times } from "../Utils/defaults";
 const Header = ({
   handleGrapthType,
   graphType,
