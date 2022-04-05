@@ -171,6 +171,7 @@ function App() {
             toggleFirstDayLine={toggleFirstDayLine}
             switchToggle={switchToggle}
             selectedPattern={selectedPattern}
+            setLayout={setLayout}
           />
         </div>
       </div>

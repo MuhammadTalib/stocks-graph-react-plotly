@@ -22,9 +22,10 @@ const GraphRenderer = ({
   toggleFirstDayLine,
   switchToggle,
   selectedPattern,
+  setLayout,
 }) => {
-  const [secondaryGraphWidth, setSecondaryGraphWidth] = useState(6);
-  const classes = useStyles(secondaryGraphWidth);
+  // const [secondaryGraphWidth, setSecondaryGraphWidth] = useState(6);
+  // const classes = useStyles(secondaryGraphWidth);
   const [secondaryLayout, setSecondaryLayout] = useState({ ...initialLayout });
 
   const [cursor, setCursor] = useState("crosshair");
@@ -65,15 +66,18 @@ const GraphRenderer = ({
           w = w / 2;
         }
 
-        setSecondaryLayout({
+        setLayout({
           ...layout,
           width: w,
           height: window.innerHeight - 50,
         });
-        setSecondaryGraphWidth(
-          sidebarRef.current.getBoundingClientRect().right -
-            mouseMoveEvent.clientX
-        );
+        setSecondaryLayout({
+          ...secondaryLayout,
+          width:
+            sidebarRef.current.getBoundingClientRect().right -
+            mouseMoveEvent.clientX,
+          height: window.innerHeight - 50,
+        });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,20 +137,19 @@ const GraphRenderer = ({
           />
         </div>
       </div>
-      <div
-        ref={sidebarRef}
-        className="app-sidebar"
-        style={{ width: secondaryGraphWidth + "px" }}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-        <div className="app-sidebar-content">
-          {enableDualChart && (
+      {enableDualChart && (
+        <div
+          ref={sidebarRef}
+          className="app-sidebar"
+          style={{ width: secondaryLayout.width + "px", marginTop: "52px" }}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <div className="app-sidebar-resizer" onMouseDown={startResizing} />
+          <div className="app-sidebar-content">
             <div
               id="secondary-chart"
               style={{
                 cursor,
-                marginTop: "52px",
                 border:
                   currentSelected === "secondary"
                     ? "4px solid #438695"
@@ -174,9 +177,9 @@ const GraphRenderer = ({
                 loader={loader}
               />
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   ) : (
     <></>

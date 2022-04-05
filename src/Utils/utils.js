@@ -305,6 +305,11 @@ export function getDataRequestService(
         let tempMerged = template && template.merged;
         let resMerged = tempMerged;
 
+        Object.keys(tempMerged).length &&
+          Object.keys(tempMerged).forEach((key) => {
+            resMerged[key].data = [];
+          });
+
         responseData?.forEach((m) => {
           high.push(m.high);
           low.push(m.low);
