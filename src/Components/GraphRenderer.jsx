@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from "@mui/styles";
+import React, { useEffect, useRef, useState } from "react";
 import { rightMargin } from "../Utils/defaults";
-import { DefaultChart } from "./DefaultChart";
 import { initialLayout } from "../Utils/utils";
+import { DefaultChart } from "./DefaultChart";
 const style = { width: "100%", height: "100%" };
 
 const useStyles = makeStyles(() => ({
