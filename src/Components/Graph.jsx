@@ -31,7 +31,6 @@ export const Graph = ({
       });
     setBottomTemplates(temp);
   }, [separateGraphs]);
-  console.log("loader: ", loader);
   if (loader) {
     return <div className="loadingLabel">Loading...</div>;
   } else

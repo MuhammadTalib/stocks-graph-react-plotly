@@ -33,6 +33,7 @@ const GraphRenderer = ({
   const [pointIndex, setPointIndex] = useState(1);
 
   const onHover = ({ points: [point] }) => {
+    console.log("onHover-->", point.pointIndex);
     setPointIndex(point.pointIndex);
     setCursor("pointer");
   };
