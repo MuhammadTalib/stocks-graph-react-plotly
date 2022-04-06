@@ -23,6 +23,7 @@ const GraphRenderer = ({
   switchToggle,
   selectedPattern,
   setLayout,
+  selectedStock,
 }) => {
   // const [secondaryGraphWidth, setSecondaryGraphWidth] = useState(6);
   // const classes = useStyles(secondaryGraphWidth);
@@ -35,7 +36,7 @@ const GraphRenderer = ({
   const onHover = ({ points: [point] }) => {
     console.log("onHover-->", point.pointIndex);
     setPointIndex(point.pointIndex);
-    setCursor("pointer");
+    setCursor("crosshair");
   };
   const onUnhover = () => {
     setCursor("crosshair");
@@ -70,14 +71,14 @@ const GraphRenderer = ({
         setLayout({
           ...layout,
           width: w,
-          height: window.innerHeight - 50,
+          height: window.innerHeight - 80,
         });
         setSecondaryLayout({
           ...secondaryLayout,
           width:
             sidebarRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX,
-          height: window.innerHeight - 50,
+          height: window.innerHeight - 80,
         });
       }
     },
@@ -135,6 +136,7 @@ const GraphRenderer = ({
             selectedPattern={selectedPattern}
             separateGraphs={separateGraphs}
             loader={loader}
+            selectedStock={selectedStock}
           />
         </div>
       </div>
@@ -176,6 +178,7 @@ const GraphRenderer = ({
                 data={data}
                 separateGraphs={separateGraphs}
                 loader={loader}
+                selectedStock={selectedStock}
               />
             </div>
           </div>

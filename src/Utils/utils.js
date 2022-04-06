@@ -136,6 +136,7 @@ export const initialLayout = {
     spikesnap: "cursor",
     spikethickness: 1,
     spikecolor: "black",
+    spikedash: "dot",
   },
   yaxis: {
     domain: [0, 1],
@@ -151,11 +152,12 @@ export const initialLayout = {
     spikesnap: "cursor",
     spikethickness: 1,
     spikecolor: "black",
+    spikedash: "dot",
   },
   opacity: 0.2,
   autosize: true,
   width: window.innerWidth - 10,
-  height: window.innerHeight - 50,
+  height: window.innerHeight - 80,
 };
 
 export const drawMergedChart = (selectedTemp, data, a, graphType) => {

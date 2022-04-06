@@ -70,12 +70,12 @@ function App() {
     function handleResize() {
       if (
         layout.width !== window.innerWidth - 10 ||
-        layout.height !== window.innerHeight - 50
+        layout.height !== window.innerHeight - 80
       ) {
         setLayout({
           ...layout,
           width: window.innerWidth - 10,
-          height: window.innerHeight - 50,
+          height: window.innerHeight - 80,
         });
       }
     }
@@ -171,6 +171,7 @@ function App() {
             toggleFirstDayLine={toggleFirstDayLine}
             switchToggle={switchToggle}
             selectedPattern={selectedPattern}
+            selectedStock={selectedStock}
             setLayout={setLayout}
           />
         </div>

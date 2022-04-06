@@ -261,7 +261,7 @@ const WatchList = ({
         setLayout({
           ...layout,
           width: w,
-          height: window.innerHeight - 50,
+          height: window.innerHeight - 80,
         });
         setSidebarWidth(
           sidebarRef.current.getBoundingClientRect().right -
