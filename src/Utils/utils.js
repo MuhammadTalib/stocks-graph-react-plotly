@@ -511,6 +511,7 @@ export function getDataRequestService(
                     color: open[i] < close[i] ? "green" : "red",
                     opacity: 1,
                   },
+                  hoverinfo: "x",
                 };
               }
               return null;

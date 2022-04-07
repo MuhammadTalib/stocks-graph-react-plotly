@@ -61,7 +61,7 @@ export const templates = [
       EMA0: {
         data: [],
         xaxis: "x",
-        name: `EMA0`,
+        name: `EMA 20`,
         yaxis: "y",
         mode: "line",
         type: "scatter",
@@ -73,7 +73,7 @@ export const templates = [
       },
       EMA1: {
         data: [],
-        name: "EMA1",
+        name: "EMA 22",
         xaxis: "x",
         type: "scatter",
         yaxis: "y",
@@ -83,7 +83,7 @@ export const templates = [
       },
       EMA2: {
         data: [],
-        name: "EMA2",
+        name: "EMA 26",
         type: "scatter",
         xaxis: "x",
         yaxis: "y",
@@ -117,7 +117,7 @@ export const templates = [
       EMA0: {
         data: [],
         xaxis: "x",
-        name: `EMA0`,
+        name: `EMA 10`,
         yaxis: "y",
         mode: "line",
         type: "scatter",
@@ -128,7 +128,7 @@ export const templates = [
       },
       EMA1: {
         data: [],
-        name: "EMA1",
+        name: "EMA 11",
         xaxis: "x",
         type: "scatter",
         yaxis: "y",
@@ -138,7 +138,7 @@ export const templates = [
       },
       EMA2: {
         data: [],
-        name: "EMA2",
+        name: "EMA 13",
         type: "scatter",
         xaxis: "x",
         yaxis: "y",
@@ -150,14 +150,14 @@ export const templates = [
         data: [],
         xaxis: "x",
         yaxis: "y",
-        name: "EMA3",
+        name: "EMA 20",
         marker: {
           color: "red",
         },
       },
       EMA4: {
         data: [],
-        name: "EMA4",
+        name: "EMA 22",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -166,7 +166,7 @@ export const templates = [
       },
       EMA5: {
         data: [],
-        name: "EMA5",
+        name: "EMA 26",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -254,7 +254,7 @@ export const templates = [
     merged: {
       SMA0: {
         data: [],
-        name: "SMA0",
+        name: "MMA 20",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -263,7 +263,7 @@ export const templates = [
       },
       SMA1: {
         data: [],
-        name: "SMA1",
+        name: "MMA 50",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -272,7 +272,7 @@ export const templates = [
       },
       SMA2: {
         data: [],
-        name: "SMA2",
+        name: "MMA 100",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -281,7 +281,7 @@ export const templates = [
       },
       SMA3: {
         data: [],
-        name: "SMA3",
+        name: "MMA 200",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -385,7 +385,7 @@ export const templates = [
     merged: {
       EMA0: {
         data: [],
-        name: "EMA0",
+        name: "EMA 20",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -394,7 +394,7 @@ export const templates = [
       },
       EMA1: {
         data: [],
-        name: "EMA1",
+        name: "EMA 50",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -403,7 +403,7 @@ export const templates = [
       },
       EMA2: {
         data: [],
-        name: "EMA2",
+        name: "EMA 100",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -412,7 +412,7 @@ export const templates = [
       },
       EMA3: {
         data: [],
-        name: "EMA3",
+        name: "EMA 200",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -510,7 +510,7 @@ export const templates = [
     merged: {
       EMA0: {
         data: [],
-        name: "EMA0",
+        name: "EMA 10",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -519,7 +519,7 @@ export const templates = [
       },
       EMA1: {
         data: [],
-        name: "EMA1",
+        name: "EMA 11",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -528,7 +528,7 @@ export const templates = [
       },
       EMA2: {
         data: [],
-        name: "EMA2",
+        name: "EMA 13",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -537,7 +537,7 @@ export const templates = [
       },
       EMA3: {
         data: [],
-        name: "EMA3",
+        name: "EMA 20",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -546,7 +546,7 @@ export const templates = [
       },
       EMA4: {
         data: [],
-        name: "EMA4",
+        name: "EMA 22",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -555,7 +555,7 @@ export const templates = [
       },
       EMA5: {
         data: [],
-        name: "EMA5",
+        name: "EMA 26",
         xaxis: "x",
         yaxis: "y",
         marker: {

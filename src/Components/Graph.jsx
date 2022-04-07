@@ -71,6 +71,7 @@ export const Graph = ({
                           width: 1.5,
                           dash: "dot",
                         },
+                        hoverinfo: "x",
                       };
                     }
                     return null;
