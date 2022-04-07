@@ -1,7 +1,7 @@
 import React from "react";
 const InfoLines = ({
   selectedStock,
-  ohlc: { high, low, open, close },
+  ohlc: { high, low, open, close, pattern },
   selectedPattern,
 }) => {
   return (
@@ -14,7 +14,7 @@ const InfoLines = ({
       <div>
         Open: {open} High: {high} Low: {low} Close: {close}
       </div>
-      {selectedPattern && <div>Pattern: {selectedPattern}</div>}
+      {pattern ? <div>Pattern: {selectedPattern}</div> : <></>}
     </div>
   );
 };

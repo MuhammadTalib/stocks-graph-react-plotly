@@ -1,3 +1,5 @@
+import { initialLayout } from "./utils";
+
 export const times = [
   { name: "1h", ms: 3600000 },
   { name: "1d", ms: 86400000 },
@@ -26,6 +28,7 @@ export const T0 = {
   id: 0,
   name: "T0",
   merged: {},
+  separate: {},
 };
 
 export const dummy = {
@@ -48,6 +51,8 @@ export const templates = [
   {
     name: "T0",
     id: 0,
+    merged: {},
+    separate: {},
   },
   {
     name: "T1",
@@ -64,6 +69,7 @@ export const templates = [
           size: 4,
           color: "blue",
         },
+        hoverinfo: "x",
       },
       EMA1: {
         data: [],
@@ -85,6 +91,23 @@ export const templates = [
           color: "blue",
         },
       },
+    },
+    separate: {
+      "Volume EMA": {
+        // x: x,
+        // y: volume,
+        data: [],
+        name: "Volume",
+        marker: {
+          color: "#9fa5c5",
+        },
+        yaxis: "y2",
+        hoverinfo: "x",
+      },
+    },
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0.3, 1] },
+      yaxis2: { ...initialLayout.yaxis, domain: [0, 0.25] },
     },
   },
   {
@@ -151,6 +174,10 @@ export const templates = [
         },
       },
     },
+    separate: {},
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0, 1] },
+    },
   },
   {
     name: "T3",
@@ -194,6 +221,32 @@ export const templates = [
         },
       },
     },
+    separate: {
+      "%R0": {
+        data: [],
+        name: "%R0",
+        type: "bar",
+        marker: {
+          color: "blue",
+        },
+        yaxis: "y2",
+      },
+      "%R1": {
+        data: [],
+        name: "%R1",
+        type: "bar",
+        marker: {
+          color: "red",
+        },
+        yaxis: "y3",
+      },
+    },
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0.55, 1] },
+      yaxis2: { ...initialLayout.yaxis, domain: [0.25, 0.5] },
+      yaxis3: { ...initialLayout.yaxis, domain: [0, 0.25] },
+      xaxis: { ...initialLayout.xaxis },
+    },
   },
   {
     name: "T4",
@@ -233,6 +286,95 @@ export const templates = [
         yaxis: "y",
         marker: {
           color: "rgb(89,89,89)",
+        },
+      },
+    },
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0.5, 1] },
+      yaxis2: {
+        ...initialLayout.yaxis,
+        domain: [0.3, 0.45],
+        range: [-5, 5],
+        autorange: false,
+      },
+      yaxis3: { ...initialLayout.yaxis, domain: [0.15, 0.3] },
+      yaxis4: { ...initialLayout.yaxis, domain: [0, 0.15] },
+      xaxis: { ...initialLayout.xaxis },
+    },
+    separate: {
+      MACD0: {
+        data: [],
+        name: "MACD0",
+        marker: {
+          color: "blue",
+        },
+        xaxis: "x",
+        yaxis: "y2",
+      },
+      MACDSIGNAL0: {
+        data: [],
+        name: "MACD SIGNAL",
+        xaxis: "x",
+        yaxis: "y2",
+        marker: {
+          color: "black",
+        },
+      },
+      MACDHIST0: {
+        data: [],
+        name: "MACD HIST",
+        type: "bar",
+        xaxis: "x",
+        yaxis: "y3",
+        markerFn: (MACDHIST0) => {
+          return {
+            color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")), //"black",
+          };
+        },
+      },
+      stochd0: {
+        data: [],
+        name: "stochd",
+        marker: {
+          color: "rgb(153,42,173)",
+        },
+        xaxis: "x",
+        yaxis: "y4",
+      },
+
+      stochk0: {
+        data: [],
+        name: "stochk",
+        xaxis: "x",
+        yaxis: "y4",
+        marker: {
+          color: "rgb(13,0,255)",
+        },
+      },
+      line1: {
+        customLine: 20,
+        data: [],
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          dash: "dash",
+          width: 2,
+          color: "red",
+        },
+      },
+      line2: {
+        data: [],
+        customLine: 80,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
         },
       },
     },
@@ -277,6 +419,89 @@ export const templates = [
           color: "black",
         },
       },
+    },
+    separate: {
+      MACD0: {
+        data: [],
+        name: "MACD0",
+        marker: {
+          color: "blue",
+        },
+        xaxis: "x",
+        yaxis: "y2",
+      },
+      MACDSIGNAL0: {
+        data: [],
+        name: "MACD SIGNAL",
+        xaxis: "x",
+        yaxis: "y2",
+        marker: {
+          color: "black",
+        },
+      },
+      MACDHIST0: {
+        data: [],
+        name: "MACDHIST",
+        type: "bar",
+        xaxis: "x",
+        yaxis: "y3",
+        markerFn: (MACDHIST0) => {
+          return {
+            color: MACDHIST0.map((m, i) => (m > 0 ? "green" : "red")),
+          };
+        },
+      },
+      stochd0: {
+        data: [],
+        name: "stochd",
+        marker: {
+          color: "rgb(153,42,173)",
+        },
+        xaxis: "x",
+        yaxis: "y4",
+      },
+      stochk0: {
+        data: [],
+        name: "stochk",
+        xaxis: "x",
+        yaxis: "y4",
+        marker: {
+          color: "rgb(13,0,255)",
+        },
+      },
+      line1: {
+        customLine: 20,
+        data: [],
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          dash: "dash",
+          width: 2,
+          color: "red",
+        },
+      },
+      line2: {
+        customLine: 80,
+        data: [],
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
+    },
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0.5, 1] },
+      yaxis2: { ...initialLayout.yaxis, domain: [0.3, 0.45] },
+      yaxis3: { ...initialLayout.yaxis, domain: [0.15, 0.3] },
+      yaxis4: { ...initialLayout.yaxis, domain: [0, 0.15] },
+      xaxis: { ...initialLayout.xaxis },
     },
   },
   {
@@ -338,6 +563,27 @@ export const templates = [
         },
       },
     },
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0.35, 1] },
+      yaxis2: { ...initialLayout.yaxis, domain: [0, 0.3] },
+      xaxis: { ...initialLayout.xaxis },
+    },
+    separate: {
+      HIST0: {
+        data: [],
+        type: "bar",
+        name: "HIST0",
+        markerFn: (HIST0) => {
+          return {
+            color: HIST0.map((m, i) =>
+              m > 0 ? "rgb(38,165,154)" : "rgb(254,82,82)"
+            ), //"black",
+          };
+        },
+        xaxis: "x",
+        yaxis: "y2",
+      },
+    },
   },
   {
     name: "T7",
@@ -370,6 +616,102 @@ export const templates = [
           color: "black",
         },
       },
+    },
+    separate: {
+      RSI0: {
+        data: [],
+        name: "RSI0",
+        marker: {
+          color: "blue",
+        },
+        xaxis: "x",
+        yaxis: "y2",
+      },
+      line1: {
+        customLine: 80,
+        data: [],
+
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y2",
+        line: {
+          dash: "dashdot",
+          width: 2,
+          color: "green",
+        },
+      },
+      line2: {
+        customLine: 40,
+        data: [],
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y2",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      stochd0: {
+        data: [],
+        name: "stochd",
+        marker: {
+          color: "rgb(153,42,173)",
+        },
+        xaxis: "x",
+        yaxis: "y3",
+      },
+      stochk0: {
+        data: [],
+        name: "stochk",
+        xaxis: "x",
+        yaxis: "y3",
+        marker: {
+          color: "rgb(13,0,255)",
+        },
+      },
+      line3: {
+        data: [],
+        customLine: 20,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y3",
+        line: {
+          dash: "dash",
+          width: 2,
+          color: "red",
+        },
+      },
+      line4: {
+        data: [],
+        customLine: 80,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y3",
+        line: {
+          color: "green",
+          dash: "dashdot",
+          width: 2,
+        },
+      },
+    },
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0.55, 1] },
+      yaxis2: {
+        ...initialLayout.yaxis,
+        domain: [0.25, 0.5],
+        range: [20, 80],
+        autorange: false,
+      },
+      yaxis3: {
+        ...initialLayout.yaxis,
+        domain: [0, 0.25],
+      },
+      xaxis: { ...initialLayout.xaxis },
     },
   },
 ];

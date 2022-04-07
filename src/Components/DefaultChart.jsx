@@ -3,6 +3,7 @@ import {
   drawConfirmHighAndLow,
   drawMergedChart,
   drawPatternData,
+  drawSeparateChart,
 } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
@@ -45,6 +46,7 @@ export function DefaultChart({
           low: data.low[pointIndex],
           open: data.open[pointIndex],
           close: data.close[pointIndex],
+          pattern: data.patternData[pointIndex],
         }}
         selectedPattern={selectedPattern}
       />
@@ -63,7 +65,9 @@ export function DefaultChart({
           ...drawConfirmHighAndLow(switchToggle, data), //0 1 2 3
           ...drawPatternData(data, selectedPattern), //
         ]}
-        separateGraphs={separateGraphs}
+        separateGraphs={[
+          ...drawSeparateChart(selectedTemp, data, pointIndex, graphType),
+        ]}
         loader={loader}
       />
     </>
