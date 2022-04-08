@@ -591,7 +591,7 @@ export const templates = [
     merged: {
       EMA0: {
         data: [],
-        name: "EMA0",
+        name: "EMA 5",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -600,7 +600,7 @@ export const templates = [
       },
       MA0: {
         data: [],
-        name: "MA0",
+        name: "MA 10",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -609,7 +609,7 @@ export const templates = [
       },
       MA1: {
         data: [],
-        name: "MA1",
+        name: "MA 30",
         xaxis: "x",
         yaxis: "y",
         marker: {
