@@ -628,7 +628,7 @@ export const templates = [
         yaxis: "y2",
       },
       line1: {
-        customLine: 80,
+        customLine: 60,
         data: [],
 
         mode: "lines",

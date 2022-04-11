@@ -1,11 +1,18 @@
-import { FormControlLabel, Grid, Switch, TextField } from "@mui/material";
+import {
+  FormControlLabel,
+  Grid,
+  Paper,
+  Switch,
+  TextField,
+} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
 import { getAllStocks } from "../services/api";
 import { templates, times } from "../Utils/defaults";
+
 const Header = ({
   handleGrapthType,
   graphType,
@@ -21,8 +28,14 @@ const Header = ({
   switchToggle,
   toggleFirstDayLine,
   setToggleFirstDayLine,
+  selectedStock,
 }) => {
+  useEffect(() => {
+    setOpenPatternDropdown(false);
+  }, [selectedStock]);
+  let patternRef = useRef(null);
   let [patterns, setPatterns] = useState([]);
+  const [openPatternDropdown, setOpenPatternDropdown] = useState(false);
 
   useEffect(() => {
     getAllStocks("stocks/patterns").then((res) => {
@@ -30,28 +43,71 @@ const Header = ({
       setPatterns(res?.data?.list || []);
     });
   }, []);
-
+  const CustomPaper = (props) => {
+    return <Paper elevation={8} {...props} />;
+  };
+  const handleKeyDown = (e) => {
+    console.log("e", e);
+    if (e.keyCode === 38) {
+      setOpenPatternDropdown(false);
+    } else if (e.keyCode === 40) {
+      setOpenPatternDropdown(false);
+    }
+  };
   return (
-    <Grid container spacing={2} style={{ position: "fixed", padding: "10px" }}>
-      <Grid item md={2} sm={6} xs={12}>
+    <Grid
+      ref={patternRef}
+      container
+      spacing={2}
+      style={{ position: "fixed", padding: "10px" }}
+    >
+      <Grid
+        item
+        md={2}
+        sm={6}
+        xs={12}
+        onMouseLeave={() => {
+          setOpenPatternDropdown(false);
+        }}
+      >
         <Autocomplete
+          onKeyPress={handleKeyDown}
+          selectOnFocus={false}
+          blurOnSelect={"touch"}
           onChange={(_, newValue) => {
             handlePatternChange(newValue);
           }}
           fullWidth
           id="free-solo-2-demo"
+          open={openPatternDropdown}
+          onBlur={() => {
+            setOpenPatternDropdown(false);
+          }}
           disableClearable={true}
           options={[...patterns]}
+          onMouseLeave={() => {
+            patternRef.current.click();
+          }}
           onClose={() => {
             console.log("aytr");
           }}
+          onKeyDown={() => {
+            setOpenPatternDropdown(true);
+          }}
+          onClick={() => {
+            setOpenPatternDropdown(true);
+          }}
           value={selectedPattern}
           defaultValue={patterns.find((v) => v[0])}
+          PaperComponent={CustomPaper}
           renderInput={(params) => (
             <TextField
               {...params}
               label="Pattern"
               variant="standard"
+              onClick={() => {
+                setOpenPatternDropdown(!openPatternDropdown);
+              }}
               InputProps={{
                 ...params.InputProps,
                 type: "search",

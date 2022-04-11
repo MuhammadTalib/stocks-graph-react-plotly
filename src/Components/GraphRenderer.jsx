@@ -25,8 +25,6 @@ const GraphRenderer = ({
   setLayout,
   selectedStock,
 }) => {
-  // const [secondaryGraphWidth, setSecondaryGraphWidth] = useState(6);
-  // const classes = useStyles(secondaryGraphWidth);
   const [secondaryLayout, setSecondaryLayout] = useState({ ...initialLayout });
 
   const [cursor, setCursor] = useState("crosshair");
@@ -34,7 +32,6 @@ const GraphRenderer = ({
   const [pointIndex, setPointIndex] = useState(1);
 
   const onHover = ({ points: [point] }) => {
-    console.log("onHover-->", point.pointIndex);
     setPointIndex(point.pointIndex);
     setCursor("crosshair");
   };

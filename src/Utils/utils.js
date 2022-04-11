@@ -28,7 +28,7 @@ export const drawPatternData = (data, selectedPattern) => {
             }
             return null;
           }),
-          name: "Pattern",
+          showlegend: false,
           mode: "markers",
           dy: 10,
           marker: {
@@ -58,12 +58,13 @@ export const drawPatternData = (data, selectedPattern) => {
             }),
             size: 7,
           },
+          hoverinfo: "skip",
         },
       ]
     : [];
 };
 
-export const drawConfirmHighAndLow = (switchToggle, data) => {
+export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
   return [
     ...(switchToggle
       ? [
@@ -73,12 +74,13 @@ export const drawConfirmHighAndLow = (switchToggle, data) => {
               if (!m) return null;
               else return data.high[i];
             }),
-            name: "Confirm High",
+            name: "Confirm High " + data.high[pointIndex],
             mode: "markers",
             marker: {
               color: "blue",
               symbol: "diamond",
             },
+            hoverinfo: "skip",
           },
         ]
       : []),
@@ -90,12 +92,13 @@ export const drawConfirmHighAndLow = (switchToggle, data) => {
               if (!m) return null;
               else return data.low[i];
             }),
-            name: "Confirm Low",
+            name: "Confirm Low " + data.low[pointIndex],
             mode: "markers",
             marker: {
               color: "red",
               symbol: "diamond",
             },
+            hoverinfo: "skip",
           },
         ]
       : []),
@@ -416,6 +419,7 @@ export function getDataRequestService(
           open,
           close,
           x,
+          hovertext: high,
           increasing:
             template.id === 6
               ? {
