@@ -1,10 +1,19 @@
 import { initialLayout } from "./utils";
 
 export const times = [
-  { name: "1h", ms: 3600000 },
-  { name: "1d", ms: 86400000 },
+  { name: "1h", ms: 3600000 * 1 },
+  { name: "2h", ms: 3600000 * 2 },
+  { name: "4h", ms: 3600000 * 4 },
+  { name: "6h", ms: 3600000 * 6 },
+  { name: "8h", ms: 3600000 * 8 },
+  { name: "12h", ms: 3600000 * 12 },
+  { name: "18h", ms: 3600000 * 18 },
+  { name: "1d", ms: 86400000 * 1 },
+  { name: "2d", ms: 86400000 * 2 },
+  { name: "3d", ms: 86400000 * 3 },
   { name: "1wk", ms: 604800000 },
-  { name: "1mo", ms: 2629746000 },
+  { name: "2wk", ms: 604800000 * 2 },
+  { name: "1mo", ms: 2629746000 * 1 },
 ];
 
 export const rightMargin = 23;
@@ -714,4 +723,16 @@ export const templates = [
       xaxis: { ...initialLayout.xaxis },
     },
   },
+];
+
+export const strategies = [
+  { value: "1", name: "T3 Bearish" },
+  { value: "2", name: "T3 Bullish" },
+  { value: "3", name: "T3 Bearish" },
+  { value: "4", name: "T3 Bullish" },
+  { value: "5", name: "T3 Bearish" },
+  { value: "6", name: "T3 Bullish" },
+  { value: "7", name: "T3 Bearish" },
+  { value: "8", name: "T3 Bullish" },
+  { value: "9", name: "T3 Bearish" },
 ];

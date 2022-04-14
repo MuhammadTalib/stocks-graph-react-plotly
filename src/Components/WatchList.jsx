@@ -1,4 +1,6 @@
-import { Box, Grid, TextField } from "@mui/material";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import { Box, Checkbox, Grid, TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,9 +13,12 @@ import { visuallyHidden } from "@mui/utils";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../App.css";
 import { getAllStocks } from "../services/api";
-import { times } from "../Utils/defaults";
+import { strategies, times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
 import WatchListRow from "./WatchListRow";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const WatchList = ({
   handleStockChange,
@@ -34,6 +39,7 @@ const WatchList = ({
 }) => {
   const [categories, setCategories] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
+  const [selectedStrategy, setSelectedStrategy] = useState([]);
 
   useEffect(() => {
     console.log("getAllStocks");
@@ -90,7 +96,7 @@ const WatchList = ({
     return (
       <Grid container>
         <Grid container item md={12} sm={12} xs={12} spacing={2}>
-          <Grid item md={5} sm={5} xs={5}>
+          <Grid item md={3} sm={3} xs={3}>
             <Autocomplete
               blurOnSelect
               onChange={(_, newValue) => {
@@ -115,18 +121,16 @@ const WatchList = ({
               )}
             />
           </Grid>
-          <Grid item md={3} sm={3} xs={3}>
+          <Grid item md={2} sm={2} xs={2}>
             <Autocomplete
               blurOnSelect
               onChange={(_, newValue) => {
-                console.log("newValue", newValue);
                 setSelectedTime(newValue);
                 hanldeSelectedTime(newValue);
               }}
               fullWidth
               disableClearable={true}
               getOptionLabel={(option) => {
-                console.log("option", option);
                 return option ? option?.name : null;
               }}
               options={times}
@@ -144,21 +148,32 @@ const WatchList = ({
               )}
             />
           </Grid>
-          <Grid item md={4} sm={4} xs={4}>
+          <Grid item md={7} sm={7} xs={7}>
             <Autocomplete
-              blurOnSelect
-              fullWidth
-              options={[]}
-              defaultValue={times.find((v) => v[0])}
+              multiple
+              id="checkboxes-tags-demo"
+              limitTags={1}
+              size="small"
+              options={strategies}
+              onChange={(e, v) => {
+                setSelectedStrategy(v);
+              }}
+              getOptionLabel={(option) => option.name}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    checked={selected}
+                  />
+                  {option.name}
+                </li>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Strategies"
-                  variant="standard"
-                  InputProps={{
-                    ...params.InputProps,
-                    type: "search",
-                  }}
+                  placeholder="Strategies"
                 />
               )}
             />
@@ -167,8 +182,15 @@ const WatchList = ({
 
         <Grid item md={12} sm={12} xs={12}>
           <div onKeyPress={handleKeyDown}>
-            <TableContainer sx={{ maxHeight: height - 20, margin: "10px 0px" }}>
+            <TableContainer
+              sx={{
+                maxHeight: height - 20,
+
+                margin: "10px 0px",
+              }}
+            >
               <Table
+                sx={{ minWidth: "300px" }}
                 ref={scrollableListRef}
                 stickyHeader
                 aria-label="sticky table"
@@ -179,10 +201,17 @@ const WatchList = ({
                       { label: "Symbol", numeric: false },
                       { label: "Sources", numeric: false },
                       { label: "Time", numeric: false },
+                      ...selectedStrategy.map((m) => {
+                        return {
+                          label: m.name,
+                          numeric: true,
+                        };
+                      }),
                     ].map((column, index) => (
                       <TableCell
+                        // sx={{ width: 100, minWidth: "100px" }}
                         key={index}
-                        align={column.numeric ? "right" : "left"}
+                        align={column.numeric ? "center" : "center"}
                         sortDirection={orderBy === column.label ? order : false}
                       >
                         <TableSortLabel
@@ -220,6 +249,7 @@ const WatchList = ({
                         setStocks={setStocks}
                         stocks={stocks}
                         hanldeSelectedTime={hanldeSelectedTime}
+                        selectedStrategy={selectedStrategy}
                       />
                     );
                   })}
@@ -240,6 +270,7 @@ const WatchList = ({
     categories,
     stocks,
     selectedTime,
+    selectedStrategy,
   ]);
 
   const sidebarRef = useRef(null);
