@@ -112,6 +112,14 @@ export const templates = [
         },
         yaxis: "y2",
         hoverinfo: "x",
+        type: "bar",
+        markerFn: (_, data) => {
+          return {
+            color: data.open.map((m, i) =>
+              m < data.close[i] ? "green" : "red"
+            ),
+          };
+        },
       },
     },
     layout: {
@@ -233,7 +241,7 @@ export const templates = [
     separate: {
       "%R0": {
         data: [],
-        name: "%R0",
+        name: "%R(5)",
         type: "bar",
         marker: {
           color: "blue",
@@ -242,7 +250,7 @@ export const templates = [
       },
       "%R1": {
         data: [],
-        name: "%R1",
+        name: "%R(20)",
         type: "bar",
         marker: {
           color: "red",
@@ -386,6 +394,32 @@ export const templates = [
           width: 2,
         },
       },
+      line3: {
+        data: [],
+        customLine: 10,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line4: {
+        data: [],
+        customLine: 90,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
     },
   },
   {
@@ -494,6 +528,32 @@ export const templates = [
       line2: {
         customLine: 80,
         data: [],
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line3: {
+        data: [],
+        customLine: 10,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y4",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line4: {
+        data: [],
+        customLine: 90,
         mode: "lines",
         xaxis: "x",
         showlegend: false,
@@ -663,6 +723,32 @@ export const templates = [
           width: 2,
         },
       },
+      line3: {
+        data: [],
+        customLine: 10,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y2",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line4: {
+        data: [],
+        customLine: 90,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y2",
+        line: {
+          color: "red",
+          dash: "dash",
+          width: 2,
+        },
+      },
       stochd0: {
         data: [],
         name: "stochd",
@@ -679,32 +765,6 @@ export const templates = [
         yaxis: "y3",
         marker: {
           color: "rgb(13,0,255)",
-        },
-      },
-      line3: {
-        data: [],
-        customLine: 20,
-        mode: "lines",
-        xaxis: "x",
-        showlegend: false,
-        yaxis: "y3",
-        line: {
-          dash: "dash",
-          width: 2,
-          color: "red",
-        },
-      },
-      line4: {
-        data: [],
-        customLine: 80,
-        mode: "lines",
-        xaxis: "x",
-        showlegend: false,
-        yaxis: "y3",
-        line: {
-          color: "green",
-          dash: "dashdot",
-          width: 2,
         },
       },
     },

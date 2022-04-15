@@ -185,8 +185,8 @@ const WatchList = ({
             <TableContainer
               sx={{
                 maxHeight: height - 20,
-
                 margin: "10px 0px",
+                overflowX: "auto",
               }}
             >
               <Table
@@ -200,6 +200,7 @@ const WatchList = ({
                     {[
                       { label: "Symbol", numeric: false },
                       { label: "Sources", numeric: false },
+                      { label: "Description", numeric: false },
                       { label: "Time", numeric: false },
                       ...selectedStrategy.map((m) => {
                         return {
@@ -209,7 +210,7 @@ const WatchList = ({
                       }),
                     ].map((column, index) => (
                       <TableCell
-                        // sx={{ width: 100, minWidth: "100px" }}
+                        sx={{ minWidth: "100px" }}
                         key={index}
                         align={column.numeric ? "center" : "center"}
                         sortDirection={orderBy === column.label ? order : false}
@@ -336,7 +337,9 @@ const WatchList = ({
       onMouseDown={(e) => e.preventDefault()}
     >
       <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-      <div className="app-sidebar-content"> {stock} </div>
+      <div className="app-sidebar-content" style={{ overflowX: "clip" }}>
+        {stock}
+      </div>
     </div>
   );
 };

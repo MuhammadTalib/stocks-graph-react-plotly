@@ -137,7 +137,6 @@ function App() {
           style={{
             height: "100vh",
             overflowY: "hidden",
-            overflowX: "hidden",
           }}
         >
           <Header

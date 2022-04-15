@@ -260,7 +260,8 @@ export const drawSeparateChart = (selectedTemp, data, pointIndex) => {
             ...(selectedTemp.separate[key].markerFn
               ? {
                   marker: selectedTemp.separate[key].markerFn(
-                    selectedTemp.separate[key].data
+                    selectedTemp.separate[key].data,
+                    data
                   ),
                 }
               : {}),

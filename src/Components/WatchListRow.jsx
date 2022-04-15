@@ -29,8 +29,9 @@ const WatchListRow = ({
       >
         <TableCell align={"center"}>{row.name}</TableCell>
         <TableCell align={"center"}>
-          {row?.sources?.length && row.sources[0]}{" "}
+          {row?.sources?.length && row.sources[0]}
         </TableCell>
+        <TableCell align={"center"}>Description</TableCell>
         <TableCell align={"center"}>{selectedTime.name}</TableCell>
         {selectedStrategy.map((m) => (
           <TableCell align={"center"}>{m.value}</TableCell>
