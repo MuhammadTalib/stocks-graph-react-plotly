@@ -103,8 +103,6 @@ export const templates = [
     },
     separate: {
       "Volume EMA": {
-        // x: x,
-        // y: volume,
         data: [],
         name: "Volume",
         marker: {
@@ -202,7 +200,7 @@ export const templates = [
     merged: {
       donchian_price0: {
         data: [],
-        name: "DONCHAIN",
+        name: "DONCHIAN AVG",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -215,7 +213,7 @@ export const templates = [
       },
       donchian_min0: {
         data: [],
-        name: "donchian min",
+        name: "DONCHAIN MIN",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -227,7 +225,7 @@ export const templates = [
       },
       donchian_max0: {
         data: [],
-        name: "donchian max",
+        name: "DONCHAIN MAX",
         xaxis: "x",
         yaxis: "y",
         marker: {
@@ -321,7 +319,7 @@ export const templates = [
     separate: {
       MACD0: {
         data: [],
-        name: "MACD0",
+        name: "MACD LINE",
         marker: {
           color: "blue",
         },
@@ -466,7 +464,7 @@ export const templates = [
     separate: {
       MACD0: {
         data: [],
-        name: "MACD0",
+        name: "MACD LINE",
         marker: {
           color: "blue",
         },
@@ -689,7 +687,7 @@ export const templates = [
     separate: {
       RSI0: {
         data: [],
-        name: "RSI0",
+        name: "RSI(14)",
         marker: {
           color: "blue",
         },
@@ -699,7 +697,6 @@ export const templates = [
       line1: {
         customLine: 60,
         data: [],
-
         mode: "lines",
         xaxis: "x",
         showlegend: false,
@@ -723,32 +720,7 @@ export const templates = [
           width: 2,
         },
       },
-      line3: {
-        data: [],
-        customLine: 10,
-        mode: "lines",
-        xaxis: "x",
-        showlegend: false,
-        yaxis: "y2",
-        line: {
-          color: "red",
-          dash: "dash",
-          width: 2,
-        },
-      },
-      line4: {
-        data: [],
-        customLine: 90,
-        mode: "lines",
-        xaxis: "x",
-        showlegend: false,
-        yaxis: "y2",
-        line: {
-          color: "red",
-          dash: "dash",
-          width: 2,
-        },
-      },
+
       stochd0: {
         data: [],
         name: "stochd",
@@ -765,6 +737,58 @@ export const templates = [
         yaxis: "y3",
         marker: {
           color: "rgb(13,0,255)",
+        },
+      },
+      line3: {
+        data: [],
+        customLine: 10,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y3",
+        line: {
+          color: "blue",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line4: {
+        data: [],
+        customLine: 90,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y3",
+        line: {
+          color: "blue",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line5: {
+        data: [],
+        customLine: 20,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y3",
+        line: {
+          color: "blue",
+          dash: "dash",
+          width: 2,
+        },
+      },
+      line6: {
+        data: [],
+        customLine: 80,
+        mode: "lines",
+        xaxis: "x",
+        showlegend: false,
+        yaxis: "y3",
+        line: {
+          color: "blue",
+          dash: "dash",
+          width: 2,
         },
       },
     },

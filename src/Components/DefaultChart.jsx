@@ -47,6 +47,8 @@ export function DefaultChart({
           open: data.open[pointIndex],
           close: data.close[pointIndex],
           pattern: data.patternData[pointIndex],
+          ConfrimHigh: data?.ConfrimHigh[pointIndex],
+          ConfrimLow: data?.ConfrimLow[pointIndex],
         }}
         selectedPattern={selectedPattern}
       />

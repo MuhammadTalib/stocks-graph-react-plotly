@@ -74,7 +74,11 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
               if (!m) return null;
               else return data.high[i];
             }),
-            name: "Confirm High " + data.high[pointIndex],
+            showlegend: false,
+            name: data?.ConfrimHigh.map((m, i) => {
+              if (!m) return null;
+              else return "Confirm High " + data.high[pointIndex];
+            }),
             mode: "markers",
             marker: {
               color: "blue",
@@ -92,6 +96,7 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
               if (!m) return null;
               else return data.low[i];
             }),
+            showlegend: false,
             name: "Confirm Low " + data.low[pointIndex],
             mode: "markers",
             marker: {

@@ -1,56 +1,101 @@
-import React, { useState, useEffect } from "react";
+import { Box, TableSortLabel } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
-import { tableCellClasses } from "@mui/material/TableCell";
-import { getAllStocks } from "../services/api";
+import { visuallyHidden } from "@mui/utils";
+import React from "react";
+import WatchListRow from "./WatchListRow";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const WatchListTable = () => {
-  let [stocks, setStocks] = useState([]);
-
-  useEffect(() => {
-    getAllStocks("stocks/available").then((res) => {
-      console.log("res", res);
-      setStocks(res?.data?.list || []);
-    });
-  }, []);
-
+const WatchListTable = ({
+  height,
+  scrollableListRef,
+  selectedStrategy,
+  orderBy,
+  createSortHandler,
+  order,
+  placeSelectedItemInTheMiddle,
+  selectedStock,
+  hanldeSelectedTime,
+  handleStockChange,
+  setSelectStockIndex,
+  selectedTime,
+  stocks,
+  setStocks,
+}) => {
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
+    <TableContainer
+      sx={{
+        maxHeight: height - 20,
+        margin: "10px 0px",
+        overflowX: "auto",
+      }}
+    >
+      <Table
+        sx={{ minWidth: "300px" }}
+        ref={scrollableListRef}
+        stickyHeader
+        aria-label="sticky table"
+      >
         <TableHead>
           <TableRow>
-            <StyledTableCell>Symbol</StyledTableCell>
-            <StyledTableCell align="right">Time Frame</StyledTableCell>
+            {[
+              { label: "Symbol", numeric: false },
+              { label: "Sources", numeric: false },
+              { label: "Description", numeric: false },
+              { label: "Time", numeric: false },
+              ...selectedStrategy.map((m) => {
+                return {
+                  label: m.name,
+                  numeric: true,
+                };
+              }),
+            ].map((column, index) => (
+              <TableCell
+                sx={{ minWidth: "100px" }}
+                key={index}
+                align={column.numeric ? "center" : "center"}
+                sortDirection={orderBy === column.label ? order : false}
+              >
+                <TableSortLabel
+                  active={orderBy === column.label}
+                  direction={orderBy === column.label ? order : "asc"}
+                  onClick={createSortHandler(column.label)}
+                >
+                  {column.label}
+                  {orderBy === column.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {stocks.map((row, i) => (
-            <TableRow
-              key={i}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-            </TableRow>
-          ))}
+          {stocks.map((row, index) => {
+            return (
+              <WatchListRow
+                key={index}
+                row={row}
+                index={index}
+                selectedStock={selectedStock}
+                handleStockChange={handleStockChange}
+                setSelectStockIndex={setSelectStockIndex}
+                selectedTime={selectedTime}
+                placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+                setStocks={setStocks}
+                stocks={stocks}
+                hanldeSelectedTime={hanldeSelectedTime}
+                selectedStrategy={selectedStrategy}
+              />
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
