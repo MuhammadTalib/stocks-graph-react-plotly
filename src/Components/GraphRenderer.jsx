@@ -1,15 +1,8 @@
-import { makeStyles } from "@mui/styles";
 import React, { useEffect, useRef, useState } from "react";
 import { rightMargin } from "../Utils/defaults";
 import { initialLayout } from "../Utils/utils";
 import { DefaultChart } from "./DefaultChart";
 const style = { width: "100%", height: "100%" };
-
-const useStyles = makeStyles(() => ({
-  container: (secondaryGraphWidth) => {
-    return { width: `calc(100% - ${secondaryGraphWidth}px)` };
-  },
-}));
 
 const GraphRenderer = ({
   data,
@@ -25,8 +18,19 @@ const GraphRenderer = ({
   setLayout,
   selectedStock,
 }) => {
-  const [secondaryLayout, setSecondaryLayout] = useState({ ...initialLayout });
+  const [secondaryLayout, setSecondaryLayout] = useState({
+    ...layout,
+    width: "50%",
+    height: window.innerHeight - 80,
+  });
 
+  useEffect(() => {
+    setSecondaryLayout({
+      ...layout,
+      width: "50%",
+      height: window.innerHeight - 80,
+    });
+  }, [layout]);
   const [cursor, setCursor] = useState("crosshair");
   const [currentSelected, setCurrentSelected] = useState("");
   const [pointIndex, setPointIndex] = useState(1);
@@ -54,16 +58,13 @@ const GraphRenderer = ({
 
   const resize = React.useCallback(
     (mouseMoveEvent) => {
+      document.querySelector('[data-title="Autoscale"]')?.click();
       if (isResizing) {
         let w =
           window.innerWidth -
           (sidebarRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX) -
           10;
-
-        if (enableDualChart) {
-          w = w / 2;
-        }
 
         setLayout({
           ...layout,
@@ -134,18 +135,19 @@ const GraphRenderer = ({
             separateGraphs={separateGraphs}
             loader={loader}
             selectedStock={selectedStock}
+            id={"default"}
           />
         </div>
       </div>
       {enableDualChart && (
         <div
           ref={sidebarRef}
-          className="app-sidebar"
+          className="app-dualchart"
           style={{ width: secondaryLayout.width + "px", marginTop: "52px" }}
           onMouseDown={(e) => e.preventDefault()}
         >
-          <div className="app-sidebar-resizer" onMouseDown={startResizing} />
-          <div className="app-sidebar-content">
+          <div className="app-dualchart-resizer" onMouseDown={startResizing} />
+          <div className="app-dualchart-content">
             <div
               id="secondary-chart"
               style={{
@@ -176,6 +178,7 @@ const GraphRenderer = ({
                 separateGraphs={separateGraphs}
                 loader={loader}
                 selectedStock={selectedStock}
+                id={"secondary"}
               />
             </div>
           </div>

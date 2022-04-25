@@ -106,22 +106,6 @@ function App() {
     setSwitchToggle(v);
   };
 
-  useEffect(() => {
-    let n = enableDualChart ? 2 : 1;
-    let w;
-    if (enableDualChart) {
-      w = layout.width / n;
-    } else {
-      w = (window.innerWidth - 10) / n;
-    }
-
-    setLayout({
-      ...layout,
-      width: w,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enableDualChart]);
-
   const placeSelectedItemInTheMiddle = (index) => {
     const LIST_ITEM_HEIGHT = 21;
     const NUM_OF_VISIBLE_LIST_ITEMS = 15;
@@ -159,20 +143,24 @@ function App() {
             separateGraphs={separateGraphs}
           />
 
-          <GraphRenderer
-            data={data}
-            layout={layout}
-            loader={loader}
-            enableDualChart={enableDualChart}
-            graphType={graphType}
-            selectedTemp={selectedTemp}
-            separateGraphs={separateGraphs}
-            toggleFirstDayLine={toggleFirstDayLine}
-            switchToggle={switchToggle}
-            selectedPattern={selectedPattern}
-            selectedStock={selectedStock}
-            setLayout={setLayout}
-          />
+          {loader ? (
+            "Loading...."
+          ) : (
+            <GraphRenderer
+              data={data}
+              layout={layout}
+              loader={loader}
+              enableDualChart={enableDualChart}
+              graphType={graphType}
+              selectedTemp={selectedTemp}
+              separateGraphs={separateGraphs}
+              toggleFirstDayLine={toggleFirstDayLine}
+              switchToggle={switchToggle}
+              selectedPattern={selectedPattern}
+              selectedStock={selectedStock}
+              setLayout={setLayout}
+            />
+          )}
         </div>
       </div>
 

@@ -27,16 +27,8 @@ export function DefaultChart({
   type,
   onDoubleClick,
   selectedStock,
+  id,
 }) {
-  // let width = "100%";
-  if (type === "default") {
-    // width = enableDualChart ? "50%" : "100%";
-  }
-
-  if (type === "secondary") {
-    // width = enableDualChart ? "50%" : "0px";
-  }
-
   return (
     <>
       <InfoLines
@@ -53,6 +45,7 @@ export function DefaultChart({
         selectedPattern={selectedPattern}
       />
       <Graph
+        id={id}
         onHover={onHover}
         rightMargin={rightMargin}
         onUnhover={onUnhover}

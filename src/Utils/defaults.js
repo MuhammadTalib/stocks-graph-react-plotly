@@ -810,13 +810,5 @@ export const templates = [
 ];
 
 export const strategies = [
-  { value: "1", name: "T3 Bearish" },
-  { value: "2", name: "T3 Bullish" },
-  { value: "3", name: "T3 Bearish" },
-  { value: "4", name: "T3 Bullish" },
-  { value: "5", name: "T3 Bearish" },
-  { value: "6", name: "T3 Bullish" },
-  { value: "7", name: "T3 Bearish" },
-  { value: "8", name: "T3 Bullish" },
-  { value: "9", name: "T3 Bearish" },
+  { value: "1", name: "T3", columns: ["T3 Bearish", "T3 Bullish"] },
 ];

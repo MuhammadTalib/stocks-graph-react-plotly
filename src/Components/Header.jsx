@@ -108,7 +108,10 @@ const Header = ({
             </Button>
           ))}
           <Button
-            onClick={() => setEnableDualChart(!enableDualChart)}
+            onClick={() => {
+              setEnableDualChart(!enableDualChart);
+              document.querySelector('[data-title="Autoscale"]')?.click();
+            }}
             className={`btn ${enableDualChart ? "templateBtn" : ""}`}
           >
             Dual Chart

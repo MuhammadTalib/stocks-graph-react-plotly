@@ -17,6 +17,7 @@ export const Graph = ({
   rightMargin,
   toggleFirstDayLine,
   onDoubleClick,
+  id,
 }) => {
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
@@ -36,6 +37,7 @@ export const Graph = ({
   } else
     return (
       <Plot
+        id={id}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         onHover={onHover}
