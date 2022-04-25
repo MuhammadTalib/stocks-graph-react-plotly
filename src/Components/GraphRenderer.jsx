@@ -5,9 +5,8 @@ import { DefaultChart } from "./DefaultChart";
 const style = { width: "100%", height: "100%" };
 
 const GraphRenderer = ({
-  data,
   layout,
-  loader,
+  // loader,
   enableDualChart,
   graphType,
   selectedTemp,
@@ -17,6 +16,8 @@ const GraphRenderer = ({
   selectedPattern,
   setLayout,
   selectedStock,
+  selectedTime,
+  selectedCategory,
 }) => {
   const [secondaryLayout, setSecondaryLayout] = useState({
     ...layout,
@@ -93,7 +94,7 @@ const GraphRenderer = ({
     };
   }, [resize, stopResizing]);
 
-  return data && data?.x?.length && layout ? (
+  return layout ? (
     <div
       style={{
         display: "flex",
@@ -125,7 +126,6 @@ const GraphRenderer = ({
             pointIndex={pointIndex}
             graphType={graphType}
             style={style}
-            data={data}
             enableDualChart={enableDualChart}
             selectedTemp={selectedTemp}
             layout={layout}
@@ -133,9 +133,12 @@ const GraphRenderer = ({
             switchToggle={switchToggle}
             selectedPattern={selectedPattern}
             separateGraphs={separateGraphs}
-            loader={loader}
+            // loader={loader}
             selectedStock={selectedStock}
             id={"default"}
+            selectedTime={selectedTime}
+            selectedCategory={selectedCategory}
+            setLayout={setLayout}
           />
         </div>
       </div>
@@ -174,11 +177,12 @@ const GraphRenderer = ({
                 onUnhover={onUnhover}
                 onClick={onClick}
                 pointIndex={pointIndex}
-                data={data}
                 separateGraphs={separateGraphs}
-                loader={loader}
                 selectedStock={selectedStock}
                 id={"secondary"}
+                selectedTime={selectedTime}
+                selectedCategory={selectedCategory}
+                setLayout={setLayout}
               />
             </div>
           </div>

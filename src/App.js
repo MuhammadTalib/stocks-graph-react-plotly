@@ -17,7 +17,7 @@ function App() {
   const [stocks, setStocks] = useState([]);
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
-  const [loader, setLoader] = useState(false);
+  // const [loader, setLoader] = useState(false);
   const [graphType, setGraphType] = useState("candlestick");
   const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
@@ -30,41 +30,41 @@ function App() {
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
-  const [data, setGraphData] = useState({ ...dummy });
+  // const [data, setGraphData] = useState({ ...dummy });
 
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
 
-  const getDataRequest = getDataRequestService(
-    selectedCategory,
-    setLoader,
-    layout,
-    setSeparateGraphs,
-    setSelectedTemp,
-    setGraphData,
-    setLayout,
-    graphType
-  );
+  // const getDataRequest = getDataRequestService(
+  //   selectedCategory,
+  //   setLoader,
+  //   layout,
+  //   setSeparateGraphs,
+  //   setSelectedTemp,
+  //   setGraphData,
+  //   setLayout,
+  //   graphType
+  // );
 
-  useEffect(() => {
-    getDataRequest(
-      selectedStock,
-      selectedTime,
-      selectedTemp,
-      selectedPattern,
-      switchToggle
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    selectedStock,
-    selectedTime,
-    selectedCategory,
-    selectedPattern,
-    switchToggle,
-    selectedTemp.id,
-    graphType,
-  ]);
+  // useEffect(() => {
+  //   getDataRequest(
+  //     selectedStock,
+  //     selectedTime,
+  //     selectedTemp,
+  //     selectedPattern,
+  //     switchToggle
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [
+  //   selectedStock,
+  //   selectedTime,
+  //   selectedCategory,
+  //   selectedPattern,
+  //   switchToggle,
+  //   selectedTemp.id,
+  //   graphType,
+  // ]);
 
   React.useEffect(() => {
     function handleResize() {
@@ -143,24 +143,20 @@ function App() {
             separateGraphs={separateGraphs}
           />
 
-          {loader ? (
-            "Loading...."
-          ) : (
-            <GraphRenderer
-              data={data}
-              layout={layout}
-              loader={loader}
-              enableDualChart={enableDualChart}
-              graphType={graphType}
-              selectedTemp={selectedTemp}
-              separateGraphs={separateGraphs}
-              toggleFirstDayLine={toggleFirstDayLine}
-              switchToggle={switchToggle}
-              selectedPattern={selectedPattern}
-              selectedStock={selectedStock}
-              setLayout={setLayout}
-            />
-          )}
+          <GraphRenderer
+            layout={layout}
+            enableDualChart={enableDualChart}
+            graphType={graphType}
+            selectedTemp={selectedTemp}
+            separateGraphs={separateGraphs}
+            toggleFirstDayLine={toggleFirstDayLine}
+            switchToggle={switchToggle}
+            selectedPattern={selectedPattern}
+            selectedStock={selectedStock}
+            setLayout={setLayout}
+            selectedTime={selectedTime}
+            selectedCategory={selectedCategory}
+          />
         </div>
       </div>
 

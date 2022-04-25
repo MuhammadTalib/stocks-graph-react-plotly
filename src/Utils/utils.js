@@ -282,7 +282,6 @@ export function getDataRequestService(
   selectedCategory,
   setLoader,
   layout,
-  setSeparateGraphs,
   setSelectedTemp,
   setGraphData,
   setLayout,
@@ -463,7 +462,7 @@ export function getDataRequestService(
             autorange: true,
             tickvals: [
               ...x.filter((f, i) => {
-                return i % 15 === 0; //d.getDate() === 15 || d.getDate() === 30;
+                return i % 15 === 0;
               }),
             ],
             ticktext: [
@@ -478,26 +477,6 @@ export function getDataRequestService(
             ],
           },
           shapes: [
-            // ...data.x.slice(0, data.x.length - rightMargin).map((dateStr) => {
-            //   let date_ = new Date(dateStr);
-            //   let date1 = date_.getDate();
-            //   if (date1 === 1) {
-            //     return {
-            //       type: "line",
-            //       text: "ddd",
-            //       x0: String(dateStr),
-            //       y0: 0,
-            //       x1: String(dateStr),
-            //       yref: "paper",
-            //       y1: 1,
-            //       line: {
-            //         color: "grey",
-            //         width: 1.5,
-            //         dash: "dot",
-            //       },
-            //     };
-            //   }
-            // }),
             ...high.map((shp, i) => {
               if (patternData[i]) {
                 let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
@@ -531,7 +510,6 @@ export function getDataRequestService(
       })
       .catch((err) => {
         setLoader(false);
-        setSeparateGraphs([]);
         setGraphData(null);
       });
     document.querySelector('[data-title="Autoscale"]')?.click();

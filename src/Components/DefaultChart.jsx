@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { dummy } from "../Utils/defaults";
 import {
   drawConfirmHighAndLow,
   drawMergedChart,
   drawPatternData,
   drawSeparateChart,
+  getDataRequestService,
 } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
@@ -16,20 +18,57 @@ export function DefaultChart({
   pointIndex,
   graphType,
   style,
-  data,
   layout,
   toggleFirstDayLine,
   switchToggle,
   selectedTemp,
   selectedPattern,
-  separateGraphs,
-  loader,
   type,
   onDoubleClick,
   selectedStock,
+  selectedTime,
+  selectedCategory,
   id,
+  setLayout,
 }) {
-  return (
+  const [data, setGraphData] = useState({ ...dummy });
+  const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
+
+  useEffect(() => {
+    setCurrentSelectedTemp(selectedTemp);
+  }, [selectedTemp]);
+
+  const [loader, setLoader] = useState(false);
+  const getDataRequest = getDataRequestService(
+    selectedCategory,
+    setLoader,
+    layout,
+    setCurrentSelectedTemp,
+    setGraphData,
+    setLayout,
+    graphType
+  );
+
+  useEffect(() => {
+    getDataRequest(
+      selectedStock,
+      selectedTime,
+      currentSelectedTemp,
+      selectedPattern,
+      switchToggle
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedStock,
+    selectedTime,
+    selectedCategory,
+    selectedPattern,
+    switchToggle,
+    currentSelectedTemp.id,
+    graphType,
+  ]);
+
+  return data && data?.x?.length ? (
     <>
       <InfoLines
         selectedStock={selectedStock}
@@ -56,15 +95,22 @@ export function DefaultChart({
         layout={layout}
         toggleFirstDayLine={toggleFirstDayLine}
         templates={[
-          ...drawMergedChart(selectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
+          ...drawMergedChart(currentSelectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
           ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
           ...drawPatternData(data, selectedPattern), //
         ]}
         separateGraphs={[
-          ...drawSeparateChart(selectedTemp, data, pointIndex, graphType),
+          ...drawSeparateChart(
+            currentSelectedTemp,
+            data,
+            pointIndex,
+            graphType
+          ),
         ]}
         loader={loader}
       />
     </>
+  ) : (
+    <></>
   );
 }
