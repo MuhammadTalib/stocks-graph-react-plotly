@@ -1,11 +1,11 @@
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./App.css";
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
-import { dummy, T0 } from "./Utils/defaults";
-import { getDataRequestService, initialLayout } from "./Utils/utils";
+import { T0 } from "./Utils/defaults";
+import { initialLayout } from "./Utils/utils";
 
 const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {
@@ -19,7 +19,6 @@ function App() {
   const classes = useStyles(sidebarWidth);
   // const [loader, setLoader] = useState(false);
   const [graphType, setGraphType] = useState("candlestick");
-  const [separateGraphs, setSeparateGraphs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
   const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
   const [enableDualChart, setEnableDualChart] = useState(false);
@@ -30,41 +29,10 @@ function App() {
   const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
-  // const [data, setGraphData] = useState({ ...dummy });
 
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
-
-  // const getDataRequest = getDataRequestService(
-  //   selectedCategory,
-  //   setLoader,
-  //   layout,
-  //   setSeparateGraphs,
-  //   setSelectedTemp,
-  //   setGraphData,
-  //   setLayout,
-  //   graphType
-  // );
-
-  // useEffect(() => {
-  //   getDataRequest(
-  //     selectedStock,
-  //     selectedTime,
-  //     selectedTemp,
-  //     selectedPattern,
-  //     switchToggle
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [
-  //   selectedStock,
-  //   selectedTime,
-  //   selectedCategory,
-  //   selectedPattern,
-  //   switchToggle,
-  //   selectedTemp.id,
-  //   graphType,
-  // ]);
 
   React.useEffect(() => {
     function handleResize() {
@@ -117,38 +85,35 @@ function App() {
   return (
     <div className="app-container">
       <div className={classes.container + " app-frame"}>
+        <Header
+          setEnableDualChart={setEnableDualChart}
+          enableDualChart={enableDualChart}
+          handleGrapthType={handleGrapthType}
+          graphType={graphType}
+          templateChange={templateChange}
+          selectedStock={selectedStock}
+          handleStockChange={handleStockChange}
+          handlePatternChange={handlePatternChange}
+          selectedTime={selectedTime}
+          hanldeSelectedTime={hanldeSelectedTime}
+          selectedTemp={selectedTemp}
+          selectedPattern={selectedPattern}
+          handlSwitchToggle={handlSwitchToggle}
+          switchToggle={switchToggle}
+          toggleFirstDayLine={toggleFirstDayLine}
+          setToggleFirstDayLine={setToggleFirstDayLine}
+        />
         <div
           style={{
             height: "100vh",
             overflowY: "hidden",
           }}
         >
-          <Header
-            setEnableDualChart={setEnableDualChart}
-            enableDualChart={enableDualChart}
-            handleGrapthType={handleGrapthType}
-            graphType={graphType}
-            templateChange={templateChange}
-            selectedStock={selectedStock}
-            handleStockChange={handleStockChange}
-            handlePatternChange={handlePatternChange}
-            selectedTime={selectedTime}
-            hanldeSelectedTime={hanldeSelectedTime}
-            selectedTemp={selectedTemp}
-            selectedPattern={selectedPattern}
-            handlSwitchToggle={handlSwitchToggle}
-            switchToggle={switchToggle}
-            toggleFirstDayLine={toggleFirstDayLine}
-            setToggleFirstDayLine={setToggleFirstDayLine}
-            separateGraphs={separateGraphs}
-          />
-
           <GraphRenderer
             layout={layout}
             enableDualChart={enableDualChart}
             graphType={graphType}
             selectedTemp={selectedTemp}
-            separateGraphs={separateGraphs}
             toggleFirstDayLine={toggleFirstDayLine}
             switchToggle={switchToggle}
             selectedPattern={selectedPattern}

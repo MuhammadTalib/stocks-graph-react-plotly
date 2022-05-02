@@ -266,7 +266,10 @@ const WatchList = ({
       onKeyDown={handleKeyDown}
       ref={sidebarRef}
       className="app-sidebar"
-      style={{ width: sidebarWidth + "px" }}
+      style={{
+        width: sidebarWidth + "px",
+        height: `calc(100vh - ${52}px`,
+      }}
       onMouseDown={(e) => e.preventDefault()}
     >
       <div className="app-sidebar-resizer" onMouseDown={startResizing} />

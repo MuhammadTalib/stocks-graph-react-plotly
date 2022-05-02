@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { rightMargin } from "../Utils/defaults";
-import { initialLayout } from "../Utils/utils";
 import { DefaultChart } from "./DefaultChart";
 const style = { width: "100%", height: "100%" };
 
@@ -66,6 +65,7 @@ const GraphRenderer = ({
           (sidebarRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX) -
           10;
+        console.log("w--?", w);
 
         setLayout({
           ...layout,
@@ -133,7 +133,6 @@ const GraphRenderer = ({
             switchToggle={switchToggle}
             selectedPattern={selectedPattern}
             separateGraphs={separateGraphs}
-            // loader={loader}
             selectedStock={selectedStock}
             id={"default"}
             selectedTime={selectedTime}

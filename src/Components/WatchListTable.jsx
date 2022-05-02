@@ -28,7 +28,7 @@ const WatchListTable = ({
   return (
     <TableContainer
       sx={{
-        maxHeight: height - 20,
+        maxHeight: height - 20 - 25,
         margin: "10px 0px",
         overflowX: "auto",
       }}

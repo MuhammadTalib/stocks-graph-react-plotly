@@ -60,6 +60,7 @@
   box-shadow: -8px 2px 22px -7px rgba(0, 0, 0, 0.25);
   z-index: 2;
   overflow-x: hidden;
+  margin-top: 55px;
 }
 
 .app-frame {
@@ -70,7 +71,6 @@
   height: 100vh;
   max-height: 100%;
   background: #ffffff;
-  box-shadow: 8px 2px 32px -2px rgba(0, 0, 0, 0.25);
   z-index: 1;
 }
 
