@@ -137,6 +137,7 @@ export const initialLayout = {
     rangeslider: {
       visible: false,
     },
+    autorange: false,
     type: "category",
     tickmode: "array",
     showspikes: true,
@@ -463,7 +464,8 @@ export function getDataRequestService(
             rangeslider: {
               visible: false,
             },
-            autorange: true,
+            autorange: false,
+            range: [x[x.length - 100], x[x.length - 1]],
             tickvals: [
               ...x.filter((f, i) => {
                 return i % 15 === 0;
@@ -547,3 +549,16 @@ export const BAR_ICON = () => (
     </g>
   </svg>
 );
+
+export const getTimeforSecondaryGraph = (time) => {
+  switch (time.name) {
+    case "1d":
+      return { name: "1wk", ms: 604800000 };
+    case "1wk":
+      return { name: "1mo", ms: 2629746000 * 1 };
+    case "2d":
+      return { name: "2wk", ms: 604800000 * 2 };
+    default:
+      return { name: "1d", ms: 86400000 * 1 };
+  }
+};

@@ -39,6 +39,7 @@ export function DefaultChart({
   }, [selectedTemp]);
 
   const [loader, setLoader] = useState(false);
+
   const getDataRequest = getDataRequestService(
     selectedCategory,
     setLoader,
@@ -50,13 +51,14 @@ export function DefaultChart({
   );
 
   useEffect(() => {
-    getDataRequest(
-      selectedStock,
-      selectedTime,
-      currentSelectedTemp,
-      selectedPattern,
-      switchToggle
-    );
+    selectedTime &&
+      getDataRequest(
+        selectedStock,
+        selectedTime,
+        currentSelectedTemp,
+        selectedPattern,
+        switchToggle
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedStock,

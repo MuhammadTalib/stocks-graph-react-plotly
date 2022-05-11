@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { rightMargin } from "../Utils/defaults";
+import { getTimeforSecondaryGraph } from "../Utils/utils";
 import { DefaultChart } from "./DefaultChart";
 const style = { width: "100%", height: "100%" };
 
 const GraphRenderer = ({
   layout,
-  // loader,
   enableDualChart,
   graphType,
   selectedTemp,
@@ -18,6 +18,7 @@ const GraphRenderer = ({
   selectedTime,
   selectedCategory,
 }) => {
+  const [secondaryChartTime, setSecondayChartTime] = useState(null);
   const [secondaryLayout, setSecondaryLayout] = useState({
     ...layout,
     width: "50%",
@@ -31,6 +32,11 @@ const GraphRenderer = ({
       height: window.innerHeight - 80,
     });
   }, []);
+
+  useEffect(() => {
+    let t = getTimeforSecondaryGraph(selectedTime);
+    setSecondayChartTime(t);
+  }, [selectedTime]);
 
   const [cursor, setCursor] = useState("crosshair");
   const [currentSelected, setCurrentSelected] = useState("");
@@ -182,9 +188,9 @@ const GraphRenderer = ({
                 separateGraphs={separateGraphs}
                 selectedStock={selectedStock}
                 id={"secondary"}
-                selectedTime={selectedTime}
+                selectedTime={secondaryChartTime}
                 selectedCategory={selectedCategory}
-                setLayout={setLayout}
+                setLayout={setSecondaryLayout}
               />
             </div>
           </div>
