@@ -465,7 +465,7 @@ export function getDataRequestService(
               visible: false,
             },
             autorange: false,
-            range: [x[x.length - 100], x[x.length - 1]],
+            range: [x.length - 280, x.length - 1],
             tickvals: [
               ...x.filter((f, i) => {
                 return i % 15 === 0;
@@ -518,7 +518,7 @@ export function getDataRequestService(
         setLoader(false);
         setGraphData(null);
       });
-    document.querySelector('[data-title="Autoscale"]')?.click();
+    // document.querySelector('[data-title="Autoscale"]')?.click();
   };
 }
 

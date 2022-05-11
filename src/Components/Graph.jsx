@@ -47,10 +47,7 @@ export const Graph = ({
           ...layout,
           xaxis: {
             ...layout.xaxis,
-            autorange: false,
-            range: [data.x.length - 280, data.x.length - 1],
           },
-
           shapes: [
             ...(toggleFirstDayLine
               ? data.x

@@ -17,7 +17,6 @@ function App() {
   const [stocks, setStocks] = useState([]);
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
-  // const [loader, setLoader] = useState(false);
   const [graphType, setGraphType] = useState("candlestick");
   const [selectedCategory, setSelectedCategory] = useState("FOREX");
   const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
