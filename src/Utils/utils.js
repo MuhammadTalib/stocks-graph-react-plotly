@@ -350,7 +350,7 @@ export function getDataRequestService(
           if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
           }
-          x.push(new Date(m.date));
+          x.push(new Date(m.date).toUTCString());
 
           if (template) {
             tempMerged &&
@@ -384,7 +384,11 @@ export function getDataRequestService(
           low.push(null);
           open.push(null);
           close.push(null);
-          x.push(new Date(Date.now(x[x.length - 1]) + (i + 1) * time.ms));
+          x.push(
+            new Date(
+              Date.now(x[x.length - 1]) + (i + 1) * time.ms
+            ).toUTCString()
+          );
           if (template) {
             tempMerged &&
               Object.keys(tempMerged).forEach((key) => {
@@ -481,8 +485,8 @@ export function getDataRequestService(
               if (patternData[i]) {
                 let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
                 let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
-                let x0 = String(new Date(x[i - 1]));
-                let x1 = String(new Date(x[i + 1]));
+                let x0 = String(new Date(x[i - 1])).toUTCString();
+                let x1 = String(new Date(x[i + 1])).toUTCString();
                 return {
                   type: "rect",
                   xref: "x",

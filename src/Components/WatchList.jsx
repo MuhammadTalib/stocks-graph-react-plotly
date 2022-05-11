@@ -235,7 +235,7 @@ const WatchList = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [layout, enableDualChart, isResizing]
+    [isResizing]
   );
 
   const stopResizing = React.useCallback(() => {

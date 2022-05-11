@@ -31,6 +31,7 @@ const GraphRenderer = ({
       height: window.innerHeight - 80,
     });
   }, [layout]);
+
   const [cursor, setCursor] = useState("crosshair");
   const [currentSelected, setCurrentSelected] = useState("");
   const [pointIndex, setPointIndex] = useState(1);
@@ -58,14 +59,13 @@ const GraphRenderer = ({
 
   const resize = React.useCallback(
     (mouseMoveEvent) => {
-      document.querySelector('[data-title="Autoscale"]')?.click();
       if (isResizing) {
+        document.querySelector('[data-title="Autoscale"]')?.click();
         let w =
           window.innerWidth -
           (sidebarRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX) -
           10;
-        console.log("w--?", w);
 
         setLayout({
           ...layout,
@@ -82,7 +82,7 @@ const GraphRenderer = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [layout, enableDualChart, isResizing]
+    [isResizing]
   );
 
   useEffect(() => {

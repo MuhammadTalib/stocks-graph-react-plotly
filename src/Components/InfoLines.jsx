@@ -7,7 +7,7 @@ const InfoLines = ({
   return (
     <div style={{ marginLeft: "10px", fontSize: "12px" }}>
       <div>
-        {selectedStock.name} - description -
+        {selectedStock.name} - {selectedStock.description || "description"} -
         {selectedStock.sources.length &&
           String(selectedStock.sources[0]).toUpperCase()}
       </div>
