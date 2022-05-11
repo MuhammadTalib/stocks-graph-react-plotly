@@ -30,7 +30,7 @@ const GraphRenderer = ({
       width: "50%",
       height: window.innerHeight - 80,
     });
-  }, [layout]);
+  }, []);
 
   const [cursor, setCursor] = useState("crosshair");
   const [currentSelected, setCurrentSelected] = useState("");
@@ -67,6 +67,8 @@ const GraphRenderer = ({
             mouseMoveEvent.clientX) -
           10;
 
+        console.log("w==??", w);
+
         setLayout({
           ...layout,
           width: w,
@@ -76,7 +78,8 @@ const GraphRenderer = ({
           ...secondaryLayout,
           width:
             sidebarRef.current.getBoundingClientRect().right -
-            mouseMoveEvent.clientX,
+            mouseMoveEvent.clientX -
+            10,
           height: window.innerHeight - 80,
         });
       }
