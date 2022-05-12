@@ -1,19 +1,19 @@
 import { initialLayout } from "./utils";
 
 export const times = [
-  { name: "1h", ms: 3600000 * 1 },
-  { name: "2h", ms: 3600000 * 2 },
-  { name: "4h", ms: 3600000 * 4 },
-  { name: "6h", ms: 3600000 * 6 },
-  { name: "8h", ms: 3600000 * 8 },
-  { name: "12h", ms: 3600000 * 12 },
-  { name: "18h", ms: 3600000 * 18 },
-  { name: "1d", ms: 86400000 * 1 },
-  { name: "2d", ms: 86400000 * 2 },
-  { name: "3d", ms: 86400000 * 3 },
-  { name: "1wk", ms: 604800000 },
-  { name: "2wk", ms: 604800000 * 2 },
-  { name: "1mo", ms: 2629746000 * 1 },
+  { name: "1h", desc: "1 Hour", ms: 3600000 * 1 },
+  { name: "2h", desc: "2 Hour", ms: 3600000 * 2 },
+  { name: "4h", desc: "4 Hour", ms: 3600000 * 4 },
+  { name: "6h", desc: "6 Hour", ms: 3600000 * 6 },
+  { name: "8h", desc: "8 Hour", ms: 3600000 * 8 },
+  { name: "12h", desc: "12 Hour", ms: 3600000 * 12 },
+  { name: "18h", desc: "18 Hour", ms: 3600000 * 18 },
+  { name: "1d", desc: "1 Day", ms: 86400000 * 1 },
+  { name: "2d", desc: "2 Day", ms: 86400000 * 2 },
+  { name: "3d", desc: "3 Day", ms: 86400000 * 3 },
+  { name: "1wk", desc: "1 Week", ms: 604800000 },
+  { name: "2wk", desc: "2 Week", ms: 604800000 * 2 },
+  { name: "1mo", desc: "1 Month", ms: 2629746000 * 1 },
 ];
 
 export const rightMargin = 23;

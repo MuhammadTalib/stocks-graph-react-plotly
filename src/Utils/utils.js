@@ -554,12 +554,13 @@ export const BAR_ICON = () => (
 export const getTimeforSecondaryGraph = (time) => {
   switch (time.name) {
     case "1d":
-      return { name: "1wk", ms: 604800000 };
-    case "1wk":
-      return { name: "1mo", ms: 2629746000 * 1 };
     case "2d":
-      return { name: "2wk", ms: 604800000 * 2 };
+    case "3d":
+      return { name: "1wk", desc: "1 Week", ms: 604800000 };
+    case "1wk":
+    case "2wk":
+      return { name: "1mo", desc: "1 Month", ms: 2629746000 * 1 };
     default:
-      return { name: "1d", ms: 86400000 * 1 };
+      return { name: "1d", desc: "1 Day", ms: 86400000 * 1 };
   }
 };

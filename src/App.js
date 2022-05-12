@@ -25,7 +25,11 @@ function App() {
   const scrollableListRef = useRef(null);
   const [selectedStock, setSelectStock] = useState("MMM");
   const [selectedPattern, setSelectedPattern] = useState(null);
-  const [selectedTime, setSelectTime] = useState({ name: "1d", ms: 86400000 });
+  const [selectedTime, setSelectTime] = useState({
+    name: "1d",
+    ms: 86400000,
+    desc: "1 Day",
+  });
 
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);

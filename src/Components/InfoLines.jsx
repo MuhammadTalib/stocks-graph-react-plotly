@@ -3,14 +3,20 @@ const InfoLines = ({
   selectedStock,
   ohlc: { high, low, open, close, pattern, ConfrimLow, ConfrimHigh },
   selectedPattern,
+  selectedTime,
 }) => {
   return (
     <div style={{ marginLeft: "10px", fontSize: "12px" }}>
-      <div>
-        {selectedStock.name} - {selectedStock.description || "description"} -
-        {selectedStock.sources.length &&
-          String(selectedStock.sources[0]).toUpperCase()}
-      </div>
+      {selectedStock && (
+        <div>
+          {selectedStock.name} - {selectedStock.description || "description"}
+          {" - "}
+          {selectedStock.sources.length &&
+            String(selectedStock.sources[0]).toUpperCase()}
+          {" - "}
+          {selectedTime.desc}
+        </div>
+      )}
       <div>
         Open: {open} High: {high} Low: {low} Close: {close}
       </div>

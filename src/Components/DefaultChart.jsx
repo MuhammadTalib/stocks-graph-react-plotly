@@ -84,6 +84,7 @@ export function DefaultChart({
           ConfrimLow: data?.ConfrimLow[pointIndex],
         }}
         selectedPattern={selectedPattern}
+        selectedTime={selectedTime}
       />
       <Graph
         id={id}

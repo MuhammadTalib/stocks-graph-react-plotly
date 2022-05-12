@@ -35,8 +35,8 @@ const GraphRenderer = ({
 
   useEffect(() => {
     let t = getTimeforSecondaryGraph(selectedTime);
-    setSecondayChartTime(t);
-  }, [selectedTime]);
+    setSecondayChartTime(enableDualChart ? t : selectedTime);
+  }, [selectedTime, enableDualChart]);
 
   const [cursor, setCursor] = useState("crosshair");
   const [currentSelected, setCurrentSelected] = useState("");
@@ -144,7 +144,7 @@ const GraphRenderer = ({
             separateGraphs={separateGraphs}
             selectedStock={selectedStock}
             id={"default"}
-            selectedTime={selectedTime}
+            selectedTime={secondaryChartTime}
             selectedCategory={selectedCategory}
             setLayout={setLayout}
           />
@@ -188,7 +188,7 @@ const GraphRenderer = ({
                 separateGraphs={separateGraphs}
                 selectedStock={selectedStock}
                 id={"secondary"}
-                selectedTime={secondaryChartTime}
+                selectedTime={selectedTime}
                 selectedCategory={selectedCategory}
                 setLayout={setSecondaryLayout}
               />

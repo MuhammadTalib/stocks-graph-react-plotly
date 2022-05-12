@@ -42,7 +42,6 @@ const WatchList = ({
 
   useEffect(() => {
     getAllStocks("stocks/watchlish/" + selectedCategory).then((res) => {
-      console.log(res?.data?.list);
       setStocks(res?.data?.list || []);
       setSelectStockIndex(0);
       handleStockChange(res?.data?.list[0]);
