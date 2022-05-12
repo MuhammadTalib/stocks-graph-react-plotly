@@ -487,8 +487,8 @@ export function getDataRequestService(
               if (patternData[i]) {
                 let lowP = Math.min(...[low[i], high[i], open[i], close[i]]);
                 let highP = Math.max(...[low[i], high[i], open[i], close[i]]);
-                let x0 = String(new Date(x[i - 1])).toUTCString();
-                let x1 = String(new Date(x[i + 1])).toUTCString();
+                let x0 = String(new Date(x[i - 1]).toUTCString());
+                let x1 = String(new Date(x[i + 1]).toUTCString());
                 return {
                   type: "rect",
                   xref: "x",
@@ -515,6 +515,7 @@ export function getDataRequestService(
         });
       })
       .catch((err) => {
+        console.log("err", err);
         setLoader(false);
         setGraphData(null);
       });
