@@ -47,12 +47,12 @@ export function DefaultChart({
         let stra = await axios.get(
           `/stocks/${selectedStrategy[0]?.value}?interval=1d&watch_list=${selectedCategory}`
         );
-        setStrategiesData(stra?.data?.data?.[selectedStock.name]);
+        setStrategiesData(stra?.data?.data);
       }
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStrategy, selectedStock]);
+  }, [selectedStrategy, selectedCategory]);
 
   const [loader, setLoader] = useState(false);
 
@@ -127,7 +127,7 @@ export function DefaultChart({
           ),
         ]}
         loader={loader}
-        strategiesData={strategiesData}
+        strategiesData={strategiesData?.[selectedStock.name]}
       />
     </>
   ) : (

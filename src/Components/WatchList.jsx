@@ -9,6 +9,7 @@ import { getAllStocks } from "../services/api";
 import { strategies, times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
 import WatchListTable from "./WatchListTable";
+import loader_gif from "./../loader.gif";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -35,11 +36,18 @@ const WatchList = ({
   const [categories, setCategories] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
   const [strategiesData, setStrategiesData] = useState([]);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    getAllStocks("/stocks/watchlish").then((res) => {
-      setCategories(res?.data?.list);
-    });
+    setLoader(true);
+    getAllStocks("/stocks/watchlish")
+      .then((res) => {
+        setCategories(res?.data?.list);
+        setLoader(false);
+      })
+      .catch(() => {
+        setLoader(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -54,15 +62,17 @@ const WatchList = ({
   useEffect(() => {
     async function fetchData() {
       if (selectedStrategy && selectedStrategy.length) {
+        setLoader(true);
         let stra = await axios.get(
           `/stocks/${selectedStrategy[0]?.value}?interval=1d&watch_list=${selectedCategory}`
         );
+        setLoader(false);
         setStrategiesData([{ data: stra.data.data }]);
       }
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStrategy, selectedStock]);
+  }, [selectedStrategy, selectedCategory]);
 
   const [selectedTime, setSelectedTime] = useState({
     name: "1d",
@@ -292,6 +302,7 @@ const WatchList = ({
       }}
       onMouseDown={(e) => e.preventDefault()}
     >
+      {loader ? <div className="watchListLoader"></div> : <></>}
       <div className="app-sidebar-resizer" onMouseDown={startResizing} />
       <div className="app-sidebar-content" style={{ overflowX: "clip" }}>
         {stock}
