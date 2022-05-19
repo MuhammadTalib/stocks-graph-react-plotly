@@ -17,8 +17,34 @@ export const Graph = ({
   rightMargin,
   toggleFirstDayLine,
   onDoubleClick,
+  strategiesData,
   id,
 }) => {
+  const drawStrategiesBar = (strategiesData) => {
+    let dateIndex =
+      strategiesData && data.x.findIndex((f) => f === strategiesData.time);
+    return strategiesData && dateIndex >= 0
+      ? [
+          {
+            type: "rect",
+            text: "ddd",
+            x0: dateIndex - 0.5,
+            y0: 0,
+            x1: dateIndex + 0.5,
+            yref: "paper",
+            y1: 1,
+            line: {
+              color: "yellow",
+              width: 1.5,
+              // dash: "dot",
+            },
+            hoverinfo: "x",
+            fillcolor: "yellow",
+            opacity: 0.3,
+          },
+        ]
+      : [];
+  };
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
     let temp = [];
@@ -78,10 +104,28 @@ export const Graph = ({
                         },
                         hoverinfo: "x",
                       };
+                      // return {
+                      //   type: "rect",
+                      //   text: "ddd",
+                      //   x0: dateIndex - 0.5,
+                      //   y0: 0,
+                      //   x1: dateIndex + 0.5,
+                      //   yref: "paper",
+                      //   y1: 1,
+                      //   line: {
+                      //     color: "yellow",
+                      //     width: 1.5,
+                      //     // dash: "dot",
+                      //   },
+                      //   hoverinfo: "x",
+                      //   fillcolor: "yellow",
+                      //   opacity: 0.3,
+                      // };
                     }
                     return null;
                   })
               : []),
+            ...drawStrategiesBar(strategiesData),
           ],
         }}
         config={{

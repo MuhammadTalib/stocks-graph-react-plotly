@@ -33,6 +33,7 @@ function App() {
 
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
+  const [selectedStrategy, setSelectedStrategy] = useState([]);
 
   const handleGrapthType = (type) => {
     setGraphType(type);
@@ -125,6 +126,7 @@ function App() {
             setLayout={setLayout}
             selectedTime={selectedTime}
             selectedCategory={selectedCategory}
+            selectedStrategy={selectedStrategy}
           />
         </div>
       </div>
@@ -145,6 +147,8 @@ function App() {
         setSidebarWidth={setSidebarWidth}
         sidebarWidth={sidebarWidth}
         enableDualChart={enableDualChart}
+        selectedStrategy={selectedStrategy}
+        setSelectedStrategy={setSelectedStrategy}
       />
     </div>
   );

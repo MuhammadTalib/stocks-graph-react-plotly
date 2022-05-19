@@ -811,4 +811,5 @@ export const templates = [
 
 export const strategies = [
   { value: "1", name: "T3", columns: ["T3 Bearish", "T3 Bullish"] },
+  { value: "double-close", name: "Double close", columns: ["Double close"] },
 ];

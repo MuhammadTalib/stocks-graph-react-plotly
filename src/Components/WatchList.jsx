@@ -2,6 +2,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { Checkbox, Grid, TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
+import axios from "axios";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../App.css";
 import { getAllStocks } from "../services/api";
@@ -28,13 +29,14 @@ const WatchList = ({
   setSidebarWidth,
   sidebarWidth,
   enableDualChart,
+  selectedStrategy,
+  setSelectedStrategy,
 }) => {
   const [categories, setCategories] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
-  const [selectedStrategy, setSelectedStrategy] = useState([]);
+  const [strategiesData, setStrategiesData] = useState([]);
 
   useEffect(() => {
-    console.log("getAllStocks");
     getAllStocks("/stocks/watchlish").then((res) => {
       setCategories(res?.data?.list);
     });
@@ -48,6 +50,19 @@ const WatchList = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (selectedStrategy && selectedStrategy.length) {
+        let stra = await axios.get(
+          `/stocks/${selectedStrategy[0]?.value}?interval=1d&watch_list=${selectedCategory}`
+        );
+        setStrategiesData([{ data: stra.data.data }]);
+      }
+    }
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedStrategy, selectedStock]);
 
   const [selectedTime, setSelectedTime] = useState({
     name: "1d",
@@ -97,7 +112,6 @@ const WatchList = ({
               id="free-solo-2-demo"
               options={categories}
               disableListWrap
-              onHighlightChange={() => {}}
               value={selectedCategory}
               renderInput={(params) => (
                 <TextField
@@ -146,8 +160,13 @@ const WatchList = ({
               limitTags={1}
               size="small"
               options={strategies}
-              onChange={(e, v) => {
-                setSelectedStrategy(v);
+              onChange={async (e, v) => {
+                if (v && v.length) {
+                  // let stra = await axios.get(
+                  //   `/stocks/${v[0].value}?interval=1d&watch_list=${selectedCategory}`
+                  // );
+                  setSelectedStrategy([...v]);
+                }
               }}
               getOptionLabel={(option) => option.name}
               renderOption={(props, option, { selected }) => (
@@ -188,6 +207,7 @@ const WatchList = ({
               selectedTime={selectedTime}
               stocks={stocks}
               setStocks={setStocks}
+              strategiesData={strategiesData}
             />
           </div>
         </Grid>
@@ -204,6 +224,7 @@ const WatchList = ({
     stocks,
     selectedTime,
     selectedStrategy,
+    strategiesData,
   ]);
 
   const sidebarRef = useRef(null);

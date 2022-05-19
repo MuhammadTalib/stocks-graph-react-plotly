@@ -11,33 +11,45 @@ const WatchListRow = ({
   setSelectStockIndex,
   hanldeSelectedTime,
   selectedStrategy,
+  strategiesData,
 }) => {
-  return (
-    row &&
-    selectedStock && (
-      <TableRow
-        className={row.name === selectedStock.name ? "selectedRowStyle" : ""}
-        active={row.name === selectedStock.name}
-        key={index}
-        onClick={() => {
-          hanldeSelectedTime(selectedTime);
-          placeSelectedItemInTheMiddle(index);
-          handleStockChange(row);
-          setSelectStockIndex(index);
-        }}
-        focus={row.name === selectedStock.name}
-      >
-        <TableCell align={"center"}>{row.name}</TableCell>
-        <TableCell align={"center"}>
-          {row?.sources?.length && row.sources[0]}
-        </TableCell>
-        <TableCell align={"center"}>{row?.description || "-"}</TableCell>
-        <TableCell align={"center"}>{selectedTime.name}</TableCell>
-        {selectedStrategy.map((m) => (
-          <TableCell align={"center"}>{m.value}</TableCell>
-        ))}
-      </TableRow>
-    )
+  return row && selectedStock ? (
+    <TableRow
+      className={row.name === selectedStock.name ? "selectedRowStyle" : ""}
+      active={row.name === selectedStock.name}
+      key={index}
+      onClick={() => {
+        hanldeSelectedTime(selectedTime);
+        placeSelectedItemInTheMiddle(index);
+        handleStockChange(row);
+        setSelectStockIndex(index);
+      }}
+      focus={row.name === selectedStock.name}
+    >
+      <TableCell align={"center"}>{row.name}</TableCell>
+      <TableCell align={"center"}>
+        {row?.sources?.length && row.sources[0]}
+      </TableCell>
+      <TableCell align={"center"}>{row?.description || "-"}</TableCell>
+      <TableCell align={"center"}>{selectedTime.name}</TableCell>
+      {strategiesData.map((m) =>
+        m?.data?.[row?.name]?.value &&
+        m?.data?.[row?.name]?.value !== "temp" ? (
+          <TableCell align={"center"}>
+            {m?.data?.[row?.name]?.value !== "temp"
+              ? m?.data?.[row?.name]?.value + ", "
+              : " "}
+            {m?.data?.[row?.name]?.time !== "temp"
+              ? m?.data?.[row?.name]?.time
+              : " "}
+          </TableCell>
+        ) : (
+          <></>
+        )
+      )}
+    </TableRow>
+  ) : (
+    <></>
   );
 };
 

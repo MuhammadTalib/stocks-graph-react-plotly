@@ -24,6 +24,7 @@ const WatchListTable = ({
   selectedTime,
   stocks,
   setStocks,
+  strategiesData,
 }) => {
   return (
     <TableContainer
@@ -46,12 +47,15 @@ const WatchListTable = ({
               { label: "Sources", numeric: false },
               { label: "Description", numeric: false },
               { label: "Time", numeric: false },
-              ...selectedStrategy.map((m) => {
-                return {
-                  label: m.name,
-                  numeric: true,
-                };
-              }),
+              ...(strategiesData?.length &&
+              strategiesData[0].data?.[selectedStock?.name]?.value !== "temp"
+                ? selectedStrategy.map((m) => {
+                    return {
+                      label: m.name,
+                      numeric: true,
+                    };
+                  })
+                : []),
             ].map((column, index) => (
               <TableCell
                 sx={{ minWidth: "100px" }}
@@ -93,6 +97,7 @@ const WatchListTable = ({
                 stocks={stocks}
                 hanldeSelectedTime={hanldeSelectedTime}
                 selectedStrategy={selectedStrategy}
+                strategiesData={strategiesData}
               />
             );
           })}

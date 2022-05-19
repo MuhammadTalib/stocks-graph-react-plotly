@@ -17,6 +17,7 @@ const GraphRenderer = ({
   selectedStock,
   selectedTime,
   selectedCategory,
+  selectedStrategy,
 }) => {
   const [secondaryChartTime, setSecondayChartTime] = useState(null);
   const [secondaryLayout, setSecondaryLayout] = useState({
@@ -147,6 +148,7 @@ const GraphRenderer = ({
             selectedTime={secondaryChartTime}
             selectedCategory={selectedCategory}
             setLayout={setLayout}
+            selectedStrategy={selectedStrategy}
           />
         </div>
       </div>
@@ -191,6 +193,7 @@ const GraphRenderer = ({
                 selectedTime={selectedTime}
                 selectedCategory={selectedCategory}
                 setLayout={setSecondaryLayout}
+                selectedStrategy={selectedStrategy}
               />
             </div>
           </div>

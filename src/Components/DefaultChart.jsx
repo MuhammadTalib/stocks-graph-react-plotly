@@ -9,6 +9,7 @@ import {
 } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
+import axios from "axios";
 
 export function DefaultChart({
   onHover,
@@ -30,13 +31,28 @@ export function DefaultChart({
   selectedCategory,
   id,
   setLayout,
+  selectedStrategy,
 }) {
   const [data, setGraphData] = useState({ ...dummy });
   const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
+  const [strategiesData, setStrategiesData] = useState(null);
 
   useEffect(() => {
     setCurrentSelectedTemp(selectedTemp);
   }, [selectedTemp]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (selectedStrategy && selectedStrategy.length) {
+        let stra = await axios.get(
+          `/stocks/${selectedStrategy[0]?.value}?interval=1d&watch_list=${selectedCategory}`
+        );
+        setStrategiesData(stra?.data?.data?.[selectedStock.name]);
+      }
+    }
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedStrategy, selectedStock]);
 
   const [loader, setLoader] = useState(false);
 
@@ -111,6 +127,7 @@ export function DefaultChart({
           ),
         ]}
         loader={loader}
+        strategiesData={strategiesData}
       />
     </>
   ) : (
