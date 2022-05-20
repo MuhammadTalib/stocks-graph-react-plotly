@@ -34,13 +34,13 @@ export const Graph = ({
             yref: "paper",
             y1: 1,
             line: {
-              color: "yellow",
+              color: "#ffff00",
               width: 1.5,
               // dash: "dot",
             },
             hoverinfo: "x",
-            fillcolor: "yellow",
-            opacity: 0.3,
+            fillcolor: "#ffff00",
+            opacity: 0.6,
           },
         ]
       : [];
@@ -73,6 +73,8 @@ export const Graph = ({
           ...layout,
           xaxis: {
             ...layout.xaxis,
+            autorange: false,
+            range: [data.x.length - 280, data.x.length - 1],
           },
           shapes: [
             ...(toggleFirstDayLine

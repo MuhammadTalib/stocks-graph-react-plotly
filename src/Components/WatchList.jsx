@@ -9,7 +9,6 @@ import { getAllStocks } from "../services/api";
 import { strategies, times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
 import WatchListTable from "./WatchListTable";
-import loader_gif from "./../loader.gif";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -37,6 +36,10 @@ const WatchList = ({
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
   const [strategiesData, setStrategiesData] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [selectedTime, setSelectedTime] = useState({
+    name: "1d",
+    ms: 86400000,
+  });
 
   useEffect(() => {
     setLoader(true);
@@ -64,20 +67,14 @@ const WatchList = ({
       if (selectedStrategy && selectedStrategy.length) {
         setLoader(true);
         let stra = await axios.get(
-          `/stocks/${selectedStrategy[0]?.value}?interval=1d&watch_list=${selectedCategory}`
+          `/stocks/${selectedStrategy[0]?.value}?interval=${selectedTime.name}&watch_list=${selectedCategory}`
         );
         setLoader(false);
         setStrategiesData([{ data: stra.data.data }]);
       }
     }
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStrategy, selectedCategory]);
-
-  const [selectedTime, setSelectedTime] = useState({
-    name: "1d",
-    ms: 86400000,
-  });
+  }, [selectedStrategy, selectedCategory, selectedTime]);
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 38) {
@@ -172,9 +169,6 @@ const WatchList = ({
               options={strategies}
               onChange={async (e, v) => {
                 if (v && v.length) {
-                  // let stra = await axios.get(
-                  //   `/stocks/${v[0].value}?interval=1d&watch_list=${selectedCategory}`
-                  // );
                   setSelectedStrategy([...v]);
                 }
               }}

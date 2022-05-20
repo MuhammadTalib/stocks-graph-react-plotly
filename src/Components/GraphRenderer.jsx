@@ -18,6 +18,7 @@ const GraphRenderer = ({
   selectedTime,
   selectedCategory,
   selectedStrategy,
+  sidebarWidth,
 }) => {
   const [secondaryChartTime, setSecondayChartTime] = useState(null);
   const [secondaryLayout, setSecondaryLayout] = useState({
@@ -85,6 +86,7 @@ const GraphRenderer = ({
           ...secondaryLayout,
           width:
             sidebarRef.current.getBoundingClientRect().right -
+            sidebarWidth -
             mouseMoveEvent.clientX -
             10,
           height: window.innerHeight - 80,
@@ -92,7 +94,7 @@ const GraphRenderer = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isResizing]
+    [isResizing, sidebarWidth]
   );
 
   useEffect(() => {

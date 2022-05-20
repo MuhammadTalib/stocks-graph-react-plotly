@@ -45,6 +45,7 @@ function App() {
         layout.width !== window.innerWidth - 10 ||
         layout.height !== window.innerHeight - 80
       ) {
+        document.querySelector('[data-title="Autoscale"]')?.click();
         setLayout({
           ...layout,
           width: window.innerWidth - 10,
@@ -127,6 +128,7 @@ function App() {
             selectedTime={selectedTime}
             selectedCategory={selectedCategory}
             selectedStrategy={selectedStrategy}
+            sidebarWidth={sidebarWidth}
           />
         </div>
       </div>

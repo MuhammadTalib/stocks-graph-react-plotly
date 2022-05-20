@@ -52,7 +52,7 @@ const WatchListTable = ({
                 ? selectedStrategy.map((m) => {
                     return {
                       label: m.name,
-                      numeric: true,
+                      numeric: false,
                     };
                   })
                 : []),
