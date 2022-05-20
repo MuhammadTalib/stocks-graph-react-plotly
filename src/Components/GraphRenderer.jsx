@@ -75,8 +75,6 @@ const GraphRenderer = ({
             mouseMoveEvent.clientX) -
           10;
 
-        console.log("w==??", w);
-
         setLayout({
           ...layout,
           width: w,

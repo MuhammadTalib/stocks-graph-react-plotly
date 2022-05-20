@@ -45,7 +45,7 @@ export function DefaultChart({
     async function fetchData() {
       if (selectedStrategy && selectedStrategy.length) {
         let stra = await axios.get(
-          `/stocks/${selectedStrategy[0]?.value}?interval=${selectedTime.name}&watch_list=${selectedCategory}`
+          `/stocks/${selectedStrategy[0]?.value}?interval=${selectedTime.name}&watch_list=${selectedCategory}&trends_required=true`
         );
         setStrategiesData(stra?.data?.data);
       }
@@ -116,7 +116,7 @@ export function DefaultChart({
         templates={[
           ...drawMergedChart(currentSelectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
           ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
-          ...drawPatternData(data, selectedPattern), //
+          ...drawPatternData(data, strategiesData?.[selectedStock.name]), //
         ]}
         separateGraphs={[
           ...drawSeparateChart(

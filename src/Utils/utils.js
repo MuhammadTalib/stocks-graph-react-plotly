@@ -13,26 +13,37 @@ function arrayMin(array) {
   });
 }
 
-export const drawPatternData = (data, selectedPattern) => {
-  return data.patternData?.length
+export const drawPatternData = (data, strategiesData) => {
+  let patterns =
+    strategiesData?.["bearish_data"]?.map(
+      (m, i) =>
+        m?.["Bearish Double Close Outside Bar"] ||
+        strategiesData?.["bullish_data"]?.[i]?.[
+          "Bullish Double Close Outside Bar"
+        ]
+    ) || data.patternData;
+  return patterns?.length
     ? [
         {
           x: data?.x,
-          y: data?.patternData.map((m, i) => {
+          y: patterns?.map((m, i) => {
             let perc10 = ((data.max - data.min) / 100) * 2.5; //((data.high[i] - data.low[i]) / 100) * 10;
+            if (Number(data.high[i]) + perc10 > 500) {
+              console.log("perc10", data.high[i], perc10, i);
+            }
             if (m) {
               if (data.close[i] > data.open[i]) {
-                return data.low[i] - perc10;
+                return Number(data.low[i]) - perc10;
+              } else {
+                return Number(data.high[i]) + perc10;
               }
-              return data.high[i] + perc10;
             }
             return null;
           }),
           showlegend: false,
           mode: "markers",
-          dy: 10,
           marker: {
-            color: data?.patternData.map((m, i) => {
+            color: patterns?.map((m, i) => {
               if (m) {
                 if (data.close[i] < data.open[i]) {
                   return "red";
@@ -41,13 +52,8 @@ export const drawPatternData = (data, selectedPattern) => {
               }
               return null;
             }),
-            margin: {
-              r: 10,
-              t: 25,
-              b: 40,
-              l: 20,
-            },
-            symbol: data?.patternData.map((m, i) => {
+
+            symbol: patterns.map((m, i) => {
               if (m) {
                 if (data.close[i] < data.open[i]) {
                   return "triangle-down";
