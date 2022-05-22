@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { rightMargin } from "../Utils/defaults";
 import { getTimeforSecondaryGraph } from "../Utils/utils";
 import { DefaultChart } from "./DefaultChart";
 const style = { width: "100%", height: "100%" };
@@ -128,7 +127,6 @@ const GraphRenderer = ({
         >
           <DefaultChart
             type="default"
-            rightMargin={rightMargin}
             onHover={onHover}
             onDoubleClick={(e) => setCurrentSelected(e)}
             onUnhover={onUnhover}
@@ -175,7 +173,6 @@ const GraphRenderer = ({
                 type="secondary"
                 onHover={onHover}
                 onDoubleClick={(e) => setCurrentSelected(e)}
-                rightMargin={rightMargin}
                 graphType={graphType}
                 style={style}
                 enableDualChart={enableDualChart}

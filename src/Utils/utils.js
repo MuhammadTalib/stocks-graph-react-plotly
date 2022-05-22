@@ -1,5 +1,5 @@
 import { getAllStocks } from "../services/api";
-import { dummy, months, rightMargin } from "./defaults";
+import { dummy, months, reversalPatterns, rightMargin } from "./defaults";
 
 function arrayMax(array) {
   return array.reduce(function (a, b) {
@@ -12,63 +12,6 @@ function arrayMin(array) {
     return Math.min(a, b);
   });
 }
-
-export const drawPatternData = (data, strategiesData) => {
-  let patterns =
-    strategiesData?.["bearish_data"]?.map(
-      (m, i) =>
-        m?.["Bearish Double Close Outside Bar"] ||
-        strategiesData?.["bullish_data"]?.[i]?.[
-          "Bullish Double Close Outside Bar"
-        ]
-    ) || data.patternData;
-  return patterns?.length
-    ? [
-        {
-          x: data?.x,
-          y: patterns?.map((m, i) => {
-            let perc10 = ((data.max - data.min) / 100) * 2.5; //((data.high[i] - data.low[i]) / 100) * 10;
-            if (Number(data.high[i]) + perc10 > 500) {
-              console.log("perc10", data.high[i], perc10, i);
-            }
-            if (m) {
-              if (data.close[i] > data.open[i]) {
-                return Number(data.low[i]) - perc10;
-              } else {
-                return Number(data.high[i]) + perc10;
-              }
-            }
-            return null;
-          }),
-          showlegend: false,
-          mode: "markers",
-          marker: {
-            color: patterns?.map((m, i) => {
-              if (m) {
-                if (data.close[i] < data.open[i]) {
-                  return "red";
-                }
-                return "green";
-              }
-              return null;
-            }),
-
-            symbol: patterns.map((m, i) => {
-              if (m) {
-                if (data.close[i] < data.open[i]) {
-                  return "triangle-down";
-                }
-                return "triangle-up";
-              }
-              return null;
-            }),
-            size: 7,
-          },
-          hoverinfo: "skip",
-        },
-      ]
-    : [];
-};
 
 export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
   return [
@@ -114,65 +57,6 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
         ]
       : []),
   ];
-};
-
-export const initialLayout = {
-  dragmode: "pan",
-  margin: {
-    r: 10,
-    t: 25,
-    b: 40,
-    l: 20,
-  },
-  hovermode: "x",
-  showlegend: true,
-  legend: {
-    x: 0,
-    y: 1,
-    traceorder: "normal",
-    font: {
-      family: "sans-serif",
-      size: 12,
-      color: "#000",
-    },
-    bgcolor: "#E2E2E211",
-    bordercolor: "#FFFFFF",
-  },
-  xaxis: {
-    domain: [0, 1],
-    rangeslider: {
-      visible: false,
-    },
-    autorange: false,
-    type: "category",
-    tickmode: "array",
-    showspikes: true,
-    spikemode: "toaxis+across+marker",
-    spikesnap: "cursor",
-    spikethickness: 1,
-    spikecolor: "black",
-    spikedash: "dot",
-  },
-  yaxis: {
-    domain: [0, 1],
-    autorange: true,
-    rangeslider: {
-      visible: false,
-    },
-    position: 1,
-    side: "bottom",
-    type: "linear",
-    showspikes: true,
-    spikemode: "toaxis+across+marker",
-    spikesnap: "cursor",
-    spikethickness: 1,
-    spikecolor: "black",
-    spikedash: "dot",
-  },
-  opacity: 0.2,
-  autosize: true,
-  width: window.innerWidth - 10,
-  height: window.innerHeight - 80,
 };
 
 export const drawMergedChart = (selectedTemp, data, a, graphType) => {
@@ -282,6 +166,66 @@ export const drawSeparateChart = (selectedTemp, data, pointIndex) => {
           };
         }),
       ]
+    : [];
+};
+
+export const drawStrategiesBar = (strategiesData, data) => {
+  let dateIndex =
+    strategiesData && data.x.findIndex((f) => f === strategiesData.time);
+  return strategiesData && dateIndex >= 0
+    ? [
+        {
+          type: "rect",
+          text: "ddd",
+          x0: dateIndex - 0.5,
+          y0: 0,
+          x1: dateIndex + 0.5,
+          yref: "paper",
+          y1: 1,
+          line: {
+            color: "#ffff00",
+            width: 1.5,
+            // dash: "dot",
+          },
+          hoverinfo: "x",
+          fillcolor: "#ffff00",
+          opacity: 0.6,
+        },
+      ]
+    : [];
+};
+
+export const drawFirstDateLine = (toggleFirstDayLine, data) => {
+  return toggleFirstDayLine
+    ? data.x.slice(0, data.x.length - rightMargin).map((dateStr, dateIndex) => {
+        let date_ = new Date(dateStr);
+        let date1 = date_.getDate();
+        let date2 = new Date(data.x[dateIndex - 1]).getDate();
+        let date3 = new Date(data.x[dateIndex - 2]).getDate();
+
+        if (
+          date1 === 1 ||
+          (date1 === 2 && date2 !== 1) ||
+          (date1 === 3 && date3 !== 1 && date2 !== 2)
+        ) {
+          return {
+            type: "line",
+            text: "ddd",
+            x0: String(dateStr),
+            y0: 0,
+            x1: String(dateStr),
+            yref: "paper",
+            y1: 1,
+            line: {
+              color: "grey",
+              width: 1.5,
+              dash: "dot",
+            },
+            hoverinfo: "x",
+          };
+        }
+        return null;
+      })
     : [];
 };
 
@@ -569,4 +513,16 @@ export const getTimeforSecondaryGraph = (time) => {
     default:
       return { name: "1d", desc: "1 Day", ms: 86400000 * 1 };
   }
+};
+
+export const getOccuredReversalPatterns = (patternData, pointIndex) => {
+  let occured = "";
+  patternData.length &&
+    reversalPatterns.forEach((key, i) => {
+      if (patternData?.[pointIndex]?.[key]) {
+        if (occured.length > 0) occured += ", ";
+        occured += key;
+      }
+    });
+  return occured;
 };

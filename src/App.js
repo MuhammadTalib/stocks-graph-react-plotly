@@ -4,8 +4,7 @@ import "./App.css";
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
-import { T0 } from "./Utils/defaults";
-import { initialLayout } from "./Utils/utils";
+import { initialLayout, T0 } from "./Utils/defaults";
 
 const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {

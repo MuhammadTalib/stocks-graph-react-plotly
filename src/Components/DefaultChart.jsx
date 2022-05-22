@@ -1,19 +1,19 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { dummy } from "../Utils/defaults";
+import { drawPatternData } from "../Utils/patternUtils";
 import {
   drawConfirmHighAndLow,
   drawMergedChart,
-  drawPatternData,
   drawSeparateChart,
   getDataRequestService,
+  getOccuredReversalPatterns,
 } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
-import axios from "axios";
 
 export function DefaultChart({
   onHover,
-  rightMargin,
   onUnhover,
   onClick,
   pointIndex,
@@ -95,17 +95,23 @@ export function DefaultChart({
           low: data.low[pointIndex],
           open: data.open[pointIndex],
           close: data.close[pointIndex],
-          pattern: data.patternData[pointIndex],
           ConfrimHigh: data?.ConfrimHigh[pointIndex],
           ConfrimLow: data?.ConfrimLow[pointIndex],
         }}
-        selectedPattern={selectedPattern}
+        selectedPattern={
+          data.patternData[pointIndex]
+            ? selectedPattern === "All Reversal Patterns"
+              ? getOccuredReversalPatterns(data.patternData, pointIndex)
+              : selectedPattern
+            : undefined
+        }
         selectedTime={selectedTime}
+        pointIndex={pointIndex}
+        data={data}
       />
       <Graph
         id={id}
         onHover={onHover}
-        rightMargin={rightMargin}
         onUnhover={onUnhover}
         onClick={onClick}
         onDoubleClick={() => onDoubleClick(type)}
@@ -116,7 +122,11 @@ export function DefaultChart({
         templates={[
           ...drawMergedChart(currentSelectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
           ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
-          ...drawPatternData(data, strategiesData?.[selectedStock.name]), //
+          ...drawPatternData(
+            data,
+            selectedPattern,
+            strategiesData?.[selectedStock.name]
+          ), //
         ]}
         separateGraphs={[
           ...drawSeparateChart(
