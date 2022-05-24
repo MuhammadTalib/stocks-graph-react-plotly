@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
@@ -37,6 +37,8 @@ function App() {
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
+
+  useEffect(() => {}, []);
 
   React.useEffect(() => {
     function handleResize() {

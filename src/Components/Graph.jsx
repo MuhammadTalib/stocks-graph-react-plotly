@@ -19,9 +19,14 @@ export const Graph = ({
   onDoubleClick,
   strategiesData,
   id,
+  setLayout,
 }) => {
+  document
+    .querySelector('[data-title="Autoscale"]')
+    ?.addEventListener("onclick", function (event) {
+      console.log("blah");
+    });
   let [bottomTemplate, setBottomTemplates] = useState([]);
-  const [tempLayout, setTempLayout] = useState(layout);
   useEffect(() => {
     let temp = [];
     separateGraphs?.length &&
@@ -35,21 +40,6 @@ export const Graph = ({
     setBottomTemplates(temp);
   }, [separateGraphs]);
 
-  useEffect(() => {
-    setTempLayout({
-      ...layout,
-      xaxis: {
-        ...layout.xaxis,
-        autorange: false,
-        range: [data.x.length - 280, data.x.length - 1],
-      },
-      shapes: [
-        ...drawFirstDateLine(toggleFirstDayLine, data),
-        ...drawStrategiesBar(strategiesData, data),
-      ],
-    });
-  }, [data]);
-
   if (loader) {
     return <div className="loadingLabel">Loading...</div>;
   } else
@@ -61,11 +51,38 @@ export const Graph = ({
         onHover={onHover}
         onUnhover={onUnhover}
         data={[data, ...(templates || []), ...bottomTemplate]}
-        layout={tempLayout}
+        layout={{
+          ...layout,
+          // xaxis: {
+          //   ...layout.xaxis,
+          //   autorange: false,
+          //   // range: [data.x.length - 280, data.x.length - 1],
+          // },
+          shapes: [
+            ...drawFirstDateLine(toggleFirstDayLine, data),
+            ...drawStrategiesBar(strategiesData, data),
+          ],
+        }}
         config={{
           scrollZoom: true,
         }}
         useResizeHandler={true}
+        onRelayout={(e) => {
+          if (e["xaxis.autorange"]) {
+            setLayout({
+              ...layout,
+              xaxis: {
+                ...layout.xaxis,
+                autorange: false,
+                range: [data.x.length - 280, data.x.length - 1],
+              },
+              shapes: [
+                ...drawFirstDateLine(toggleFirstDayLine, data),
+                ...drawStrategiesBar(strategiesData, data),
+              ],
+            });
+          }
+        }}
       />
     );
 };
