@@ -21,6 +21,7 @@ export const Graph = ({
   id,
 }) => {
   let [bottomTemplate, setBottomTemplates] = useState([]);
+  const [tempLayout, setTempLayout] = useState(layout);
   useEffect(() => {
     let temp = [];
     separateGraphs?.length &&
@@ -33,6 +34,22 @@ export const Graph = ({
       });
     setBottomTemplates(temp);
   }, [separateGraphs]);
+
+  useEffect(() => {
+    setTempLayout({
+      ...layout,
+      xaxis: {
+        ...layout.xaxis,
+        autorange: false,
+        range: [data.x.length - 280, data.x.length - 1],
+      },
+      shapes: [
+        ...drawFirstDateLine(toggleFirstDayLine, data),
+        ...drawStrategiesBar(strategiesData, data),
+      ],
+    });
+  }, [data]);
+
   if (loader) {
     return <div className="loadingLabel">Loading...</div>;
   } else
@@ -44,18 +61,7 @@ export const Graph = ({
         onHover={onHover}
         onUnhover={onUnhover}
         data={[data, ...(templates || []), ...bottomTemplate]}
-        layout={{
-          ...layout,
-          xaxis: {
-            ...layout.xaxis,
-            autorange: false,
-            range: [data.x.length - 280, data.x.length - 1],
-          },
-          shapes: [
-            ...drawFirstDateLine(toggleFirstDayLine, data),
-            ...drawStrategiesBar(strategiesData, data),
-          ],
-        }}
+        layout={tempLayout}
         config={{
           scrollZoom: true,
         }}

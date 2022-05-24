@@ -13,7 +13,7 @@ function arrayMin(array) {
   });
 }
 
-export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
+export const drawConfirmHighAndLow = (switchToggle, data) => {
   return [
     ...(switchToggle
       ? [
@@ -24,10 +24,10 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
               else return data.high[i];
             }),
             showlegend: false,
-            name: data?.ConfrimHigh.map((m, i) => {
-              if (!m) return null;
-              else return "Confirm High " + data.high[pointIndex];
-            }),
+            // name: data?.ConfrimHigh.map((m, i) => {
+            //   if (!m) return null;
+            //   else return "Confirm High " + data.high[pointIndex];
+            // }),
             mode: "markers",
             marker: {
               color: "blue",
@@ -46,7 +46,7 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
               else return data.low[i];
             }),
             showlegend: false,
-            name: "Confirm Low " + data.low[pointIndex],
+            // name: "Confirm Low " + data.low[pointIndex],
             mode: "markers",
             marker: {
               color: "red",
@@ -161,7 +161,7 @@ export const drawSeparateChart = (selectedTemp, data, pointIndex) => {
                   ),
                 }
               : {}),
-            name: `${selectedTemp.separate[key].name} ${selectedTemp.separate[key].data[pointIndex]}`,
+            // name: `${selectedTemp.separate[key].name} ${selectedTemp.separate[key].data[pointIndex]}`,
             hoverinfo: "x",
           };
         }),
