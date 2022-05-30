@@ -18,21 +18,10 @@ const GraphRenderer = ({
   selectedCategory,
   selectedStrategy,
   sidebarWidth,
+  secondaryLayout,
+  setSecondaryLayout,
 }) => {
   const [secondaryChartTime, setSecondayChartTime] = useState(null);
-  const [secondaryLayout, setSecondaryLayout] = useState({
-    ...layout,
-    width: "50%",
-    height: window.innerHeight - 80,
-  });
-
-  useEffect(() => {
-    setSecondaryLayout({
-      ...layout,
-      width: "50%",
-      height: window.innerHeight - 80,
-    });
-  }, []);
 
   useEffect(() => {
     let t = getTimeforSecondaryGraph(selectedTime);
@@ -147,6 +136,7 @@ const GraphRenderer = ({
             selectedCategory={selectedCategory}
             setLayout={setLayout}
             selectedStrategy={selectedStrategy}
+            sidebarWidth={sidebarWidth}
           />
         </div>
       </div>
@@ -154,7 +144,10 @@ const GraphRenderer = ({
         <div
           ref={sidebarRef}
           className="app-dualchart"
-          style={{ width: secondaryLayout.width + "px", marginTop: "52px" }}
+          style={{
+            width: secondaryLayout.width + 10 + "px",
+            marginTop: "52px",
+          }}
           onMouseDown={(e) => e.preventDefault()}
         >
           <div className="app-dualchart-resizer" onMouseDown={startResizing} />
@@ -191,6 +184,7 @@ const GraphRenderer = ({
                 selectedCategory={selectedCategory}
                 setLayout={setSecondaryLayout}
                 selectedStrategy={selectedStrategy}
+                sidebarWidth={sidebarWidth}
               />
             </div>
           </div>

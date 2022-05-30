@@ -31,6 +31,8 @@ const WatchList = ({
   enableDualChart,
   selectedStrategy,
   setSelectedStrategy,
+  secondaryLayout,
+  setSecondaryLayout,
 }) => {
   const [categories, setCategories] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
@@ -45,7 +47,7 @@ const WatchList = ({
     setLoader(true);
     getAllStocks("/stocks/watchlish")
       .then((res) => {
-        setCategories(res?.data?.list);
+        setCategories(res?.data?.list || []);
         setLoader(false);
       })
       .catch(() => {
@@ -244,7 +246,7 @@ const WatchList = ({
           10;
 
         if (enableDualChart) {
-          w = w / 2;
+          w = Math.floor(w / 2);
         }
 
         setLayout({
@@ -252,6 +254,7 @@ const WatchList = ({
           width: w,
           height: window.innerHeight - 80,
         });
+        setSecondaryLayout({ ...secondaryLayout, width: w });
         setSidebarWidth(
           sidebarRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX

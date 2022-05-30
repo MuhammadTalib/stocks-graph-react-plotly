@@ -236,7 +236,9 @@ export function getDataRequestService(
   setSelectedTemp,
   setGraphData,
   setLayout,
-  graphType
+  graphType,
+  enableDualChart,
+  sidebarWidth
 ) {
   return async (stock, time, template, pattern, meta_trader_indicator) => {
     document.querySelector('[data-title="Autoscale"]')?.click();
@@ -409,6 +411,12 @@ export function getDataRequestService(
         });
         setLayout({
           ...tempLayout,
+          width:
+            enableDualChart && !tempLayout.dualChartSet
+              ? tempLayout.width / 2
+              : window.innerWidth - sidebarWidth,
+          dualChartSet: enableDualChart,
+          height: window.innerHeight - 80,
           xaxis: {
             ...layout.xaxis,
             rangeslider: {

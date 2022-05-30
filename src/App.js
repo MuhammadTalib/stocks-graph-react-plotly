@@ -29,7 +29,11 @@ function App() {
     ms: 86400000,
     desc: "1 Day",
   });
-
+  const [secondaryLayout, setSecondaryLayout] = useState({
+    ...layout,
+    width: "50%",
+    height: window.innerHeight - 80,
+  });
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
   const [selectedStrategy, setSelectedStrategy] = useState([]);
@@ -130,6 +134,8 @@ function App() {
             selectedCategory={selectedCategory}
             selectedStrategy={selectedStrategy}
             sidebarWidth={sidebarWidth}
+            secondaryLayout={secondaryLayout}
+            setSecondaryLayout={setSecondaryLayout}
           />
         </div>
       </div>
@@ -152,6 +158,8 @@ function App() {
         enableDualChart={enableDualChart}
         selectedStrategy={selectedStrategy}
         setSelectedStrategy={setSelectedStrategy}
+        secondaryLayout={secondaryLayout}
+        setSecondaryLayout={setSecondaryLayout}
       />
     </div>
   );

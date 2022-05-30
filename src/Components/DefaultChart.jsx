@@ -32,6 +32,8 @@ export function DefaultChart({
   id,
   setLayout,
   selectedStrategy,
+  enableDualChart,
+  sidebarWidth,
 }) {
   const [data, setGraphData] = useState({ ...dummy });
   const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
@@ -63,7 +65,9 @@ export function DefaultChart({
     setCurrentSelectedTemp,
     setGraphData,
     setLayout,
-    graphType
+    graphType,
+    enableDualChart,
+    sidebarWidth
   );
 
   useEffect(() => {

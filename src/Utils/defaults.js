@@ -119,6 +119,9 @@ export const templates = [
     id: 0,
     merged: {},
     separate: {},
+    layout: {
+      yaxis: { ...initialLayout.yaxis, domain: [0, 1] },
+    },
   },
   {
     name: "T1",
