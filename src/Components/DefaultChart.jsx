@@ -34,6 +34,7 @@ export function DefaultChart({
   selectedStrategy,
   enableDualChart,
   sidebarWidth,
+  dualChartWidth,
 }) {
   const [data, setGraphData] = useState({ ...dummy });
   const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
@@ -88,6 +89,7 @@ export function DefaultChart({
     switchToggle,
     currentSelectedTemp.id,
     graphType,
+    enableDualChart,
   ]);
 
   return data && data?.x?.length ? (
@@ -143,6 +145,8 @@ export function DefaultChart({
         loader={loader}
         strategiesData={strategiesData?.[selectedStock.name]}
         setLayout={setLayout}
+        dualChartWidth={dualChartWidth}
+        sidebarWidth={sidebarWidth}
       />
     </>
   ) : (

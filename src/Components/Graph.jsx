@@ -20,6 +20,8 @@ export const Graph = ({
   strategiesData,
   id,
   setLayout,
+  dualChartWidth,
+  sidebarWidth,
 }) => {
   document
     .querySelector('[data-title="Autoscale"]')
@@ -53,11 +55,6 @@ export const Graph = ({
         data={[data, ...(templates || []), ...bottomTemplate]}
         layout={{
           ...layout,
-          // xaxis: {
-          //   ...layout.xaxis,
-          //   autorange: false,
-          //   // range: [data.x.length - 280, data.x.length - 1],
-          // },
           shapes: [
             ...drawFirstDateLine(toggleFirstDayLine, data),
             ...drawStrategiesBar(strategiesData, data),
@@ -76,6 +73,7 @@ export const Graph = ({
                 autorange: false,
                 range: [data.x.length - 280, data.x.length - 1],
               },
+              width: window.innerWidth - dualChartWidth - sidebarWidth,
               shapes: [
                 ...drawFirstDateLine(toggleFirstDayLine, data),
                 ...drawStrategiesBar(strategiesData, data),

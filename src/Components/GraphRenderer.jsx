@@ -43,8 +43,9 @@ const GraphRenderer = ({
     setCursor("grabbing");
   };
 
-  const sidebarRef = useRef(null);
+  const dualChartRef = useRef(null);
   const [isResizing, setIsResizing] = useState(false);
+  const [dualChartWidth, setDualChartWidth] = useState(0);
 
   const stopResizing = React.useCallback(() => {
     setIsResizing(false);
@@ -59,9 +60,18 @@ const GraphRenderer = ({
         document.querySelector('[data-title="Autoscale"]')?.click();
         let w =
           window.innerWidth -
-          (sidebarRef.current.getBoundingClientRect().right -
+          (dualChartRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX) -
           10;
+
+        console.log(
+          "w===",
+          w,
+          dualChartRef.current.getBoundingClientRect().right -
+            // sidebarWidth -
+            mouseMoveEvent.clientX -
+            10
+        );
 
         setLayout({
           ...layout,
@@ -71,12 +81,16 @@ const GraphRenderer = ({
         setSecondaryLayout({
           ...secondaryLayout,
           width:
-            sidebarRef.current.getBoundingClientRect().right -
-            sidebarWidth -
+            dualChartRef.current.getBoundingClientRect().right -
+            // sidebarWidth -
             mouseMoveEvent.clientX -
             10,
           height: window.innerHeight - 80,
         });
+        setDualChartWidth(
+          dualChartRef.current.getBoundingClientRect().right -
+            mouseMoveEvent.clientX
+        );
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,12 +151,13 @@ const GraphRenderer = ({
             setLayout={setLayout}
             selectedStrategy={selectedStrategy}
             sidebarWidth={sidebarWidth}
+            dualChartWidth={dualChartWidth}
           />
         </div>
       </div>
       {enableDualChart && (
         <div
-          ref={sidebarRef}
+          ref={dualChartRef}
           className="app-dualchart"
           style={{
             width: secondaryLayout.width + 10 + "px",
@@ -185,6 +200,7 @@ const GraphRenderer = ({
                 setLayout={setSecondaryLayout}
                 selectedStrategy={selectedStrategy}
                 sidebarWidth={sidebarWidth}
+                dualChartWidth={dualChartWidth}
               />
             </div>
           </div>

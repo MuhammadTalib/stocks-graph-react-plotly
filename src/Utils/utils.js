@@ -411,10 +411,9 @@ export function getDataRequestService(
         });
         setLayout({
           ...tempLayout,
-          width:
-            enableDualChart && !tempLayout.dualChartSet
-              ? tempLayout.width / 2
-              : window.innerWidth - sidebarWidth,
+          width: enableDualChart
+            ? (window.innerWidth - sidebarWidth) / 2
+            : window.innerWidth - sidebarWidth,
           dualChartSet: enableDualChart,
           height: window.innerHeight - 80,
           xaxis: {
