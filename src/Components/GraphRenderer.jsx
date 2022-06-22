@@ -20,6 +20,7 @@ const GraphRenderer = ({
   sidebarWidth,
   secondaryLayout,
   setSecondaryLayout,
+  dataBaseUrl,
 }) => {
   const [secondaryChartTime, setSecondayChartTime] = useState(null);
 
@@ -64,15 +65,6 @@ const GraphRenderer = ({
             mouseMoveEvent.clientX) -
           10;
 
-        console.log(
-          "w===",
-          w,
-          dualChartRef.current.getBoundingClientRect().right -
-            // sidebarWidth -
-            mouseMoveEvent.clientX -
-            10
-        );
-
         setLayout({
           ...layout,
           width: w,
@@ -82,7 +74,6 @@ const GraphRenderer = ({
           ...secondaryLayout,
           width:
             dualChartRef.current.getBoundingClientRect().right -
-            // sidebarWidth -
             mouseMoveEvent.clientX -
             10,
           height: window.innerHeight - 80,
@@ -152,6 +143,7 @@ const GraphRenderer = ({
             selectedStrategy={selectedStrategy}
             sidebarWidth={sidebarWidth}
             dualChartWidth={dualChartWidth}
+            dataBaseUrl={dataBaseUrl}
           />
         </div>
       </div>
@@ -201,6 +193,7 @@ const GraphRenderer = ({
                 selectedStrategy={selectedStrategy}
                 sidebarWidth={sidebarWidth}
                 dualChartWidth={dualChartWidth}
+                dataBaseUrl={dataBaseUrl}
               />
             </div>
           </div>

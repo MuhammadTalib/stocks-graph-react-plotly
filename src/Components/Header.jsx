@@ -1,7 +1,8 @@
 import { FormControlLabel, Grid, Switch } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import "../App.css";
 import { getAllStocks } from "../services/api";
 import { templates, times } from "../Utils/defaults";
@@ -24,7 +25,9 @@ const Header = ({
   toggleFirstDayLine,
   setToggleFirstDayLine,
   selectedStock,
+  dataBaseUrl,
 }) => {
+  let linkRef = useRef();
   let [patterns, setPatterns] = useState([]);
 
   useEffect(() => {
@@ -116,6 +119,26 @@ const Header = ({
           >
             Dual Chart
           </Button>
+          {dataBaseUrl !== "/db_v1" ? (
+            <>
+              <Link
+                style={{ display: "none" }}
+                ref={linkRef}
+                target={"_blank"}
+                to="/db_v1"
+              ></Link>
+
+              <Button
+                onClick={() => {
+                  linkRef.current.click();
+                }}
+              >
+                {" "}
+              </Button>
+            </>
+          ) : (
+            <></>
+          )}
         </ButtonGroup>
       </Grid>
     </Grid>

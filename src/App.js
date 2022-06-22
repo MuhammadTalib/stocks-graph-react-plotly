@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function App() {
+function App({ dataBaseUrl }) {
   const [stocks, setStocks] = useState([]);
   const [sidebarWidth, setSidebarWidth] = useState(6);
   const classes = useStyles(sidebarWidth);
@@ -113,6 +113,7 @@ function App() {
           switchToggle={switchToggle}
           toggleFirstDayLine={toggleFirstDayLine}
           setToggleFirstDayLine={setToggleFirstDayLine}
+          dataBaseUrl={dataBaseUrl}
         />
         <div
           style={{
@@ -136,6 +137,7 @@ function App() {
             sidebarWidth={sidebarWidth}
             secondaryLayout={secondaryLayout}
             setSecondaryLayout={setSecondaryLayout}
+            dataBaseUrl={dataBaseUrl}
           />
         </div>
       </div>

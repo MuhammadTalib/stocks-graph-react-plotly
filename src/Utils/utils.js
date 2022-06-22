@@ -238,7 +238,8 @@ export function getDataRequestService(
   setLayout,
   graphType,
   enableDualChart,
-  sidebarWidth
+  sidebarWidth,
+  dataBaseUrl
 ) {
   return async (stock, time, template, pattern, meta_trader_indicator) => {
     document.querySelector('[data-title="Autoscale"]')?.click();
@@ -247,7 +248,9 @@ export function getDataRequestService(
     }
     setLoader(true);
 
-    let url = `stocks?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
+    let url = `stocks${
+      dataBaseUrl || ""
+    }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
       stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
     }&interval=${time.name}`;
     if (template && template?.id > 0) {
