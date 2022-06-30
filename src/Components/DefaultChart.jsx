@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { dummy } from "../Utils/defaults";
-import { drawPatternData } from "../Utils/patternUtils";
+import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
 import {
   drawConfirmHighAndLow,
   drawMergedChart,
@@ -134,7 +134,8 @@ export function DefaultChart({
             data,
             selectedPattern,
             strategiesData?.[selectedStock.name]
-          ), //
+          ),
+          ...drawPatternTriggers(data),
         ]}
         separateGraphs={[
           ...drawSeparateChart(

@@ -273,6 +273,8 @@ export function getDataRequestService(
         let close = [];
         let x = [];
         let patternData = [];
+        let patternTrigger = [];
+
         let elder_impulse_system = [];
         let ConfrimHigh = [];
         let ConfrimLow = [];
@@ -303,9 +305,16 @@ export function getDataRequestService(
             ConfrimLow.push(m["meta-indicators"]["Confrim Low"]);
           }
 
-          if (m[pattern] !== undefined) {
+          if (
+            m[pattern]?.pattern_end !== undefined &&
+            m[pattern]?.trigger !== undefined
+          ) {
+            patternData.push(m[pattern]?.pattern_end);
+            patternTrigger.push(m[pattern]?.trigger);
+          } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
           }
+
           x.push(new Date(m.date).toUTCString());
 
           if (template) {
@@ -408,6 +417,7 @@ export function getDataRequestService(
           ConfrimHigh,
           ConfrimLow,
           patternData,
+          patternTrigger,
           elder_impulse_system,
           max: arrayMax(high),
           min: arrayMin(low.filter((f) => f !== 0 && f !== null)),
@@ -479,7 +489,6 @@ export function getDataRequestService(
         setLoader(false);
         setGraphData(null);
       });
-    // document.querySelector('[data-title="Autoscale"]')?.click();
   };
 }
 

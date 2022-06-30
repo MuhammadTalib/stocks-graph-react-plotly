@@ -30,9 +30,6 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
           x: data?.x,
           y: patterns?.map((m, i) => {
             let perc10 = ((data.max - data.min) / 100) * 2.5;
-            if (Number(data.high[i]) + perc10 > 500) {
-              console.log("perc10", data.high[i], perc10, i);
-            }
             if (m) {
               if (data.close[i] > data.open[i]) {
                 return Number(data.low[i]) - perc10;
@@ -60,6 +57,52 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                   return "triangle-down";
                 }
                 return "triangle-up";
+              }
+              return null;
+            }),
+            size: 7,
+          },
+          hoverinfo: "skip",
+        },
+      ]
+    : [];
+};
+
+export const drawPatternTriggers = (data) => {
+  let patterns = data.patternTrigger;
+
+  return patterns?.length
+    ? [
+        {
+          x: data?.x,
+          y: patterns?.map((m, i) => {
+            if (m) {
+              if (data.close[i] > data.open[i]) {
+                return Number(data.low[i]);
+              } else {
+                return Number(data.high[i]);
+              }
+            }
+            return null;
+          }),
+          showlegend: false,
+          mode: "markers",
+          marker: {
+            color: patterns?.map((m, i) => {
+              if (m) {
+                if (data.close[i] < data.open[i]) {
+                  return "red";
+                }
+                return "red";
+              }
+              return null;
+            }),
+            symbol: patterns.map((m, i) => {
+              if (m) {
+                if (data.close[i] < data.open[i]) {
+                  return "x";
+                }
+                return "x";
               }
               return null;
             }),
