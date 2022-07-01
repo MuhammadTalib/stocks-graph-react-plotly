@@ -310,7 +310,10 @@ export function getDataRequestService(
             m[pattern]?.trigger !== undefined
           ) {
             patternData.push(m[pattern]?.pattern_end);
-            patternTrigger.push(m[pattern]?.trigger);
+            patternTrigger.push({
+              trigger: m[pattern]?.trigger,
+              failure_position: m[pattern]?.failure_position,
+            });
           } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
           }

@@ -76,12 +76,8 @@ export const drawPatternTriggers = (data) => {
         {
           x: data?.x,
           y: patterns?.map((m, i) => {
-            if (m) {
-              if (data.close[i] > data.open[i]) {
-                return Number(data.low[i]);
-              } else {
-                return Number(data.high[i]);
-              }
+            if (m.trigger) {
+              return Number(m.failure_position);
             }
             return null;
           }),
@@ -89,19 +85,13 @@ export const drawPatternTriggers = (data) => {
           mode: "markers",
           marker: {
             color: patterns?.map((m, i) => {
-              if (m) {
-                if (data.close[i] < data.open[i]) {
-                  return "red";
-                }
+              if (m.trigger) {
                 return "red";
               }
               return null;
             }),
             symbol: patterns.map((m, i) => {
-              if (m) {
-                if (data.close[i] < data.open[i]) {
-                  return "x";
-                }
+              if (m.trigger) {
                 return "x";
               }
               return null;
