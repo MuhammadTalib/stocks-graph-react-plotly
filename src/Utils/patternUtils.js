@@ -1,12 +1,11 @@
-import { reversalPatterns } from "./defaults";
-
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
-  let patterns = data.patternData;
+  let patterns = data.patternData && data.patternData[0];
   if (selectedPattern === "All Reversal Patterns") {
+    let keys = Object.keys(patterns);
     patterns = data.patternData.map((m) => {
       let ans = 0;
 
-      for (let key of reversalPatterns) {
+      for (let key of keys) {
         if (m[key]) {
           ans = 1;
           break;

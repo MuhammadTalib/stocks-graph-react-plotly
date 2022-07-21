@@ -1,5 +1,5 @@
 import { getAllStocks } from "../services/api";
-import { dummy, months, reversalPatterns, rightMargin } from "./defaults";
+import { dummy, months, rightMargin } from "./defaults";
 
 function arrayMax(array) {
   return array.reduce(function (a, b) {
@@ -538,9 +538,10 @@ export const getTimeforSecondaryGraph = (time) => {
 };
 
 export const getOccuredReversalPatterns = (patternData, pointIndex) => {
+  let keys = Object.keys(patternData[0]);
   let occured = "";
   patternData.length &&
-    reversalPatterns.forEach((key, i) => {
+    keys.forEach((key, i) => {
       if (patternData?.[pointIndex]?.[key]) {
         if (occured.length > 0) occured += ", ";
         occured += key;
