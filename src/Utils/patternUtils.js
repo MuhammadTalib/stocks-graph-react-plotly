@@ -1,7 +1,7 @@
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
   let patterns = data.patternData && data.patternData[0];
   if (selectedPattern === "All Reversal Patterns") {
-    let keys = Object.keys(patterns);
+    let keys = patterns && Object.keys(patterns);
     patterns = data.patternData.map((m) => {
       let ans = 0;
 
