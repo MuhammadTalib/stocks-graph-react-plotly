@@ -538,9 +538,10 @@ export const getTimeforSecondaryGraph = (time) => {
 };
 
 export const getOccuredReversalPatterns = (patternData, pointIndex) => {
-  let keys = Object.keys(patternData[0]);
+  let keys = patternData && patternData.length && Object.keys(patternData[0]);
   let occured = "";
   patternData.length &&
+    Array.isArray(keys) &&
     keys.forEach((key, i) => {
       if (patternData?.[pointIndex]?.[key]) {
         if (occured.length > 0) occured += ", ";
