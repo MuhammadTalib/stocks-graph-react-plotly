@@ -79,7 +79,7 @@ export const drawPatternTriggers = (data) => {
           x: data?.x,
           y: patterns?.map((m, i) => {
             if (m.trigger) {
-              return Number(m.failure_position);
+              return Number(m.trigger_value);
             }
             return null;
           }),

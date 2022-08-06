@@ -312,7 +312,7 @@ export function getDataRequestService(
             patternData.push(m[pattern]?.pattern_end);
             patternTrigger.push({
               trigger: m[pattern]?.trigger,
-              failure_position: m[pattern]?.failure_position,
+              trigger_value: m[pattern]?.trigger_value,
             });
           } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
