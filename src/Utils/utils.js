@@ -306,13 +306,16 @@ export function getDataRequestService(
           }
 
           if (
-            m[pattern]?.pattern_end !== undefined &&
+            (m[pattern]?.pattern_end !== undefined ||
+              m[pattern]?.trigger_value_max !== undefined) &&
             m[pattern]?.trigger !== undefined
           ) {
             patternData.push(m[pattern]?.pattern_end);
             patternTrigger.push({
               trigger: m[pattern]?.trigger,
               trigger_value: m[pattern]?.trigger_value,
+              trigger_value_max: m[pattern]?.trigger_value_max,
+              trigger_value_min: m[pattern]?.trigger_value_min,
             });
           } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);

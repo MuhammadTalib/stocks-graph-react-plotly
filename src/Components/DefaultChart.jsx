@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+
 import { dummy } from "../Utils/defaults";
 import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
 import {
