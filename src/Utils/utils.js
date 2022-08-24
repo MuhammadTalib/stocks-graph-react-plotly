@@ -307,7 +307,7 @@ export function getDataRequestService(
 
           if (
             (m[pattern]?.pattern_end !== undefined ||
-              m[pattern]?.trigger_value_max !== undefined) &&
+              m[pattern]?.trigger_value !== undefined) &&
             m[pattern]?.trigger !== undefined
           ) {
             patternData.push(m[pattern]?.pattern_end);

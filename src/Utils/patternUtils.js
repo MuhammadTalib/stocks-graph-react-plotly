@@ -79,34 +79,7 @@ export const drawPatternTriggers = (data) => {
           x: data?.x,
           y: patterns?.map((m, i) => {
             if (m.trigger) {
-              return Number(m.trigger_value || m.trigger_value_max);
-            }
-            return null;
-          }),
-          showlegend: false,
-          mode: "markers",
-          marker: {
-            color: patterns?.map((m, i) => {
-              if (m.trigger) {
-                return "red";
-              }
-              return null;
-            }),
-            symbol: patterns.map((m, i) => {
-              if (m.trigger) {
-                return "x";
-              }
-              return null;
-            }),
-            size: 7,
-          },
-          hoverinfo: "skip",
-        },
-        {
-          x: data?.x,
-          y: patterns?.map((m, i) => {
-            if (m.trigger) {
-              return Number(m.trigger_value_min);
+              return Number(m.trigger_value);
             }
             return null;
           }),
