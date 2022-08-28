@@ -108,12 +108,16 @@ export function DefaultChart({
           ConfrimLow: data?.ConfrimLow[pointIndex],
         }}
         selectedPattern={
-          data.patternData[pointIndex]
+          (data.patternData[pointIndex]
             ? selectedPattern === "All Reversal Patterns"
               ? getOccuredReversalPatterns(data.patternData, pointIndex)
               : selectedPattern
-            : undefined
+            : undefined) ||
+          (data?.patternTrigger[pointIndex]?.trigger_failure
+            ? selectedPattern
+            : undefined)
         }
+        patternTrigger={data?.patternTrigger[pointIndex]?.trigger_failure}
         selectedTime={selectedTime}
         pointIndex={pointIndex}
         data={data}

@@ -310,13 +310,21 @@ export function getDataRequestService(
               m[pattern]?.trigger_value !== undefined) &&
             m[pattern]?.trigger !== undefined
           ) {
-            patternData.push(m[pattern]?.pattern_end);
-            patternTrigger.push({
+            let patternObj = {
               trigger: m[pattern]?.trigger,
               trigger_value: m[pattern]?.trigger_value,
               trigger_value_max: m[pattern]?.trigger_value_max,
               trigger_value_min: m[pattern]?.trigger_value_min,
-            });
+            };
+            if (m[pattern]?.trigger_failure) {
+              patternObj = {
+                ...patternObj,
+                trigger_failure: m[pattern]?.trigger_failure,
+                trigger_failure_value: m[pattern]?.trigger_failure_value,
+              };
+            }
+            patternData.push(m[pattern]?.pattern_end);
+            patternTrigger.push(patternObj);
           } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
           }

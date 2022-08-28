@@ -72,7 +72,6 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
 
 export const drawPatternTriggers = (data) => {
   let patterns = data.patternTrigger;
-
   return patterns?.length
     ? [
         {
@@ -95,6 +94,44 @@ export const drawPatternTriggers = (data) => {
             symbol: patterns.map((m, i) => {
               if (m.trigger) {
                 return "x";
+              }
+              return null;
+            }),
+            size: 7,
+          },
+          hoverinfo: "skip",
+        },
+        {
+          x: data?.x,
+          y: patterns?.map((m, i) => {
+            let perc10 = ((data.max - data.min) / 100) * 2.5;
+            if (m.trigger_failure) {
+              if (data.close[i] > data.open[i]) {
+                return m?.trigger_failure_value - perc10;
+              } else {
+                return m.trigger_failure_value + perc10;
+              }
+            }
+            return null;
+          }),
+          showlegend: false,
+          mode: "markers",
+          marker: {
+            color: patterns?.map((m, i) => {
+              if (m.trigger_failure) {
+                if (data.close[i] < data.open[i]) {
+                  return "red";
+                }
+                return "green";
+              }
+              return null;
+            }),
+            symbol: patterns.map((m, i) => {
+              if (m.trigger_failure) {
+                if (data.close[i] < data.open[i]) {
+                  return "triangle-down";
+                }
+                return "triangle-up";
               }
               return null;
             }),

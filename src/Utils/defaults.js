@@ -295,6 +295,18 @@ export const templates = [
           width: 2,
         },
       },
+      ema_10: {
+        data: [],
+        name: "EMA 10",
+        xaxis: "x",
+        yaxis: "y",
+        marker: {
+          color: "blue",
+        },
+        line: {
+          width: 2,
+        },
+      },
     },
     separate: {
       "%R0": {

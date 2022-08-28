@@ -1,13 +1,15 @@
 import { FormControlLabel, Grid, Switch } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import "../App.css";
+
 import { getAllStocks } from "../services/api";
 import { templates, times } from "../Utils/defaults";
 import { BAR_ICON, OHLC_ICON } from "../Utils/utils";
 import AutocompleteWrapper from "./AutocompleteWrapper";
+
+import "../App.css";
 
 const Header = ({
   handleGrapthType,
@@ -100,46 +102,52 @@ const Header = ({
         />
       </Grid>
       <Grid item md={4} xs={4}>
-        <ButtonGroup variant="text" aria-label="text button group">
-          {templates.map((m, i) => (
-            <Button
-              key={i}
-              onClick={() => templateChange(m)}
-              className={`btn ${selectedTemp.id === m.id ? "templateBtn" : ""}`}
-            >
-              {m.name}
-            </Button>
-          ))}
-          <Button
-            onClick={() => {
-              setEnableDualChart(!enableDualChart);
-              document.querySelector('[data-title="Autoscale"]')?.click();
-            }}
-            className={`btn ${enableDualChart ? "templateBtn" : ""}`}
-          >
-            Dual Chart
-          </Button>
-          {dataBaseUrl !== "/db_v1" ? (
-            <>
-              <Link
-                style={{ display: "none" }}
-                ref={linkRef}
-                target={"_blank"}
-                to="/db_v1"
-              ></Link>
-
+        {templates.length > 0 ? (
+          <ButtonGroup variant="text" aria-label="text button group">
+            {templates.map((m, i) => (
               <Button
-                onClick={() => {
-                  linkRef.current.click();
-                }}
+                key={i}
+                onClick={() => templateChange(m)}
+                className={`btn ${
+                  selectedTemp.id === m.id ? "templateBtn" : ""
+                }`}
               >
-                {" "}
+                {m.name}
               </Button>
-            </>
-          ) : (
-            <></>
-          )}
-        </ButtonGroup>
+            ))}
+            <Button
+              onClick={() => {
+                setEnableDualChart(!enableDualChart);
+                document.querySelector('[data-title="Autoscale"]')?.click();
+              }}
+              className={`btn ${enableDualChart ? "templateBtn" : ""}`}
+            >
+              Dual Chart
+            </Button>
+            {dataBaseUrl !== "/db_v1" ? (
+              <>
+                <Link
+                  style={{ display: "none" }}
+                  ref={linkRef}
+                  target={"_blank"}
+                  to="/db_v1"
+                ></Link>
+
+                <Button
+                  onClick={() => {
+                    linkRef.current.click();
+                  }}
+                >
+                  {" "}
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
+          </ButtonGroup>
+        ) : (
+          <></>
+        )}
       </Grid>
     </Grid>
   );

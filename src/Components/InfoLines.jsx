@@ -4,6 +4,7 @@ const InfoLines = ({
   ohlc: { high, low, open, close, ConfrimLow, ConfrimHigh },
   selectedPattern,
   selectedTime,
+  patternTrigger,
 }) => {
   return (
     <div style={{ marginLeft: "10px", fontSize: "12px" }}>
@@ -20,7 +21,11 @@ const InfoLines = ({
       <div>
         Open: {open} High: {high} Low: {low} Close: {close}
       </div>
-      {selectedPattern ? <div>Pattern: {selectedPattern}</div> : <></>}
+      {selectedPattern || patternTrigger ? (
+        <div>Pattern: {selectedPattern}</div>
+      ) : (
+        <></>
+      )}
       {ConfrimLow ? <div>Confirm Low: {low}</div> : <></>}
       {ConfrimHigh ? <div>Confirm High: {high}</div> : <></>}
     </div>
