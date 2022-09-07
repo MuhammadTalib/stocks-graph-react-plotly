@@ -46,18 +46,18 @@ export function DefaultChart({
     setCurrentSelectedTemp(selectedTemp);
   }, [selectedTemp]);
 
-  useEffect(() => {
-    async function fetchData() {
-      if (selectedStrategy && selectedStrategy.length) {
-        let stra = await axios.get(
-          `/stocks/${selectedStrategy[0]?.value}?interval=${selectedTime.name}&watch_list=${selectedCategory}&trends_required=true`
-        );
-        setStrategiesData(stra?.data?.data);
-      }
-    }
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStrategy, selectedCategory, selectedTime]);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     if (selectedStrategy && selectedStrategy.length) {
+  //       let stra = await axios.get(
+  //         `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${selectedStrategy[0]}`
+  //       );
+  //       setStrategiesData(stra?.data?.data);
+  //     }
+  //   }
+  //   fetchData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedStrategy, selectedCategory, selectedTime]);
 
   const [loader, setLoader] = useState(false);
 
@@ -71,7 +71,8 @@ export function DefaultChart({
     graphType,
     enableDualChart,
     sidebarWidth,
-    dataBaseUrl
+    dataBaseUrl,
+    selectedStrategy
   );
 
   useEffect(() => {
@@ -93,6 +94,7 @@ export function DefaultChart({
     currentSelectedTemp.id,
     graphType,
     enableDualChart,
+    selectedStrategy,
   ]);
 
   return data && data?.x?.length ? (
@@ -109,7 +111,7 @@ export function DefaultChart({
         }}
         selectedPattern={
           (data.patternData[pointIndex]
-            ? selectedPattern === "All Reversal Patterns"
+            ? selectedPattern === "All Reversal Patterns" || data.strategiesData
               ? getOccuredReversalPatterns(data.patternData, pointIndex)
               : selectedPattern
             : undefined) ||
@@ -135,12 +137,8 @@ export function DefaultChart({
         templates={[
           ...drawMergedChart(currentSelectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
           ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
-          ...drawPatternData(
-            data,
-            selectedPattern,
-            strategiesData?.[selectedStock.name]
-          ),
-          ...drawPatternTriggers(data),
+          ...drawPatternData(data, selectedPattern, data.strategiesData),
+          ...drawPatternTriggers(data, data.strategiesData),
         ]}
         separateGraphs={[
           ...drawSeparateChart(

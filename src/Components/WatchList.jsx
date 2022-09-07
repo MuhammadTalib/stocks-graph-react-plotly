@@ -4,11 +4,13 @@ import { Checkbox, Grid, TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import "../App.css";
+
 import { getAllStocks } from "../services/api";
-import { strategies, times } from "../Utils/defaults";
+import { times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
 import WatchListTable from "./WatchListTable";
+
+import "../App.css";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -34,6 +36,7 @@ const WatchList = ({
   secondaryLayout,
   setSecondaryLayout,
 }) => {
+  const [strategies, setStrategies] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
   const [strategiesData, setStrategiesData] = useState([]);
@@ -48,6 +51,15 @@ const WatchList = ({
     getAllStocks("/stocks/watchlish")
       .then((res) => {
         setCategories(res?.data?.list || []);
+        setLoader(false);
+      })
+      .catch(() => {
+        setLoader(false);
+      });
+
+    getAllStocks("/stocks/active_strategies")
+      .then((res) => {
+        setStrategies(res?.data?.list || []);
         setLoader(false);
       })
       .catch(() => {
@@ -69,7 +81,7 @@ const WatchList = ({
       if (selectedStrategy && selectedStrategy.length) {
         setLoader(true);
         let stra = await axios.get(
-          `/stocks/${selectedStrategy[0]?.value}?interval=${selectedTime.name}&watch_list=${selectedCategory}`
+          `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${selectedStrategy[0]}`
         );
         setLoader(false);
         setStrategiesData([{ data: stra.data.data }]);
@@ -174,7 +186,7 @@ const WatchList = ({
                   setSelectedStrategy([...v]);
                 }
               }}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => option}
               renderOption={(props, option, { selected }) => (
                 <li {...props}>
                   <Checkbox
@@ -182,7 +194,7 @@ const WatchList = ({
                     checkedIcon={checkedIcon}
                     checked={selected}
                   />
-                  {option.name}
+                  {option}
                 </li>
               )}
               renderInput={(params) => (

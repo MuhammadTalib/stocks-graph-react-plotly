@@ -881,6 +881,6 @@ export const templates = [
   },
 ];
 
-export const strategies = [
-  { value: "double-close", name: "Double close", columns: ["Double close"] },
-];
+// export const strategies = [
+//   { value: "double-close", name: "Double close", columns: ["Double close"] },
+// ];

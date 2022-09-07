@@ -239,7 +239,8 @@ export function getDataRequestService(
   graphType,
   enableDualChart,
   sidebarWidth,
-  dataBaseUrl
+  dataBaseUrl,
+  selectedStrategy
 ) {
   return async (stock, time, template, pattern, meta_trader_indicator) => {
     document.querySelector('[data-title="Autoscale"]')?.click();
@@ -248,11 +249,19 @@ export function getDataRequestService(
     }
     setLoader(true);
 
-    let url = `stocks${
-      dataBaseUrl || ""
-    }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
-      stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
-    }&interval=${time.name}`;
+    let url = !selectedStrategy.length
+      ? `stocks${
+          dataBaseUrl || ""
+        }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
+          stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
+        }&interval=${time.name}`
+      : `stocks/strategy_data_against_symbol?watch_list=${selectedCategory}&interval=${
+          time.name
+        }${
+          selectedStrategy.length ? "&strategy_name=" + selectedStrategy[0] : ""
+        }&symbol=${stock.name?.toLowerCase()}&source=${
+          stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
+        }`;
     if (template && template?.id > 0) {
       url = url + `&template=${template.id}`;
     }
@@ -265,6 +274,7 @@ export function getDataRequestService(
     await getAllStocks(url)
       .then((res) => {
         setLoader(false);
+        let pattern_name_list = res.data.patterns_list;
         let responseData = [...res?.data?.data];
 
         let high = [];
@@ -329,6 +339,27 @@ export function getDataRequestService(
             patternData.push(m[pattern]);
           }
 
+          if (selectedStrategy.length) {
+            let arrowPattern = {};
+            let crossPattern = {};
+            pattern_name_list.map((straIns) => {
+              if (
+                (m[straIns]?.pattern_end !== undefined ||
+                  m[straIns]?.trigger_value !== undefined) &&
+                m[straIns]?.trigger !== undefined
+              ) {
+                crossPattern[straIns] = {
+                  trigger: m[straIns]?.trigger,
+                  trigger_value: m[straIns]?.trigger_value,
+                  trigger_value_max: m[straIns]?.trigger_value_max,
+                  trigger_value_min: m[straIns]?.trigger_value_min,
+                };
+                arrowPattern[straIns] = m[straIns]?.pattern_end;
+              }
+            });
+            patternData.push(arrowPattern);
+            patternTrigger.push(crossPattern);
+          }
           x.push(new Date(m.date).toUTCString());
 
           if (template) {
@@ -432,6 +463,8 @@ export function getDataRequestService(
           ConfrimLow,
           patternData,
           patternTrigger,
+          pattern_name_list,
+          strategiesData: selectedStrategy.length ? true : false,
           elder_impulse_system,
           max: arrayMax(high),
           min: arrayMin(low.filter((f) => f !== 0 && f !== null)),

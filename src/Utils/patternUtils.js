@@ -1,8 +1,8 @@
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
   let patterns = data.patternData;
-  if (selectedPattern === "All Reversal Patterns") {
+  if (selectedPattern === "All Reversal Patterns" || strategiesData) {
     patterns = data.patternData && data.patternData[0];
-    let keys = patterns && Object.keys(patterns);
+    let keys = data?.pattern_name_list || (patterns && Object.keys(patterns));
     patterns = data.patternData.map((m) => {
       let ans = 0;
       if (Array.isArray(keys)) {
@@ -17,14 +17,6 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
       return ans;
     });
   }
-  patterns =
-    strategiesData?.["bearish_data"]?.map(
-      (m, i) =>
-        m?.["Bearish Double Close Outside Bar"] ||
-        strategiesData?.["bullish_data"]?.[i]?.[
-          "Bullish Double Close Outside Bar"
-        ]
-    ) || patterns;
 
   return patterns?.length
     ? [
@@ -70,14 +62,31 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
     : [];
 };
 
-export const drawPatternTriggers = (data) => {
+export const drawPatternTriggers = (data, strategiesData) => {
   let patterns = data.patternTrigger;
+
+  if (strategiesData) {
+    let keys = data.pattern_name_list;
+    patterns = data.patternTrigger.map((m) => {
+      let ans = null;
+      if (Array.isArray(keys)) {
+        for (let key of keys) {
+          if (m[key]?.trigger) {
+            ans = m[key];
+            break;
+          }
+        }
+      }
+      return ans;
+    });
+  }
+
   return patterns?.length
     ? [
         {
           x: data?.x,
           y: patterns?.map((m, i) => {
-            if (m.trigger) {
+            if (m?.trigger) {
               return Number(m.trigger_value);
             }
             return null;
@@ -86,13 +95,13 @@ export const drawPatternTriggers = (data) => {
           mode: "markers",
           marker: {
             color: patterns?.map((m, i) => {
-              if (m.trigger) {
+              if (m?.trigger) {
                 return "red";
               }
               return null;
             }),
             symbol: patterns.map((m, i) => {
-              if (m.trigger) {
+              if (m?.trigger) {
                 return "x";
               }
               return null;
@@ -105,7 +114,7 @@ export const drawPatternTriggers = (data) => {
           x: data?.x,
           y: patterns?.map((m, i) => {
             let perc10 = ((data.max - data.min) / 100) * 2.5;
-            if (m.trigger_failure) {
+            if (m?.trigger_failure) {
               if (data.close[i] > data.open[i]) {
                 return m?.trigger_failure_value - perc10;
               } else {
@@ -118,7 +127,7 @@ export const drawPatternTriggers = (data) => {
           mode: "markers",
           marker: {
             color: patterns?.map((m, i) => {
-              if (m.trigger_failure) {
+              if (m?.trigger_failure) {
                 if (data.close[i] < data.open[i]) {
                   return "red";
                 }
@@ -127,7 +136,7 @@ export const drawPatternTriggers = (data) => {
               return null;
             }),
             symbol: patterns.map((m, i) => {
-              if (m.trigger_failure) {
+              if (m?.trigger_failure) {
                 if (data.close[i] < data.open[i]) {
                   return "triangle-down";
                 }

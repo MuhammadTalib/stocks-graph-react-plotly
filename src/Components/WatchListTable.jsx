@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { visuallyHidden } from "@mui/utils";
 import React from "react";
+
 import WatchListRow from "./WatchListRow";
 
 const WatchListTable = ({
@@ -51,7 +52,7 @@ const WatchListTable = ({
               strategiesData[0].data?.[selectedStock?.name]?.value !== "temp"
                 ? selectedStrategy.map((m) => {
                     return {
-                      label: m.name,
+                      label: m,
                       numeric: false,
                     };
                   })
