@@ -149,7 +149,6 @@ export function DefaultChart({
           ),
         ]}
         loader={loader}
-        strategiesData={strategiesData?.[selectedStock.name]}
         setLayout={setLayout}
         dualChartWidth={dualChartWidth}
         sidebarWidth={sidebarWidth}

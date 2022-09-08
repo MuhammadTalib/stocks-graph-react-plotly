@@ -171,7 +171,11 @@ export const drawSeparateChart = (selectedTemp, data, pointIndex) => {
 
 export const drawStrategiesBar = (strategiesData, data) => {
   let dateIndex =
-    strategiesData && data.x.findIndex((f) => f === strategiesData.time);
+    strategiesData &&
+    data.patternData.findLastIndex((f) => {
+      return Object.values(f).includes(1);
+    });
+
   return strategiesData && dateIndex >= 0
     ? [
         {

@@ -115,7 +115,25 @@ const WatchList = ({
     setOrderBy(property);
 
     setStocks(
-      stableSort(stocks, getComparator(isAsc ? "desc" : "asc", property))
+      stableSort(
+        stocks.map((m) => {
+          let obj = {};
+          selectedStrategy.forEach((s, i) => {
+            let t = strategiesData?.[i]?.data?.[m.name]?.time;
+            obj[s] = t ? new Date(t) : null;
+          });
+
+          return {
+            ...m,
+            Symbol: m.name,
+            Sources: m.sources[0],
+            Description: m.description,
+            Time: selectedTime.name,
+            ...obj,
+          };
+        }),
+        getComparator(isAsc ? "desc" : "asc", property, selectedStrategy)
+      )
     );
   };
 
@@ -243,6 +261,7 @@ const WatchList = ({
     selectedTime,
     selectedStrategy,
     strategiesData,
+    strategies,
   ]);
 
   const sidebarRef = useRef(null);

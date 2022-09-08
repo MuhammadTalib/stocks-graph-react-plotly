@@ -1,8 +1,10 @@
 import * as Plotly from "plotly.js";
 import React, { useEffect, useState } from "react";
 import createPlotlyComponent from "react-plotly.js/factory";
-import "../App.css";
+
 import { drawFirstDateLine, drawStrategiesBar } from "../Utils/utils";
+
+import "../App.css";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -17,7 +19,6 @@ export const Graph = ({
   onClick,
   toggleFirstDayLine,
   onDoubleClick,
-  strategiesData,
   id,
   setLayout,
   dualChartWidth,
@@ -57,7 +58,7 @@ export const Graph = ({
           ...layout,
           shapes: [
             ...drawFirstDateLine(toggleFirstDayLine, data),
-            ...drawStrategiesBar(strategiesData, data),
+            ...drawStrategiesBar(data.strategiesData, data),
           ],
         }}
         config={{
@@ -76,7 +77,7 @@ export const Graph = ({
               width: window.innerWidth - dualChartWidth - sidebarWidth,
               shapes: [
                 ...drawFirstDateLine(toggleFirstDayLine, data),
-                ...drawStrategiesBar(strategiesData, data),
+                ...drawStrategiesBar(data.strategiesData, data),
               ],
             });
           }
