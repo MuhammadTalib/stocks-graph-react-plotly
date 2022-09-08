@@ -48,15 +48,15 @@ const WatchListTable = ({
               { label: "Sources", numeric: false },
               { label: "Description", numeric: false },
               { label: "Time", numeric: false },
-              ...(strategiesData?.length &&
-              strategiesData[0].data?.[selectedStock?.name]?.value !== "temp"
-                ? selectedStrategy.map((m) => {
+              ...(strategiesData?.length
+                ? strategiesData.map((m) => {
                     return {
-                      label: m,
+                      label: m.name,
                       numeric: false,
                     };
                   })
                 : []),
+              // : []
             ].map((column, index) => (
               <TableCell
                 sx={{ minWidth: "100px" }}

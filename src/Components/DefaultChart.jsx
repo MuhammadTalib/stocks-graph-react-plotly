@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
@@ -40,24 +39,10 @@ export function DefaultChart({
 }) {
   const [data, setGraphData] = useState({ ...dummy });
   const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
-  const [strategiesData, setStrategiesData] = useState(null);
 
   useEffect(() => {
     setCurrentSelectedTemp(selectedTemp);
   }, [selectedTemp]);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     if (selectedStrategy && selectedStrategy.length) {
-  //       let stra = await axios.get(
-  //         `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${selectedStrategy[0]}`
-  //       );
-  //       setStrategiesData(stra?.data?.data);
-  //     }
-  //   }
-  //   fetchData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedStrategy, selectedCategory, selectedTime]);
 
   const [loader, setLoader] = useState(false);
 
@@ -82,7 +67,8 @@ export function DefaultChart({
         selectedTime,
         currentSelectedTemp,
         selectedPattern,
-        switchToggle
+        switchToggle,
+        data
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -152,6 +138,7 @@ export function DefaultChart({
         setLayout={setLayout}
         dualChartWidth={dualChartWidth}
         sidebarWidth={sidebarWidth}
+        selectedStrategy={selectedStrategy}
       />
     </>
   ) : (

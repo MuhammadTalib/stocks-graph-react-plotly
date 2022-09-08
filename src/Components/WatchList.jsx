@@ -38,6 +38,7 @@ const WatchList = ({
 }) => {
   const [strategies, setStrategies] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [selectedStraTemp, setSelectedStraTemp] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
   const [strategiesData, setStrategiesData] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -78,17 +79,28 @@ const WatchList = ({
 
   useEffect(() => {
     async function fetchData() {
-      if (selectedStrategy && selectedStrategy.length) {
+      if (selectedStraTemp && selectedStraTemp.length) {
+        let currStrategy = selectedStraTemp.pop();
         setLoader(true);
         let stra = await axios.get(
-          `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${selectedStrategy[0]}`
+          `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${currStrategy}`
         );
         setLoader(false);
-        setStrategiesData([{ data: stra.data.data }]);
+        setStrategiesData([
+          ...strategiesData,
+          { data: stra.data.data, name: currStrategy },
+        ]);
       }
     }
     fetchData();
-  }, [selectedStrategy, selectedCategory, selectedTime]);
+  }, [
+    selectedStrategy,
+    selectedCategory,
+    selectedTime,
+    selectedStraTemp.length,
+    selectedStraTemp,
+    strategiesData,
+  ]);
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 38) {
@@ -202,6 +214,7 @@ const WatchList = ({
               onChange={async (e, v) => {
                 if (v && v.length) {
                   setSelectedStrategy([...v]);
+                  setSelectedStraTemp([...v]);
                 }
               }}
               getOptionLabel={(option) => option}
@@ -262,6 +275,8 @@ const WatchList = ({
     selectedStrategy,
     strategiesData,
     strategies,
+    strategiesData.length,
+    selectedStrategy.length,
   ]);
 
   const sidebarRef = useRef(null);

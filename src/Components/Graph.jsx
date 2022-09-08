@@ -23,6 +23,7 @@ export const Graph = ({
   setLayout,
   dualChartWidth,
   sidebarWidth,
+  selectedStrategy,
 }) => {
   document
     .querySelector('[data-title="Autoscale"]')
@@ -58,7 +59,9 @@ export const Graph = ({
           ...layout,
           shapes: [
             ...drawFirstDateLine(toggleFirstDayLine, data),
-            ...drawStrategiesBar(data.strategiesData, data),
+            ...(selectedStrategy.length < 2
+              ? drawStrategiesBar(data.strategiesData, data)
+              : []),
           ],
         }}
         config={{

@@ -189,7 +189,6 @@ export const drawStrategiesBar = (strategiesData, data) => {
           line: {
             color: "#ffff00",
             width: 1.5,
-            // dash: "dot",
           },
           hoverinfo: "x",
           fillcolor: "#ffff00",
@@ -246,7 +245,17 @@ export function getDataRequestService(
   dataBaseUrl,
   selectedStrategy
 ) {
-  return async (stock, time, template, pattern, meta_trader_indicator) => {
+  return async (
+    stock,
+    time,
+    template,
+    pattern,
+    meta_trader_indicator,
+    data
+  ) => {
+    let prevPatternData = data.patternData;
+    let prevPatternTrigger = data.patternTrigger;
+
     document.querySelector('[data-title="Autoscale"]')?.click();
     if (!selectedCategory || !stock?.name || stock?.selectedSource) {
       return;
@@ -262,7 +271,9 @@ export function getDataRequestService(
       : `stocks/strategy_data_against_symbol?watch_list=${selectedCategory}&interval=${
           time.name
         }${
-          selectedStrategy.length ? "&strategy_name=" + selectedStrategy[0] : ""
+          selectedStrategy.length
+            ? "&strategy_name=" + selectedStrategy[selectedStrategy.length - 1]
+            : ""
         }&symbol=${stock.name?.toLowerCase()}&source=${
           stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
         }`;
@@ -278,7 +289,7 @@ export function getDataRequestService(
     await getAllStocks(url)
       .then((res) => {
         setLoader(false);
-        let pattern_name_list = res.data.patterns_list;
+        let pattern_name_list = res.data?.patterns_list;
         let responseData = [...res?.data?.data];
 
         let high = [];
@@ -308,7 +319,8 @@ export function getDataRequestService(
             resSeparate[key].data = [];
           });
 
-        responseData?.forEach((m) => {
+        responseData?.forEach((_m, ith) => {
+          let m = _m;
           high.push(m.high);
           low.push(m.low);
           open.push(m.open);
@@ -361,8 +373,11 @@ export function getDataRequestService(
                 arrowPattern[straIns] = m[straIns]?.pattern_end;
               }
             });
-            patternData.push(arrowPattern);
-            patternTrigger.push(crossPattern);
+            patternData.push({ ...arrowPattern, ...data.patternData[ith] });
+            patternTrigger.push({
+              ...crossPattern,
+              ...data.patternTrigger[ith],
+            });
           }
           x.push(new Date(m.date).toUTCString());
 
@@ -467,7 +482,13 @@ export function getDataRequestService(
           ConfrimLow,
           patternData,
           patternTrigger,
-          pattern_name_list,
+          pattern_name_list:
+            selectedStrategy.length > 0
+              ? [
+                  ...(data?.pattern_name_list || []),
+                  ...(pattern_name_list || []),
+                ]
+              : null,
           strategiesData: selectedStrategy.length ? true : false,
           elder_impulse_system,
           max: arrayMax(high),

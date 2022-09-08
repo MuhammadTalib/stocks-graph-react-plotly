@@ -1,10 +1,12 @@
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useRef, useState } from "react";
-import "./App.css";
+
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
 import { initialLayout, T0 } from "./Utils/defaults";
+
+import "./App.css";
 
 const useStyles = makeStyles(() => ({
   container: (sidebarWidth) => {
@@ -159,7 +161,9 @@ function App({ dataBaseUrl }) {
         sidebarWidth={sidebarWidth}
         enableDualChart={enableDualChart}
         selectedStrategy={selectedStrategy}
-        setSelectedStrategy={setSelectedStrategy}
+        setSelectedStrategy={(s) => {
+          setSelectedStrategy([...s]);
+        }}
         secondaryLayout={secondaryLayout}
         setSecondaryLayout={setSecondaryLayout}
       />

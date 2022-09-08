@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import { getTimeforSecondaryGraph } from "../Utils/utils";
 import { DefaultChart } from "./DefaultChart";
+
 const style = { width: "100%", height: "100%" };
 
 const GraphRenderer = ({
