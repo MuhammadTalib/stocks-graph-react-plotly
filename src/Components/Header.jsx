@@ -34,7 +34,6 @@ const Header = ({
 
   useEffect(() => {
     getAllStocks("stocks/patterns").then((res) => {
-      console.log("res", res);
       setPatterns(res?.data?.list || []);
     });
   }, []);

@@ -253,9 +253,6 @@ export function getDataRequestService(
     meta_trader_indicator,
     data
   ) => {
-    let prevPatternData = data.patternData;
-    let prevPatternTrigger = data.patternTrigger;
-
     document.querySelector('[data-title="Autoscale"]')?.click();
     if (!selectedCategory || !stock?.name || stock?.selectedSource) {
       return;
@@ -334,7 +331,9 @@ export function getDataRequestService(
           if (
             (m[pattern]?.pattern_end !== undefined ||
               m[pattern]?.trigger_value !== undefined) &&
-            m[pattern]?.trigger !== undefined
+            m[pattern]?.trigger !== undefined &&
+            pattern !== "All Failure Patterns" &&
+            pattern !== "All High/Low Patterns"
           ) {
             let patternObj = {
               trigger: m[pattern]?.trigger,
@@ -607,7 +606,17 @@ export const getTimeforSecondaryGraph = (time) => {
 };
 
 export const getOccuredReversalPatterns = (patternData, pointIndex) => {
-  let keys = patternData && patternData.length && Object.keys(patternData[0]);
+  let keys =
+    patternData &&
+    patternData.length &&
+    Object.keys(patternData[0]).filter((f) => {
+      return ![
+        "trigger",
+        "trigger_failure",
+        "trigger_failure_value",
+        "trigger_value",
+      ].find((t) => t === f);
+    });
   let occured = "";
   patternData.length &&
     Array.isArray(keys) &&

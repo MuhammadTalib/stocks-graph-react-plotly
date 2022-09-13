@@ -1,8 +1,22 @@
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
   let patterns = data.patternData;
-  if (selectedPattern === "All Reversal Patterns" || strategiesData) {
+  if (
+    selectedPattern === "All Reversal Patterns" ||
+    selectedPattern === "All Failure Patterns" ||
+    selectedPattern === "All High/Low Patterns" ||
+    strategiesData
+  ) {
     patterns = data.patternData && data.patternData[0];
-    let keys = data?.pattern_name_list || (patterns && Object.keys(patterns));
+    let keys =
+      data?.pattern_name_list ||
+      (patterns && Object.keys(patterns))?.filter((f) => {
+        return ![
+          "trigger",
+          "trigger_failure",
+          "trigger_failure_value",
+          "trigger_value",
+        ].find((t) => t === f);
+      });
     patterns = data.patternData.map((m) => {
       let ans = 0;
       if (Array.isArray(keys)) {

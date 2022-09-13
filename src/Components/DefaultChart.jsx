@@ -97,7 +97,10 @@ export function DefaultChart({
         }}
         selectedPattern={
           (data.patternData[pointIndex]
-            ? selectedPattern === "All Reversal Patterns" || data.strategiesData
+            ? selectedPattern === "All Reversal Patterns" ||
+              selectedPattern === "All Failure Patterns" ||
+              selectedPattern === "All High/Low Patterns" ||
+              data.strategiesData
               ? getOccuredReversalPatterns(data.patternData, pointIndex)
               : selectedPattern
             : undefined) ||

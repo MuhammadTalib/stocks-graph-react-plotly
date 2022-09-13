@@ -27,9 +27,7 @@ export const Graph = ({
 }) => {
   document
     .querySelector('[data-title="Autoscale"]')
-    ?.addEventListener("onclick", function (event) {
-      console.log("blah");
-    });
+    ?.addEventListener("onclick", function (event) {});
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
     let temp = [];
