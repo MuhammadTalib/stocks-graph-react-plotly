@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
 import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
@@ -45,6 +45,7 @@ export function DefaultChart({
   }, [selectedTemp]);
 
   const [loader, setLoader] = useState(false);
+  const prevCountRef = useRef();
 
   const getDataRequest = getDataRequestService(
     selectedCategory,
@@ -61,6 +62,12 @@ export function DefaultChart({
   );
 
   useEffect(() => {
+    let addPreviousStrategy = true;
+    if (selectedStock !== prevCountRef.current) {
+      addPreviousStrategy = false;
+    }
+    prevCountRef.current = selectedStock;
+
     selectedTime &&
       getDataRequest(
         selectedStock,
@@ -68,7 +75,8 @@ export function DefaultChart({
         currentSelectedTemp,
         selectedPattern,
         switchToggle,
-        data
+        data,
+        addPreviousStrategy
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

@@ -52,6 +52,9 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
           marker: {
             color: patterns?.map((m, i) => {
               if (m) {
+                if (selectedPattern === "All High/Low Patterns") {
+                  return "red";
+                }
                 if (data.close[i] < data.open[i]) {
                   return "red";
                 }
@@ -61,6 +64,9 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
             }),
             symbol: patterns.map((m, i) => {
               if (m) {
+                if (selectedPattern === "All High/Low Patterns") {
+                  return "x";
+                }
                 if (data.close[i] < data.open[i]) {
                   return "triangle-down";
                 }

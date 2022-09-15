@@ -251,7 +251,8 @@ export function getDataRequestService(
     template,
     pattern,
     meta_trader_indicator,
-    data
+    data,
+    addPreviousStrategy
   ) => {
     document.querySelector('[data-title="Autoscale"]')?.click();
     if (!selectedCategory || !stock?.name || stock?.selectedSource) {
@@ -332,7 +333,6 @@ export function getDataRequestService(
             (m[pattern]?.pattern_end !== undefined ||
               m[pattern]?.trigger_value !== undefined) &&
             m[pattern]?.trigger !== undefined &&
-            pattern !== "All Failure Patterns" &&
             pattern !== "All High/Low Patterns"
           ) {
             let patternObj = {
@@ -348,7 +348,7 @@ export function getDataRequestService(
                 trigger_failure_value: m[pattern]?.trigger_failure_value,
               };
             }
-            patternData.push(m[pattern]?.pattern_end);
+            patternData.push(m[pattern]);
             patternTrigger.push(patternObj);
           } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
@@ -372,10 +372,13 @@ export function getDataRequestService(
                 arrowPattern[straIns] = m[straIns]?.pattern_end;
               }
             });
-            patternData.push({ ...arrowPattern, ...data.patternData[ith] });
+            patternData.push({
+              ...arrowPattern,
+              ...(addPreviousStrategy ? data.patternData[ith] : []),
+            });
             patternTrigger.push({
               ...crossPattern,
-              ...data.patternTrigger[ith],
+              ...(addPreviousStrategy ? data.patternTrigger[ith] : []),
             });
           }
           x.push(new Date(m.date).toUTCString());
