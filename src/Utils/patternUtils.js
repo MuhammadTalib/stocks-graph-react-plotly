@@ -1,8 +1,10 @@
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
+  if (selectedPattern === "All Failure Patterns") {
+    return [];
+  }
   let patterns = data.patternData;
   if (
     selectedPattern === "All Reversal Patterns" ||
-    selectedPattern === "All Failure Patterns" ||
     selectedPattern === "All High/Low Patterns" ||
     strategiesData
   ) {
@@ -27,11 +29,9 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
           }
         }
       }
-
       return ans;
     });
   }
-
   return patterns?.length
     ? [
         {
@@ -86,7 +86,16 @@ export const drawPatternTriggers = (data, strategiesData) => {
   let patterns = data.patternTrigger;
 
   if (strategiesData) {
-    let keys = data.pattern_name_list;
+    let keys =
+      data.pattern_name_list ||
+      (patterns && Object.keys(patterns))?.filter((f) => {
+        return ![
+          "trigger",
+          "trigger_failure",
+          "trigger_failure_value",
+          "trigger_value",
+        ].find((t) => t === f);
+      });
     patterns = data.patternTrigger.map((m) => {
       let ans = null;
       if (Array.isArray(keys)) {

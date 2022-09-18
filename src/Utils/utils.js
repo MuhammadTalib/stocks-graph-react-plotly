@@ -323,6 +323,7 @@ export function getDataRequestService(
           low.push(m.low);
           open.push(m.open);
           close.push(m.close);
+          x.push(new Date(m.date).toUTCString());
 
           if (meta_trader_indicator) {
             ConfrimHigh.push(m["meta-indicators"]["Confrim High"]);
@@ -348,7 +349,11 @@ export function getDataRequestService(
                 trigger_failure_value: m[pattern]?.trigger_failure_value,
               };
             }
-            patternData.push(m[pattern]);
+            if (pattern === "All Failure Patterns") {
+              patternData.push(m[pattern]);
+            } else {
+              patternData.push(m[pattern]?.pattern_end);
+            }
             patternTrigger.push(patternObj);
           } else if (m[pattern] !== undefined) {
             patternData.push(m[pattern]);
@@ -381,7 +386,6 @@ export function getDataRequestService(
               ...(addPreviousStrategy ? data.patternTrigger[ith] : []),
             });
           }
-          x.push(new Date(m.date).toUTCString());
 
           if (template) {
             tempMerged &&

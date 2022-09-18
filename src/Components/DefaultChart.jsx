@@ -134,8 +134,9 @@ export function DefaultChart({
         templates={[
           ...drawMergedChart(currentSelectedTemp, data, pointIndex, graphType), //templates T1 , T2 , T3
           ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
-          ...drawPatternData(data, selectedPattern, data.strategiesData),
-          ...drawPatternTriggers(data, data.strategiesData),
+          ...(drawPatternData(data, selectedPattern, data.strategiesData) ||
+            []),
+          ...(drawPatternTriggers(data, data.strategiesData) || []),
         ]}
         separateGraphs={[
           ...drawSeparateChart(
