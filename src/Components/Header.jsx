@@ -81,11 +81,14 @@ const Header = ({
       </Grid>
       <Grid item md={2}>
         <AutocompleteWrapper
-          options={[0, 1, 2, 3, 4]}
+          options={["0", 1, 2, 3, 4]}
           value={switchToggle}
           label={"MT4"}
           handleChange={handlSwitchToggle}
           selectedStock={selectedStock}
+          getOptionLabel={(option) => {
+            return option;
+          }}
         />
       </Grid>
       <Grid item xs={2}>
@@ -96,7 +99,7 @@ const Header = ({
           handleChange={hanldeSelectedTime}
           selectedStock={selectedStock}
           getOptionLabel={(option) => {
-            return option ? option?.name : null;
+            return option ? option?.name : "";
           }}
         />
       </Grid>
@@ -141,7 +144,7 @@ const Header = ({
                 </Button>
               </>
             ) : (
-              <></>
+              <Button></Button>
             )}
           </ButtonGroup>
         ) : (

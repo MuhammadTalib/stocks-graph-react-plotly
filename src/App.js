@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
@@ -38,13 +38,11 @@ function App({ dataBaseUrl }) {
   });
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
-  const [selectedStrategy, setSelectedStrategy] = useState([]);
+  const [selectedStrategy, setSelectedStrategy1] = useState([]);
 
   const handleGrapthType = (type) => {
     setGraphType(type);
   };
-
-  useEffect(() => {}, []);
 
   React.useEffect(() => {
     function handleResize() {
@@ -93,6 +91,11 @@ function App({ dataBaseUrl }) {
     const amountToScroll =
       LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS + index * LIST_ITEM_HEIGHT;
     scrollableListRef.current.scrollTo(amountToScroll, 0);
+  };
+
+  const handleChangeSelectedStrategy = (s) => {
+    console.log("s", s);
+    setSelectedStrategy1([...s]);
   };
 
   return (
@@ -161,9 +164,7 @@ function App({ dataBaseUrl }) {
         sidebarWidth={sidebarWidth}
         enableDualChart={enableDualChart}
         selectedStrategy={selectedStrategy}
-        setSelectedStrategy={(s) => {
-          setSelectedStrategy([...s]);
-        }}
+        setSelectedStrategy={handleChangeSelectedStrategy}
         secondaryLayout={secondaryLayout}
         setSecondaryLayout={setSecondaryLayout}
       />

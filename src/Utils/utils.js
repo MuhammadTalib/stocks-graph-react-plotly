@@ -251,8 +251,7 @@ export function getDataRequestService(
     template,
     pattern,
     meta_trader_indicator,
-    data,
-    addPreviousStrategy
+    data
   ) => {
     document.querySelector('[data-title="Autoscale"]')?.click();
     if (!selectedCategory || !stock?.name || stock?.selectedSource) {
@@ -266,25 +265,28 @@ export function getDataRequestService(
         }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
           stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
         }&interval=${time.name}`
-      : `stocks/strategy_data_against_symbol?watch_list=${selectedCategory}&interval=${
-          time.name
-        }${
-          selectedStrategy.length
-            ? "&strategy_name=" + selectedStrategy[selectedStrategy.length - 1]
-            : ""
-        }&symbol=${stock.name?.toLowerCase()}&source=${
-          stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
-        }`;
-    if (template && template?.id > 0) {
-      url = url + `&template=${template.id}`;
+      : `stocks/strategy_data_against_symbol`;
+
+    if (!selectedStrategy.length) {
+      if (template && template?.id > 0) {
+        url = url + `&template=${template.id}`;
+      }
+      if (pattern?.length) {
+        url = url + `&pattern=${pattern}`;
+      }
+      if (meta_trader_indicator) {
+        url = url + `&meta_template=${meta_trader_indicator}`;
+      }
     }
-    if (pattern?.length) {
-      url = url + `&pattern=${pattern}`;
-    }
-    if (meta_trader_indicator) {
-      url = url + `&meta_template=${meta_trader_indicator}`;
-    }
-    await getAllStocks(url)
+
+    await getAllStocks(url, selectedStrategy.length ? "post" : null, {
+      watch_list: selectedCategory,
+      interval: time.name,
+      symbol: stock.name?.toLowerCase(),
+      strategies: selectedStrategy,
+      source:
+        stock?.selectedSource || (stock?.sources?.length && stock.sources[0]),
+    })
       .then((res) => {
         setLoader(false);
         let pattern_name_list = res.data?.patterns_list;
@@ -362,7 +364,7 @@ export function getDataRequestService(
           if (selectedStrategy.length) {
             let arrowPattern = {};
             let crossPattern = {};
-            pattern_name_list.map((straIns) => {
+            pattern_name_list.forEach((straIns) => {
               if (
                 (m[straIns]?.pattern_end !== undefined ||
                   m[straIns]?.trigger_value !== undefined) &&
@@ -379,11 +381,11 @@ export function getDataRequestService(
             });
             patternData.push({
               ...arrowPattern,
-              ...(addPreviousStrategy ? data.patternData[ith] : []),
+              // ...(addPreviousStrategy ? data.patternData[ith] : []),
             });
             patternTrigger.push({
               ...crossPattern,
-              ...(addPreviousStrategy ? data.patternTrigger[ith] : []),
+              // ...(addPreviousStrategy ? data.patternTrigger[ith] : []),
             });
           }
 

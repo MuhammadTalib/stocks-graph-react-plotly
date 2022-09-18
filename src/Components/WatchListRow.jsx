@@ -32,10 +32,10 @@ const WatchListRow = ({
       </TableCell>
       <TableCell align={"center"}>{row?.description || "-"}</TableCell>
       <TableCell align={"center"}>{selectedTime.name}</TableCell>
-      {strategiesData.map((m) =>
+      {strategiesData.map((m, i) =>
         m?.data?.[row?.name]?.value &&
         m?.data?.[row?.name]?.value !== "temp" ? (
-          <TableCell align={"center"}>
+          <TableCell key={i} align={"center"}>
             {m?.data?.[row?.name]?.value !== "temp"
               ? m?.data?.[row?.name]?.value + ", "
               : " "}

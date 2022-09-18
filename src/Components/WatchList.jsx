@@ -44,7 +44,8 @@ const WatchList = ({
   const [loader, setLoader] = useState(false);
   const [selectedTime, setSelectedTime] = useState({
     name: "1d",
-    ms: 86400000,
+    desc: "1 Day",
+    ms: 86400000 * 1,
   });
 
   useEffect(() => {
@@ -79,27 +80,32 @@ const WatchList = ({
 
   useEffect(() => {
     async function fetchData() {
-      if (selectedStraTemp && selectedStraTemp.length) {
-        let currStrategy = selectedStraTemp.pop();
+      if (selectedStrategy && selectedStrategy.length) {
+        let currStrategy = selectedStrategy.pop();
         setLoader(true);
         let stra = await axios.get(
           `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${currStrategy}`
         );
         setLoader(false);
+
         setStrategiesData([
           ...strategiesData,
           { data: stra.data.data, name: currStrategy },
         ]);
+      } else {
+        setStrategiesData(
+          strategiesData.filter((f) => {
+            return selectedStrategy.find((ii) => ii === f.name);
+          })
+        );
       }
     }
     fetchData();
   }, [
-    selectedStrategy,
     selectedCategory,
     selectedTime,
     selectedStraTemp.length,
     selectedStraTemp,
-    strategiesData,
   ]);
 
   const handleKeyDown = (e) => {
@@ -155,7 +161,8 @@ const WatchList = ({
         <Grid container item md={12} sm={12} xs={12} spacing={2}>
           <Grid item md={3} sm={3} xs={3}>
             <Autocomplete
-              blurOnSelect
+              selectOnFocus={false}
+              blurOnSelect={"touch"}
               onChange={(_, newValue) => {
                 setSelectedCategory(newValue);
               }}
@@ -187,7 +194,7 @@ const WatchList = ({
               fullWidth
               disableClearable={true}
               getOptionLabel={(option) => {
-                return option ? option?.name : null;
+                return option ? option?.name : "";
               }}
               options={times}
               value={selectedTime}
@@ -214,10 +221,10 @@ const WatchList = ({
               onChange={async (e, v) => {
                 if (v && v.length) {
                   setSelectedStrategy([...v]);
-                  setSelectedStraTemp([...v]);
+                  // setSelectedStraTemp([...v]);
                 }
               }}
-              getOptionLabel={(option) => option}
+              getOptionLabel={(option) => option || ""}
               renderOption={(props, option, { selected }) => (
                 <li {...props}>
                   <Checkbox

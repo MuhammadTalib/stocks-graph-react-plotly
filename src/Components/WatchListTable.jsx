@@ -56,7 +56,6 @@ const WatchListTable = ({
                     };
                   })
                 : []),
-              // : []
             ].map((column, index) => (
               <TableCell
                 sx={{ minWidth: "100px" }}
