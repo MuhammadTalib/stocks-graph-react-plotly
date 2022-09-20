@@ -12,6 +12,8 @@ const AutocompleteWrapper = ({
   selectedStock,
   getOptionLabel,
   renderOption,
+  multiple,
+  renderInput,
 }) => {
   const [openPatternDropdown, setOpenPatternDropdown] = useState(false);
   let patternRef = useRef(null);
@@ -43,11 +45,12 @@ const AutocompleteWrapper = ({
           handleChange(newValue);
         }}
         fullWidth
+        multiple={multiple ? true : false}
         open={openPatternDropdown}
+        options={[...options]}
         onBlur={() => {
           setOpenPatternDropdown(false);
         }}
-        options={[...options]}
         onMouseLeave={() => {
           patternRef.current.click();
         }}
@@ -61,9 +64,10 @@ const AutocompleteWrapper = ({
         defaultValue={options.find((v) => v[0])}
         PaperComponent={CustomPaper}
         getOptionLabel={getOptionLabel && getOptionLabel}
+        renderOption={renderOption && renderOption}
         renderInput={
-          renderOption
-            ? renderOption
+          renderInput
+            ? renderInput
             : (params) => (
                 <TextField
                   {...params}

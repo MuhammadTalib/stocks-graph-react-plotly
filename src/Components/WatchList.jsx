@@ -8,6 +8,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getAllStocks } from "../services/api";
 import { times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
+import AutocompleteWrapper from "./AutocompleteWrapper";
 import WatchListTable from "./WatchListTable";
 
 import "../App.css";
@@ -123,90 +124,54 @@ const WatchList = ({
       )
     );
   };
-
-  const [openPatternDropdown, setOpenDropdown] = useState(false);
   let dropdownRef = useRef(null);
+  const [openPatternDropdown, setOpenDropdown] = useState(false);
 
   const stock = useMemo(() => {
     return (
-      <Grid container>
+      <Grid container style={{ margin: "0px 6px" }}>
         <Grid container item md={12} sm={12} xs={12} spacing={2}>
           <Grid item md={3} sm={3} xs={3}>
-            <Autocomplete
-              selectOnFocus={false}
-              blurOnSelect={"touch"}
-              onChange={(_, newValue) => {
-                setSelectedCategory(newValue);
-              }}
-              fullWidth
-              id="free-solo-2-demo"
+            <AutocompleteWrapper
               options={categories}
-              disableListWrap
               value={selectedCategory}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Categrories"
-                  variant="standard"
-                  InputProps={{
-                    ...params.InputProps,
-                    type: "search",
-                  }}
-                />
-              )}
+              label={"Categrories"}
+              handleChange={setSelectedCategory}
+              selectedStock={selectedStock}
             />
           </Grid>
           <Grid item md={2} sm={2} xs={2}>
-            <Autocomplete
-              blurOnSelect
-              onChange={(_, newValue) => {
+            <AutocompleteWrapper
+              options={times}
+              value={selectedTime}
+              label={"Time"}
+              handleChange={(newValue) => {
                 setSelectedTime(newValue);
                 hanldeSelectedTime(newValue);
               }}
-              fullWidth
-              disableClearable={true}
+              selectedStock={selectedStock}
               getOptionLabel={(option) => {
                 return option ? option?.name : "";
               }}
-              options={times}
-              value={selectedTime}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Time"
-                  variant="standard"
-                  InputProps={{
-                    ...params.InputProps,
-                    type: "search",
-                  }}
-                />
-              )}
             />
           </Grid>
           <Grid item md={7} sm={7} xs={7}>
-            <div
-              ref={dropdownRef}
-              onMouseLeave={() => {
-                setOpenDropdown(false);
+            <AutocompleteWrapper
+              options={strategies}
+              value={selectedStrategy}
+              label={"Strategies"}
+              handleChange={(v) => {
+                if (v && v.length) {
+                  setSelectedStrategy([...v]);
+                } else {
+                  setSelectedStrategy([]);
+                }
               }}
-            >
-              {" "}
-              <Autocomplete
-                multiple
-                id="checkboxes-tags-demo"
-                limitTags={1}
-                size="small"
-                options={strategies}
-                open={openPatternDropdown}
-                onChange={async (e, v) => {
-                  if (v && v.length) {
-                    setSelectedStrategy([...v]);
-                  } else {
-                    setSelectedStrategy([]);
-                  }
-                }}
-                getOptionLabel={(option) => option || ""}
-                renderOption={(props, option, { selected }) => (
+              selectedStock={selectedStock}
+              multiple={true}
+              renderOption={(props, option, s) => {
+                let selected = s?.selected;
+                return (
                   <li {...props}>
                     <Checkbox
                       icon={icon}
@@ -215,16 +180,9 @@ const WatchList = ({
                     />
                     {option}
                   </li>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Strategies"
-                    placeholder="Strategies"
-                  />
-                )}
-              />
-            </div>
+                );
+              }}
+            />
           </Grid>
         </Grid>
 
