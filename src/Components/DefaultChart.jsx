@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
 import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
-import {
-  drawConfirmHighAndLow,
-  drawMergedChart,
-  drawSeparateChart,
-  getDataRequestService,
-  getOccuredReversalPatterns,
-} from "../Utils/utils";
+import { drawConfirmHighAndLow, drawMergedChart, drawSeparateChart, getDataRequestService, getOccuredReversalPatterns } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
 
@@ -36,6 +30,8 @@ export function DefaultChart({
   sidebarWidth,
   dualChartWidth,
   dataBaseUrl,
+  setStrategiesData,
+  strategiesData,
 }) {
   const [data, setGraphData] = useState({ ...dummy });
   const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
@@ -58,7 +54,9 @@ export function DefaultChart({
     enableDualChart,
     sidebarWidth,
     dataBaseUrl,
-    selectedStrategy
+    selectedStrategy,
+    setStrategiesData,
+    strategiesData
   );
 
   useEffect(() => {

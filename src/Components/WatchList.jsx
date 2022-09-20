@@ -35,12 +35,11 @@ const WatchList = ({
   setSelectedStrategy,
   secondaryLayout,
   setSecondaryLayout,
+  strategiesData,
 }) => {
   const [strategies, setStrategies] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedStraTemp, setSelectedStraTemp] = useState([]);
   const [selectedStockIndex, setSelectStockIndex] = useState(0);
-  const [strategiesData, setStrategiesData] = useState([]);
   const [loader, setLoader] = useState(false);
   const [selectedTime, setSelectedTime] = useState({
     name: "1d",
@@ -77,36 +76,6 @@ const WatchList = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
-
-  useEffect(() => {
-    async function fetchData() {
-      if (selectedStrategy && selectedStrategy.length) {
-        let currStrategy = selectedStrategy.pop();
-        setLoader(true);
-        let stra = await axios.get(
-          `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${selectedTime.name}&strategy_name=${currStrategy}`
-        );
-        setLoader(false);
-
-        setStrategiesData([
-          ...strategiesData,
-          { data: stra.data.data, name: currStrategy },
-        ]);
-      } else {
-        setStrategiesData(
-          strategiesData.filter((f) => {
-            return selectedStrategy.find((ii) => ii === f.name);
-          })
-        );
-      }
-    }
-    fetchData();
-  }, [
-    selectedCategory,
-    selectedTime,
-    selectedStraTemp.length,
-    selectedStraTemp,
-  ]);
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 38) {
@@ -154,6 +123,9 @@ const WatchList = ({
       )
     );
   };
+
+  const [openPatternDropdown, setOpenDropdown] = useState(false);
+  let dropdownRef = useRef(null);
 
   const stock = useMemo(() => {
     return (
@@ -212,37 +184,47 @@ const WatchList = ({
             />
           </Grid>
           <Grid item md={7} sm={7} xs={7}>
-            <Autocomplete
-              multiple
-              id="checkboxes-tags-demo"
-              limitTags={1}
-              size="small"
-              options={strategies}
-              onChange={async (e, v) => {
-                if (v && v.length) {
-                  setSelectedStrategy([...v]);
-                  // setSelectedStraTemp([...v]);
-                }
+            <div
+              ref={dropdownRef}
+              onMouseLeave={() => {
+                setOpenDropdown(false);
               }}
-              getOptionLabel={(option) => option || ""}
-              renderOption={(props, option, { selected }) => (
-                <li {...props}>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    checked={selected}
+            >
+              {" "}
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                limitTags={1}
+                size="small"
+                options={strategies}
+                open={openPatternDropdown}
+                onChange={async (e, v) => {
+                  if (v && v.length) {
+                    setSelectedStrategy([...v]);
+                  } else {
+                    setSelectedStrategy([]);
+                  }
+                }}
+                getOptionLabel={(option) => option || ""}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      checked={selected}
+                    />
+                    {option}
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Strategies"
+                    placeholder="Strategies"
                   />
-                  {option}
-                </li>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Strategies"
-                  placeholder="Strategies"
-                />
-              )}
-            />
+                )}
+              />
+            </div>
           </Grid>
         </Grid>
 
@@ -283,7 +265,7 @@ const WatchList = ({
     strategiesData,
     strategies,
     strategiesData.length,
-    selectedStrategy.length,
+    // selectedStrategy.length,
   ]);
 
   const sidebarRef = useRef(null);

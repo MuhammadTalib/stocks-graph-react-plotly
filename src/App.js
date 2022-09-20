@@ -26,6 +26,7 @@ function App({ dataBaseUrl }) {
   const scrollableListRef = useRef(null);
   const [selectedStock, setSelectStock] = useState("MMM");
   const [selectedPattern, setSelectedPattern] = useState(null);
+  const [strategiesData, setStrategiesData] = useState([]);
   const [selectedTime, setSelectTime] = useState({
     name: "1d",
     ms: 86400000,
@@ -94,7 +95,6 @@ function App({ dataBaseUrl }) {
   };
 
   const handleChangeSelectedStrategy = (s) => {
-    console.log("s", s);
     setSelectedStrategy1([...s]);
   };
 
@@ -143,6 +143,8 @@ function App({ dataBaseUrl }) {
             secondaryLayout={secondaryLayout}
             setSecondaryLayout={setSecondaryLayout}
             dataBaseUrl={dataBaseUrl}
+            setStrategiesData={setStrategiesData}
+            strategiesData={strategiesData}
           />
         </div>
       </div>
@@ -167,6 +169,7 @@ function App({ dataBaseUrl }) {
         setSelectedStrategy={handleChangeSelectedStrategy}
         secondaryLayout={secondaryLayout}
         setSecondaryLayout={setSecondaryLayout}
+        strategiesData={strategiesData}
       />
     </div>
   );

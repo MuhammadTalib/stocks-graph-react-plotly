@@ -23,6 +23,8 @@ const GraphRenderer = ({
   secondaryLayout,
   setSecondaryLayout,
   dataBaseUrl,
+  setStrategiesData,
+  strategiesData,
 }) => {
   const [secondaryChartTime, setSecondayChartTime] = useState(null);
 
@@ -146,6 +148,8 @@ const GraphRenderer = ({
             sidebarWidth={sidebarWidth}
             dualChartWidth={dualChartWidth}
             dataBaseUrl={dataBaseUrl}
+            setStrategiesData={setStrategiesData}
+            strategiesData={strategiesData}
           />
         </div>
       </div>
@@ -196,6 +200,8 @@ const GraphRenderer = ({
                 sidebarWidth={sidebarWidth}
                 dualChartWidth={dualChartWidth}
                 dataBaseUrl={dataBaseUrl}
+                setStrategiesData={setStrategiesData}
+                strategiesData={strategiesData}
               />
             </div>
           </div>

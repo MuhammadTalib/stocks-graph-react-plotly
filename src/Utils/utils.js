@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { getAllStocks } from "../services/api";
 import { dummy, months, rightMargin } from "./defaults";
 
@@ -243,7 +245,9 @@ export function getDataRequestService(
   enableDualChart,
   sidebarWidth,
   dataBaseUrl,
-  selectedStrategy
+  selectedStrategy,
+  setStrategiesData,
+  strategiesData
 ) {
   return async (
     stock,
@@ -254,20 +258,44 @@ export function getDataRequestService(
     data
   ) => {
     document.querySelector('[data-title="Autoscale"]')?.click();
+    let strategiesLength = selectedStrategy?.length;
+
+    if (strategiesLength) {
+      let currStrategy = selectedStrategy[strategiesLength - 1];
+      setLoader(true);
+      let stra = await axios.get(
+        `stocks/get_strategy_watchlist?watch_list=${selectedCategory}&interval=${time.name}&strategy_name=${currStrategy}`
+      );
+      setLoader(false);
+
+      setStrategiesData([
+        ...strategiesData,
+        { data: stra.data.data, name: currStrategy },
+      ]);
+    } else {
+      setStrategiesData(
+        strategiesData.filter((f) => {
+          return selectedStrategy.find((ii) => ii === f.name);
+        })
+      );
+    }
+
     if (!selectedCategory || !stock?.name || stock?.selectedSource) {
       return;
     }
     setLoader(true);
 
-    let url = !selectedStrategy.length
-      ? `stocks${
-          dataBaseUrl || ""
-        }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
-          stock?.selectedSource || (stock?.sources?.length && stock.sources[0])
-        }&interval=${time.name}`
-      : `stocks/strategy_data_against_symbol`;
+    let url =
+      strategiesLength > 0
+        ? `stocks/strategy_data_against_symbol`
+        : `stocks${
+            dataBaseUrl || ""
+          }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
+            stock?.selectedSource ||
+            (stock?.sources?.length && stock.sources[0])
+          }&interval=${time.name}`;
 
-    if (!selectedStrategy.length) {
+    if (strategiesLength <= 0) {
       if (template && template?.id > 0) {
         url = url + `&template=${template.id}`;
       }
@@ -279,7 +307,7 @@ export function getDataRequestService(
       }
     }
 
-    await getAllStocks(url, selectedStrategy.length ? "post" : null, {
+    await getAllStocks(url, strategiesLength ? "post" : null, {
       watch_list: selectedCategory,
       interval: time.name,
       symbol: stock.name?.toLowerCase(),
