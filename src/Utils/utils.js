@@ -268,10 +268,16 @@ export function getDataRequestService(
       );
       setLoader(false);
 
-      setStrategiesData([
-        ...strategiesData,
-        { data: stra.data.data, name: currStrategy },
-      ]);
+      setStrategiesData(
+        [
+          ...new Map(
+            [
+              ...strategiesData,
+              { data: stra.data.data, name: currStrategy },
+            ].map((item) => [item["name"], item])
+          ).values(),
+        ].filter((f) => selectedStrategy.includes(f.name))
+      );
     } else {
       setStrategiesData(
         strategiesData.filter((f) => {

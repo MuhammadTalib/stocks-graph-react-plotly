@@ -1,8 +1,6 @@
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { Checkbox, Grid, TextField } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import axios from "axios";
+import { Checkbox, Grid } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { getAllStocks } from "../services/api";
@@ -124,8 +122,6 @@ const WatchList = ({
       )
     );
   };
-  let dropdownRef = useRef(null);
-  const [openPatternDropdown, setOpenDropdown] = useState(false);
 
   const stock = useMemo(() => {
     return (
@@ -159,7 +155,7 @@ const WatchList = ({
             <AutocompleteWrapper
               options={strategies}
               value={selectedStrategy}
-              label={"Strategies"}
+              label="Strategies"
               handleChange={(v) => {
                 if (v && v.length) {
                   setSelectedStrategy([...v]);
@@ -283,7 +279,6 @@ const WatchList = ({
 
   return (
     <div
-      onKeyDown={handleKeyDown}
       ref={sidebarRef}
       className="app-sidebar"
       style={{

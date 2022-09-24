@@ -39,7 +39,7 @@ function App({ dataBaseUrl }) {
   });
   const [selectedTemp, setSelectedTemp] = useState(T0);
   const [switchToggle, setSwitchToggle] = useState(0);
-  const [selectedStrategy, setSelectedStrategy1] = useState([]);
+  const [selectedStrategy, setSelectedStrategy] = useState([]);
 
   const handleGrapthType = (type) => {
     setGraphType(type);
@@ -65,6 +65,8 @@ function App({ dataBaseUrl }) {
 
   const handlePatternChange = (pattern) => {
     setSelectedPattern(pattern);
+    setSelectedStrategy([]);
+    setStrategiesData([]);
   };
 
   const handleStockChange = (stock) => {
@@ -95,7 +97,8 @@ function App({ dataBaseUrl }) {
   };
 
   const handleChangeSelectedStrategy = (s) => {
-    setSelectedStrategy1([...s]);
+    setSelectedStrategy([...s]);
+    setSelectedPattern(null);
   };
 
   return (

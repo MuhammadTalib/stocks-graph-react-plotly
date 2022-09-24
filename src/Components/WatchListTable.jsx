@@ -49,12 +49,14 @@ const WatchListTable = ({
               { label: "Description", numeric: false },
               { label: "Time", numeric: false },
               ...(strategiesData?.length
-                ? strategiesData.map((m) => {
-                    return {
-                      label: m.name,
-                      numeric: false,
-                    };
-                  })
+                ? [...new Set(strategiesData.map((item) => item.name))].map(
+                    (m) => {
+                      return {
+                        label: m,
+                        numeric: false,
+                      };
+                    }
+                  )
                 : []),
             ].map((column, index) => (
               <TableCell
