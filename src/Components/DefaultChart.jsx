@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
 import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
-import { drawConfirmHighAndLow, drawMergedChart, drawSeparateChart, getDataRequestService, getOccuredReversalPatterns } from "../Utils/utils";
+import {
+  drawConfirmHighAndLow,
+  drawMergedChart,
+  drawSeparateChart,
+  getDataRequestService,
+  getOccuredReversalPatterns,
+} from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
 
@@ -105,6 +111,7 @@ export function DefaultChart({
           (data.patternData[pointIndex]
             ? selectedPattern === "All Reversal Patterns" ||
               selectedPattern === "All Failure Patterns" ||
+              selectedPattern === "T3 Down" ||
               selectedPattern === "All High/Low Patterns" ||
               data.strategiesData
               ? getOccuredReversalPatterns(data.patternData, pointIndex)

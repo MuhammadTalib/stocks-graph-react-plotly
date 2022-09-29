@@ -5,6 +5,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
   let patterns = data.patternData;
   if (
     selectedPattern === "All Reversal Patterns" ||
+    selectedPattern === "T3 Down" ||
     selectedPattern === "All High/Low Patterns" ||
     strategiesData
   ) {
@@ -24,7 +25,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
       if (Array.isArray(keys)) {
         for (let key of keys) {
           if (m[key]) {
-            ans = 1;
+            ans = selectedPattern === "T3 Down" ? m?.["pattern_end"] : 1;
             break;
           }
         }

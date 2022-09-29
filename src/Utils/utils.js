@@ -385,7 +385,7 @@ export function getDataRequestService(
                 trigger_failure_value: m[pattern]?.trigger_failure_value,
               };
             }
-            if (pattern === "All Failure Patterns") {
+            if (pattern === "All Failure Patterns" || pattern === "T3 Down") {
               patternData.push(m[pattern]);
             } else {
               patternData.push(m[pattern]?.pattern_end);
