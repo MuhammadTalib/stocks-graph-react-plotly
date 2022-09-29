@@ -114,7 +114,11 @@ export function DefaultChart({
               selectedPattern === "T3 Down" ||
               selectedPattern === "All High/Low Patterns" ||
               data.strategiesData
-              ? getOccuredReversalPatterns(data.patternData, pointIndex)
+              ? getOccuredReversalPatterns(
+                  data.patternData,
+                  pointIndex,
+                  selectedPattern
+                )
               : selectedPattern
             : undefined) ||
           (data?.patternTrigger[pointIndex]?.trigger_failure

@@ -648,7 +648,11 @@ export const getTimeforSecondaryGraph = (time) => {
   }
 };
 
-export const getOccuredReversalPatterns = (patternData, pointIndex) => {
+export const getOccuredReversalPatterns = (
+  patternData,
+  pointIndex,
+  pattern
+) => {
   let keys =
     patternData &&
     patternData.length &&
@@ -664,7 +668,13 @@ export const getOccuredReversalPatterns = (patternData, pointIndex) => {
   patternData.length &&
     Array.isArray(keys) &&
     keys.forEach((key, i) => {
-      if (patternData?.[pointIndex]?.[key]) {
+      if (
+        pattern === "T3 Down"
+          ? patternData?.[pointIndex]?.["pattern_end"] &&
+            patternData?.[pointIndex]?.[key] &&
+            key !== "pattern_end"
+          : patternData?.[pointIndex]?.[key]
+      ) {
         if (occured.length > 0) occured += ", ";
         occured += key;
       }
