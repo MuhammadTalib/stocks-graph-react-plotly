@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
 import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
-import {
-  drawConfirmHighAndLow,
-  drawMergedChart,
-  drawSeparateChart,
-  getDataRequestService,
-  getOccuredReversalPatterns,
-} from "../Utils/utils";
+import { drawConfirmHighAndLow, drawMergedChart, drawSeparateChart, getDataRequestService, getMetaIndicatorColorName, getOccuredReversalPatterns } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
 
@@ -104,8 +98,12 @@ export function DefaultChart({
           low: data.low[pointIndex],
           open: data.open[pointIndex],
           close: data.close[pointIndex],
-          ConfrimHigh: data?.ConfrimHigh[pointIndex],
-          ConfrimLow: data?.ConfrimLow[pointIndex],
+          ConfrimHigh: getMetaIndicatorColorName(
+            data,
+            pointIndex,
+            "ConfrimHigh"
+          ),
+          ConfrimLow: getMetaIndicatorColorName(data, pointIndex, "ConfrimLow"),
         }}
         selectedPattern={
           (data.patternData[pointIndex]

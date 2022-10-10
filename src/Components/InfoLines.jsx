@@ -1,4 +1,5 @@
 import React from "react";
+
 const InfoLines = ({
   selectedStock,
   ohlc: { high, low, open, close, ConfrimLow, ConfrimHigh },
@@ -26,8 +27,20 @@ const InfoLines = ({
       ) : (
         <></>
       )}
-      {ConfrimLow ? <div>Confirm Low: {low}</div> : <></>}
-      {ConfrimHigh ? <div>Confirm High: {high}</div> : <></>}
+      {ConfrimLow ? (
+        <div>
+          Confirm Low: {ConfrimLow} - {low}
+        </div>
+      ) : (
+        <></>
+      )}
+      {ConfrimHigh ? (
+        <div>
+          Confirm High: {ConfrimHigh} - {high}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

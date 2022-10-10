@@ -16,6 +16,7 @@ function arrayMin(array) {
 }
 
 export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
+  console.log("data__>", data);
   return [
     ...(switchToggle
       ? [
@@ -32,7 +33,16 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
             }),
             mode: "markers",
             marker: {
-              color: "blue",
+              color: data?.ConfrimHigh.map((m, i) => {
+                if (!m) return null;
+                else {
+                  if (data.is_closed_based[i]) return "red";
+                  if (data.real_condition[i]) return "black";
+                  if (data.insertion_condition[i]) return "green";
+                  if (data.modified_condition[i]) return "purple";
+                  else return null;
+                }
+              }),
               symbol: "diamond",
             },
             hoverinfo: "skip",
@@ -51,7 +61,16 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
             name: "Confirm Low " + data.low[pointIndex],
             mode: "markers",
             marker: {
-              color: "red",
+              color: data?.ConfrimLow.map((m, i) => {
+                if (!m) return null;
+                else {
+                  if (data.is_closed_based[i]) return "red";
+                  if (data.real_condition[i]) return "black";
+                  if (data.insertion_condition[i]) return "green";
+                  if (data.modified_condition[i]) return "purple";
+                  else return null;
+                }
+              }),
               symbol: "diamond",
             },
             hoverinfo: "skip",
@@ -59,6 +78,17 @@ export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
         ]
       : []),
   ];
+};
+
+export const getMetaIndicatorColorName = (data, i, metaIndicator) => {
+  if (data?.[metaIndicator]?.[i]) {
+    if (data.is_closed_based[i]) return "Closed Based";
+    if (data.real_condition[i]) return "Real Condition";
+    if (data.insertion_condition[i]) return "Insertion Condition";
+    if (data.modified_condition[i]) return "Modified Condition";
+    return null;
+  }
+  return null;
 };
 
 export const drawMergedChart = (selectedTemp, data, a, graphType) => {
@@ -337,6 +367,11 @@ export function getDataRequestService(
         let elder_impulse_system = [];
         let ConfrimHigh = [];
         let ConfrimLow = [];
+        let real_condition = [];
+        let is_closed_based = [];
+        let insertion_condition = [];
+        let modified_condition = [];
+
         let tempMerged = template && template.merged;
         let resMerged = tempMerged;
 
@@ -364,6 +399,10 @@ export function getDataRequestService(
           if (meta_trader_indicator) {
             ConfrimHigh.push(m["meta-indicators"]["Confrim High"]);
             ConfrimLow.push(m["meta-indicators"]["Confrim Low"]);
+            insertion_condition.push(m["insertion_condition"]);
+            is_closed_based.push(m["is_closed_based"]);
+            real_condition.push(m["real_condition"]);
+            modified_condition.push(m["modified_condition"]);
           }
 
           if (
@@ -535,6 +574,10 @@ export function getDataRequestService(
           elder_impulse_system,
           max: arrayMax(high),
           min: arrayMin(low.filter((f) => f !== 0 && f !== null)),
+          insertion_condition,
+          is_closed_based,
+          real_condition,
+          modified_condition,
         });
         setLayout({
           ...tempLayout,
