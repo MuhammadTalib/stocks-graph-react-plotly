@@ -47,6 +47,7 @@ const WatchListTable = ({
               { label: "Symbol", numeric: false },
               { label: "Sources", numeric: false },
               { label: "Description", numeric: false },
+              { label: "Sector Name", numeric: false },
               { label: "Time", numeric: false },
               ...(strategiesData?.length
                 ? [...new Set(strategiesData.map((item) => item.name))].map(

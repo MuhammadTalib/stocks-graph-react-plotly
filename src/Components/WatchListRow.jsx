@@ -31,6 +31,7 @@ const WatchListRow = ({
         {row?.sources?.length && row.sources[0]}
       </TableCell>
       <TableCell align={"center"}>{row?.description || "-"}</TableCell>
+      <TableCell align={"center"}>{row.sectorName}</TableCell>
       <TableCell align={"center"}>{selectedTime.name}</TableCell>
       {strategiesData.map((m, i) =>
         m?.data?.[row?.name]?.value &&
