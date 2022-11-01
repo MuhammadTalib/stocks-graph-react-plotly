@@ -16,7 +16,6 @@ function arrayMin(array) {
 }
 
 export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
-  console.log("data__>", data);
   return [
     ...(switchToggle
       ? [
@@ -694,7 +693,8 @@ export const getTimeforSecondaryGraph = (time) => {
 export const getOccuredReversalPatterns = (
   patternData,
   pointIndex,
-  pattern
+  pattern,
+  data
 ) => {
   let keys =
     patternData &&
@@ -722,5 +722,13 @@ export const getOccuredReversalPatterns = (
         occured += key;
       }
     });
-  return occured;
+  return (
+    (pattern === "T3 Down" && occured ? "T3 Down - " : "") +
+    occured +
+    (pattern === "All Failure Patterns" && occured
+      ? data.close[pointIndex] > data.open[pointIndex]
+        ? " - Bullish"
+        : " - Bearish"
+      : "")
+  );
 };
