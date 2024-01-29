@@ -1,29 +1,17 @@
-import { FormControlLabel, Switch } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { FormControlLabel, IconButton, Switch } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { styled } from "@mui/material/styles";
+import "../App.css";
 import { getAllStocks } from "../services/api";
 import { templates, times } from "../Utils/defaults";
 import { BAR_ICON, OHLC_ICON } from "../Utils/utils";
 import AutocompleteWrapper from "./AutocompleteWrapper";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import "../App.css";
 
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-}));
 
 const Header = ({
     handleGrapthType,
@@ -222,50 +210,6 @@ const Header = ({
                 </Grid>
             </Grid>
         </Box>
-
-        //     </Grid>
-        //     <Grid container spacing={2} md={4} style={{ padding: "10px" }}>
-        //         <Grid item md={11}></Grid>
-        //         <Grid item md={1}>
-        //             {dataBaseUrl !== "/db_v1" ? (
-        //                 <ButtonGroup
-        //                     fullWidth
-        //                     variant="text"
-        //                     aria-label="text button group"
-        //                 >
-        //                     <>
-        //                         <Link
-        //                             style={{ display: "none" }}
-        //                             ref={linkRef}
-        //                             target={"_blank"}
-        //                             to="/db_v1"
-        //                         ></Link>
-
-        //                         <Button
-        //                             fullWidth
-        //                             onClick={() => {
-        //                                 linkRef.current.click();
-        //                             }}
-        //                             style={{ color: "white" }}
-        //                         >
-        //                             {"__"}
-        //                         </Button>
-        //                     </>
-        //                 </ButtonGroup>
-        //             ) : (
-        //                 <></>
-        //             )}
-        //         </Grid>
-        //     </Grid>
-
-        //     <Grid container spacing={2} md={1} style={{ padding: "10px" }}>
-        //         <Grid item md={12}>
-        //             <IconButton onClick={openSidebar} color="primary">
-        //                 <MoreVertIcon />
-        //             </IconButton>
-        //         </Grid>
-        //     </Grid>
-        // </Grid>
     );
 };
 

@@ -68,7 +68,7 @@ const WatchList = ({
             .catch(() => {
                 setLoader(false);
             });
-    }, []);
+    }, [setSelectedCategory]);
 
     useEffect(() => {
         getAllStocks("stocks/watchlish/" + selectedCategory).then((res) => {

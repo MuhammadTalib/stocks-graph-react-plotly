@@ -733,7 +733,7 @@ export const BAR_ICON = () => (
         width="24"
         height="24"
     >
-        <g fill="none" stroke="currentColor" stroke-linecap="square">
+        <g fill="none" stroke="currentColor" strokeLinecap="square">
             <path d="M10.5 7.5v15M7.5 20.5H10M13.5 11.5H11M19.5 6.5v15M16.5 9.5H19M22.5 16.5H20"></path>
         </g>
     </svg>
