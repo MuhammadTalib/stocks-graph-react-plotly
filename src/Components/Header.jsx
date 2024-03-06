@@ -118,7 +118,7 @@ const Header = ({
                         </Grid>
                         <Grid item md={2}>
                             <AutocompleteWrapper
-                                options={["0", 1, 2, 3, 4]}
+                                options={["0", 1, 2, 3, 4, 5]}
                                 value={switchToggle}
                                 label={"MT4"}
                                 handleChange={handlSwitchToggle}
