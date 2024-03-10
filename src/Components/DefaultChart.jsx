@@ -123,6 +123,7 @@ export function DefaultChart({
                         ? selectedPattern === "All Reversal Patterns" ||
                           selectedPattern === "All Failure Patterns" ||
                           selectedPattern === "S Combo Pattern" ||
+                          selectedPattern === "All T3 Patterns" ||
                           isT3Pattern(selectedPattern) ||
                           selectedPattern === "All High/Low Patterns" ||
                           data.strategiesData
