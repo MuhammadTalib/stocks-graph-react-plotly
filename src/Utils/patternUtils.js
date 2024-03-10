@@ -7,6 +7,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
     let patterns = data.patternData;
     if (
         selectedPattern === "All Reversal Patterns" ||
+        selectedPattern === "S Combo Pattern" ||
         isT3Pattern(selectedPattern) ||
         selectedPattern === "All High/Low Patterns" ||
         strategiesData
