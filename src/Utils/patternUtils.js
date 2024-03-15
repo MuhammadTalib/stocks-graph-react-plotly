@@ -6,6 +6,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
     }
     let patterns = data.patternData;
     if (
+        (data.patternData && data.patternData[0] && data.patternData[0].is_combo_pattern) ||
         selectedPattern === "All Reversal Patterns" ||
         selectedPattern === "S Combo Pattern" ||
         selectedPattern === "All T3 Patterns" ||
@@ -22,6 +23,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                     "trigger_failure",
                     "trigger_failure_value",
                     "trigger_value",
+                    "is_combo_pattern",
                 ].find((t) => t === f);
             });
         patterns = data.patternData.map((m) => {
@@ -101,6 +103,7 @@ export const drawPatternTriggers = (data, strategiesData) => {
                     "trigger_failure",
                     "trigger_failure_value",
                     "trigger_value",
+                    "is_combo_pattern",
                 ].find((t) => t === f);
             });
         patterns = data.patternTrigger.map((m) => {

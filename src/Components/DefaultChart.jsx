@@ -120,7 +120,8 @@ export function DefaultChart({
                 }}
                 selectedPattern={
                     (data.patternData[pointIndex]
-                        ? selectedPattern === "All Reversal Patterns" ||
+                        ? data.patternData[pointIndex].is_combo_pattern ||
+                          selectedPattern === "All Reversal Patterns" ||
                           selectedPattern === "All Failure Patterns" ||
                           selectedPattern === "S Combo Pattern" ||
                           selectedPattern === "All T3 Patterns" ||
