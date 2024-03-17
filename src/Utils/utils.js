@@ -768,6 +768,7 @@ export const getOccuredReversalPatterns = (
                 "trigger_failure",
                 "trigger_failure_value",
                 "trigger_value",
+                "is_combo_pattern",
             ].find((t) => t === f);
         });
     let occured = "";

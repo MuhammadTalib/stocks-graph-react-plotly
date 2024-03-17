@@ -1,12 +1,26 @@
 import { isT3Pattern } from "./utils";
 
+export const getPatternNameList = (patterns) => {
+    return (patterns && Object.keys(patterns))?.filter((f) => {
+        return ![
+            "trigger",
+            "trigger_failure",
+            "trigger_failure_value",
+            "trigger_value",
+            "is_combo_pattern",
+        ].find((t) => t === f);
+    });
+};
+
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
     if (selectedPattern === "All Failure Patterns") {
         return [];
     }
     let patterns = data.patternData;
     if (
-        (data.patternData && data.patternData[0] && data.patternData[0].is_combo_pattern) ||
+        (data.patternData &&
+            data.patternData[0] &&
+            data.patternData[0].is_combo_pattern) ||
         selectedPattern === "All Reversal Patterns" ||
         selectedPattern === "S Combo Pattern" ||
         selectedPattern === "All T3 Patterns" ||
@@ -15,17 +29,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         strategiesData
     ) {
         patterns = data.patternData && data.patternData[0];
-        let keys =
-            data?.pattern_name_list ||
-            (patterns && Object.keys(patterns))?.filter((f) => {
-                return ![
-                    "trigger",
-                    "trigger_failure",
-                    "trigger_failure_value",
-                    "trigger_value",
-                    "is_combo_pattern",
-                ].find((t) => t === f);
-            });
+        let keys = data?.pattern_name_list || getPatternNameList(patterns);
         patterns = data.patternData.map((m) => {
             let ans = 0;
             if (Array.isArray(keys)) {
@@ -95,17 +99,7 @@ export const drawPatternTriggers = (data, strategiesData) => {
     let patterns = data.patternTrigger;
 
     if (strategiesData) {
-        let keys =
-            data.pattern_name_list ||
-            (patterns && Object.keys(patterns))?.filter((f) => {
-                return ![
-                    "trigger",
-                    "trigger_failure",
-                    "trigger_failure_value",
-                    "trigger_value",
-                    "is_combo_pattern",
-                ].find((t) => t === f);
-            });
+        let keys = data?.pattern_name_list || getPatternNameList(patterns);
         patterns = data.patternTrigger.map((m) => {
             let ans = null;
             if (Array.isArray(keys)) {
