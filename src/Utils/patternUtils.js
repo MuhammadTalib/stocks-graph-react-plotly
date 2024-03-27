@@ -1,15 +1,20 @@
-import { isT3Pattern } from "./utils";
+import { isT3FailurePattern, isT3Pattern } from "./utils";
 
 export const getPatternNameList = (patterns) => {
-    return (patterns && Object.keys(patterns))?.filter((f) => {
-        return ![
-            "trigger",
-            "trigger_failure",
-            "trigger_failure_value",
-            "trigger_value",
-            "is_combo_pattern",
-        ].find((t) => t === f);
-    });
+    let patternArr = patterns && Object.keys(patterns);
+    return (
+        Array.isArray(patternArr) &&
+        patternArr.length &&
+        patternArr?.filter((f) => {
+            return ![
+                "trigger",
+                "trigger_failure",
+                "trigger_failure_value",
+                "trigger_value",
+                "is_combo_pattern",
+            ].find((t) => t === f);
+        })
+    );
 };
 
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
@@ -17,6 +22,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         return [];
     }
     let patterns = data.patternData;
+    let drawX = null;
     if (
         (data.patternData &&
             data.patternData[0] &&
@@ -45,9 +51,65 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
             return ans;
         });
     }
+    if (isT3FailurePattern(selectedPattern)) {
+        drawX = data.patternData;
+        patterns = data.patternData.map((m) => {
+            let ans = 0;
+            ans = m?.["failure_trigger"];
+            return ans;
+        });
+
+        drawX = data.patternData.map((m) => {
+            let ans = 0;
+            ans = m?.["pattern_end"];
+            return ans;
+        });
+    }
     return patterns?.length
         ? [
+              ...(drawX && drawX.length
+                  ? [
+                        {
+                            // to draw x on T3 Failures
+                            x: data?.x,
+                            y: drawX?.map((m, i) => {
+                                let perc10 =
+                                    ((data.max - data.min) / 100) * 2.5;
+                                if (m) {
+                                    if (data.close[i] > data.open[i]) {
+                                        return Number(data.low[i]) - perc10;
+                                    } else {
+                                        return Number(data.high[i]) + perc10;
+                                    }
+                                }
+                                return null;
+                            }),
+                            showlegend: false,
+                            mode: "markers",
+                            marker: {
+                                color: drawX?.map((m, i) => {
+                                    if (m) {
+                                        if (data.close[i] < data.open[i]) {
+                                            return "red";
+                                        }
+                                        return "green";
+                                    }
+                                    return null;
+                                }),
+                                symbol: drawX.map((m, i) => {
+                                    if (m) {
+                                        return "x";
+                                    }
+                                    return null;
+                                }),
+                                size: 7,
+                            },
+                            hoverinfo: "skip",
+                        },
+                    ]
+                  : []),
               {
+                  //to normal pattern draw including T3 Failure arrows
                   x: data?.x,
                   y: patterns?.map((m, i) => {
                       let perc10 = ((data.max - data.min) / 100) * 2.5;

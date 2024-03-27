@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { getAllStocks } from "../services/api";
-import { dummy, months, rightMargin } from "./defaults";
+import { dummy, months, rightMargin, times } from "./defaults";
 
 function arrayMax(array) {
     return array.reduce(function (a, b) {
@@ -14,6 +14,10 @@ function arrayMin(array) {
         return Math.min(a, b);
     });
 }
+
+export const getTimeObject = (time) => {
+    return times.find((t) => t.name === time);
+};
 
 export const drawConfirmHighAndLow = (switchToggle, data, pointIndex) => {
     return [
@@ -814,4 +818,22 @@ export const isT3Pattern = (pattern) => {
     ];
 
     return T3Patterns.includes(pattern);
+};
+
+export const isT3FailurePattern = (pattern) => {
+    let T3FailuesPatterns = [
+        "T3 Down Failure",
+        "T3 Up Failure",
+        "T3 Sell Failure",
+        "T3 Buy Failure",
+        "T3 Turn Dowm Failure",
+        "T3 Turn Up Failure",
+        "T3 Rev Down Failure",
+        "T3 Rev Up Failure",
+        "T3 Bull Now Failure",
+        "T3 Bear Now Failure",
+        "T3 Up Down Failure",
+        "T3 Down Up Failure",
+    ];
+    return T3FailuesPatterns.includes(pattern);
 };

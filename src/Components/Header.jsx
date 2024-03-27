@@ -138,6 +138,11 @@ const Header = ({
                                 getOptionLabel={(option) => {
                                     return option ? option?.name : "";
                                 }}
+                                isOptionEqualToValue={(option, value) =>
+                                    option.name === value.name &&
+                                    option.desc === value.desc &&
+                                    option.ms === value.ms
+                                }
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -179,23 +184,23 @@ const Header = ({
                                     variant="text"
                                     aria-label="text button group"
                                 >
-                                    <>
-                                        <Link
-                                            style={{ display: "none" }}
-                                            ref={linkRef}
-                                            target={"_blank"}
-                                            to="/db_v1"
-                                        ></Link>
+                                    {/* <React.Fragment> */}
+                                    <Link
+                                        style={{ display: "none" }}
+                                        ref={linkRef}
+                                        target={"_blank"}
+                                        to="/db_v1"
+                                    ></Link>
 
-                                        <Button
-                                            onClick={() => {
-                                                linkRef.current.click();
-                                            }}
-                                            style={{ color: "white" }}
-                                        >
-                                            {"__"}
-                                        </Button>
-                                    </>
+                                    <Button
+                                        onClick={() => {
+                                            linkRef.current.click();
+                                        }}
+                                        style={{ color: "white" }}
+                                    >
+                                        {"__"}
+                                    </Button>
+                                    {/* </React.Fragment> */}
                                 </ButtonGroup>
                             ) : (
                                 <></>

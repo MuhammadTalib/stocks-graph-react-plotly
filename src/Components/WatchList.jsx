@@ -1,18 +1,34 @@
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { Checkbox, Grid } from "@mui/material";
+import { Box, Checkbox, Grid, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-
-import { getAllStocks } from "../services/api";
 import { times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
+import { getAllStocks } from "../services/api";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 import WatchListTable from "./WatchListTable";
-
 import "../App.css";
+import FilterPanelTable from "./FilterPanelTable";
+import PatternTriggers from "./PatternTriggers";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && <Typography>{children}</Typography>}
+        </div>
+    );
+}
 
 const WatchList = ({
     handleStockChange,
@@ -229,8 +245,40 @@ const WatchList = ({
         strategiesData,
         strategies,
         strategiesData.length,
-        // selectedStrategy.length,
     ]);
+
+    const filters = useMemo(() => {
+        const filtersColumns = [
+            { label: "Symbol", numeric: false },
+            { label: "Interval", numeric: false },
+            { label: "Closing Session Time/Date", numeric: false },
+        ];
+        return (
+            <PatternTriggers
+                filtersColumns={filtersColumns}
+                height={height}
+                scrollableListRef={scrollableListRef}
+                selectedStrategy={selectedStrategy}
+                orderBy={orderBy}
+                createSortHandler={createSortHandler}
+                order={order}
+                selectedCategory={selectedCategory}
+                selectedStock={selectedStock}
+                hanldeSelectedTime={hanldeSelectedTime}
+                handleStockChange={handleStockChange}
+                setSelectStockIndex={setSelectStockIndex}
+                selectedTime={selectedTime}
+                stocks={stocks}
+                setStocks={setStocks}
+                strategiesData={strategiesData}
+                handleKeyDown={handleKeyDown}
+                categories={categories}
+                setSelectedCategory={setSelectedCategory}
+                setSelectedTime={setSelectedTime}
+                placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+            />
+        );
+    }, [selectedStock, selectedTime]);
 
     const sidebarRef = useRef(null);
     const [isResizing, setIsResizing] = useState(false);
@@ -287,6 +335,18 @@ const WatchList = ({
         };
     });
 
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            "aria-controls": `simple-tabpanel-${index}`,
+        };
+    }
+
+    const [value, setValue] = React.useState(0);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <div
             ref={sidebarRef}
@@ -300,7 +360,22 @@ const WatchList = ({
             {loader ? <div className="watchListLoader"></div> : <></>}
             <div className="app-sidebar-resizer" onMouseDown={startResizing} />
             <div className="app-sidebar-content" style={{ overflowX: "clip" }}>
-                {stock}
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="basic tabs example"
+                    >
+                        <Tab label="Symbol" {...a11yProps(0)} />
+                        <Tab label="Pattern Triggers" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+                <CustomTabPanel value={value} index={0}>
+                    {stock}
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                    {filters}
+                </CustomTabPanel>
             </div>
         </div>
     );

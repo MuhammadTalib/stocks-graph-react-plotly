@@ -9,6 +9,7 @@ import {
     getDataRequestService,
     getMetaIndicatorColorName,
     getOccuredReversalPatterns,
+    isT3FailurePattern,
     isT3Pattern,
 } from "../Utils/utils";
 import { Graph } from "./Graph";
@@ -135,6 +136,12 @@ export function DefaultChart({
                                   data
                               )
                             : selectedPattern
+                        : undefined) ||
+                    (isT3FailurePattern(selectedPattern)
+                        ? data.patternData[pointIndex] &&
+                          (data.patternData[pointIndex].pattern_end ||
+                              data.patternData[pointIndex].failure_trigger) &&
+                          selectedPattern
                         : undefined) ||
                     (data?.patternTrigger[pointIndex]?.trigger_failure
                         ? selectedPattern

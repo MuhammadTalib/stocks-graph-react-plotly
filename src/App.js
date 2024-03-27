@@ -29,8 +29,8 @@ function App({ dataBaseUrl }) {
     const [strategiesData, setStrategiesData] = useState([]);
     const [selectedTime, setSelectTime] = useState({
         name: "1d",
-        ms: 86400000,
         desc: "1 Day",
+        ms: 86400000 * 1,
     });
     const [secondaryLayout, setSecondaryLayout] = useState({
         ...layout,
