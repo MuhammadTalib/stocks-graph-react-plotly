@@ -773,6 +773,7 @@ export const getOccuredReversalPatterns = (
                 "trigger_failure_value",
                 "trigger_value",
                 "is_combo_pattern",
+                "candle_type",
             ].find((t) => t === f);
         });
     let occured = "";
@@ -789,16 +790,40 @@ export const getOccuredReversalPatterns = (
                 if (occured.length > 0) occured += ", ";
                 occured += key;
             }
+
+            if (
+                isT3FailurePattern(pattern) &&
+                (patternData?.[pointIndex]?.["pattern_end"] ||
+                    patternData?.[pointIndex]?.["failure_trigger"])
+            ) {
+                if (occured.length === 0) occured += pattern;
+            }
         });
-    return (
-        (isT3Pattern(pattern) && occured ? `${pattern} - ` : "") +
-        occured +
-        (pattern === "All Failure Patterns" && occured
-            ? data.close[pointIndex] > data.open[pointIndex]
-                ? " - Bullish"
-                : " - Bearish"
-            : "")
+    console.log(
+        "occured-",
+        occured,
+        "-,",
+        ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured
+            ? `${pattern} - `
+            : "") +
+            occured +
+            (pattern === "All Failure Patterns" && occured
+                ? data.close[pointIndex] > data.open[pointIndex]
+                    ? " - Bullish"
+                    : " - Bearish"
+                : "")
     );
+    return isT3FailurePattern(pattern) && occured
+        ? pattern
+        : ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured
+              ? `${pattern} - `
+              : "") +
+              occured +
+              (pattern === "All Failure Patterns" && occured
+                  ? data.close[pointIndex] > data.open[pointIndex]
+                      ? " - Bullish"
+                      : " - Bearish"
+                  : "");
 };
 
 export const isT3Pattern = (pattern) => {

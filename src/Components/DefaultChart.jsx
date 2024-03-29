@@ -127,6 +127,7 @@ export function DefaultChart({
                           selectedPattern === "S Combo Pattern" ||
                           selectedPattern === "All T3 Patterns" ||
                           isT3Pattern(selectedPattern) ||
+                          isT3FailurePattern(selectedPattern) ||
                           selectedPattern === "All High/Low Patterns" ||
                           data.strategiesData
                             ? getOccuredReversalPatterns(
@@ -136,12 +137,6 @@ export function DefaultChart({
                                   data
                               )
                             : selectedPattern
-                        : undefined) ||
-                    (isT3FailurePattern(selectedPattern)
-                        ? data.patternData[pointIndex] &&
-                          (data.patternData[pointIndex].pattern_end ||
-                              data.patternData[pointIndex].failure_trigger) &&
-                          selectedPattern
                         : undefined) ||
                     (data?.patternTrigger[pointIndex]?.trigger_failure
                         ? selectedPattern
