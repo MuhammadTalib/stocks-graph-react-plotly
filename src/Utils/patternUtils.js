@@ -89,10 +89,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                             marker: {
                                 color: drawX?.map((m, i) => {
                                     if (m) {
-                                        if (data.close[i] < data.open[i]) {
-                                            return "red";
-                                        }
-                                        return "green";
+                                        return "red";
                                     }
                                     return null;
                                 }),

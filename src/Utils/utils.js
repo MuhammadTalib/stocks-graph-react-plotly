@@ -781,38 +781,27 @@ export const getOccuredReversalPatterns = (
         Array.isArray(keys) &&
         keys.forEach((key, i) => {
             if (
-                isT3Pattern(pattern)
-                    ? patternData?.[pointIndex]?.["pattern_end"] &&
-                      patternData?.[pointIndex]?.[key] &&
-                      key !== "pattern_end"
-                    : patternData?.[pointIndex]?.[key]
+                isT3Pattern(pattern) &&
+                patternData?.[pointIndex]?.["pattern_end"] &&
+                patternData?.[pointIndex]?.[key] &&
+                key !== "pattern_end"
+            ) {
+                if (occured.length > 0) occured += ", ";
+                occured += key;
+            } else if (
+                isT3FailurePattern(pattern) &&
+                patternData?.[pointIndex]?.["failure_trigger"]
+            ) {
+                if (occured.length === 0) occured += pattern;
+            } else if (
+                !isT3FailurePattern(pattern) &&
+                patternData?.[pointIndex]?.[key]
             ) {
                 if (occured.length > 0) occured += ", ";
                 occured += key;
             }
-
-            if (
-                isT3FailurePattern(pattern) &&
-                (patternData?.[pointIndex]?.["pattern_end"] ||
-                    patternData?.[pointIndex]?.["failure_trigger"])
-            ) {
-                if (occured.length === 0) occured += pattern;
-            }
         });
-    console.log(
-        "occured-",
-        occured,
-        "-,",
-        ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured
-            ? `${pattern} - `
-            : "") +
-            occured +
-            (pattern === "All Failure Patterns" && occured
-                ? data.close[pointIndex] > data.open[pointIndex]
-                    ? " - Bullish"
-                    : " - Bearish"
-                : "")
-    );
+
     return isT3FailurePattern(pattern) && occured
         ? pattern
         : ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured
