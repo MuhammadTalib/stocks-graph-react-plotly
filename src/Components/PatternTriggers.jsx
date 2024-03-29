@@ -67,6 +67,7 @@ const PatternTriggers = ({
                 <Grid item md={4} sm={4} xs={4}>
                     <AutocompleteWrapper
                         options={stocks}
+                        limitTags={1}
                         value={symbolFilter}
                         label="Symbol"
                         handleChange={(v) => {

@@ -39,7 +39,7 @@ const AutocompleteWrapper = ({
             }}
         >
             <Autocomplete
-                limitTags={2}
+                limitTags={limitTags}
                 onKeyPress={handleKeyDown}
                 selectOnFocus={false}
                 blurOnSelect={"touch"}
