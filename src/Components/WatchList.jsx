@@ -2,14 +2,13 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { Box, Checkbox, Grid, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import "../App.css";
 import { times } from "../Utils/defaults";
 import { getComparator, stableSort } from "../Utils/sorting";
 import { getAllStocks } from "../services/api";
 import AutocompleteWrapper from "./AutocompleteWrapper";
-import WatchListTable from "./WatchListTable";
-import "../App.css";
-import FilterPanelTable from "./FilterPanelTable";
 import PatternTriggers from "./PatternTriggers";
+import WatchListTable from "./WatchListTable";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
