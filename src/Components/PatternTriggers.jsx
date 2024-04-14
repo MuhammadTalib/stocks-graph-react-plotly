@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { times } from "../Utils/defaults";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 import FilterPanelTable from "./FilterPanelTable";
+import DateRangePickerWrapper from "./DateRangePickerWrapper";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -21,27 +22,26 @@ const PatternTriggers = ({
     selectedStock,
     hanldeSelectedTime,
     handleStockChange,
-    setSelectStockIndex,
     selectedTime,
     stocks,
     setStocks,
     strategiesData,
     selectedCategory,
-    handleKeyDown,
     categories,
     setSelectedCategory,
     setSelectedTime,
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
+    const [selectedStockIndex, setSelectStockIndex] = useState(0);
 
     return (
         <Grid container style={{ margin: "0px 6px" }}>
             <Grid container item md={12} sm={12} xs={12} spacing={2}>
-                <Grid item md={4} sm={4} xs={4}>
+                <Grid item md={3} sm={3} xs={3}>
                     <AutocompleteWrapper
                         options={stocks}
-                        limitTags={1}
+                        limitTags={2}
                         value={symbolFilter}
                         label="Symbol"
                         handleChange={(v) => {
@@ -71,10 +71,10 @@ const PatternTriggers = ({
                         }}
                     />
                 </Grid>
-                <Grid item md={4} sm={4} xs={4}>
+                <Grid item md={3} sm={3} xs={3}>
                     <AutocompleteWrapper
                         options={times}
-                        limitTags={1}
+                        limitTags={2}
                         id="multiple-limit-tags"
                         value={timeFilter}
                         label="Time"
@@ -106,7 +106,7 @@ const PatternTriggers = ({
                     />
                 </Grid>
                 <Grid item md={7} sm={7} xs={7}>
-                    {/* <DateRangePickerWrapper /> */}
+                    <DateRangePickerWrapper />
                     {/* <AutocompleteWrapper
                         options={strategies}
                         value={selectedStrategy}
@@ -138,31 +138,28 @@ const PatternTriggers = ({
             </Grid>
 
             <Grid item md={12} sm={12} xs={12}>
-                <div onKeyPress={handleKeyDown}>
-                    <FilterPanelTable
-                        filtersColumns={filtersColumns}
-                        height={height}
-                        scrollableListRef={scrollableListRef}
-                        selectedStrategy={selectedStrategy}
-                        orderBy={orderBy}
-                        createSortHandler={createSortHandler}
-                        order={order}
-                        selectedCategory={selectedCategory}
-                        selectedStock={selectedStock}
-                        hanldeSelectedTime={hanldeSelectedTime}
-                        handleStockChange={handleStockChange}
-                        setSelectStockIndex={setSelectStockIndex}
-                        selectedTime={selectedTime}
-                        stocks={stocks}
-                        setStocks={setStocks}
-                        symbolFilter={symbolFilter}
-                        timeFilter={timeFilter}
-                        strategiesData={strategiesData}
-                        placeSelectedItemInTheMiddle={
-                            placeSelectedItemInTheMiddle
-                        }
-                    />
-                </div>
+                <FilterPanelTable
+                    filtersColumns={filtersColumns}
+                    height={height}
+                    scrollableListRef={scrollableListRef}
+                    selectedStrategy={selectedStrategy}
+                    orderBy={orderBy}
+                    createSortHandler={createSortHandler}
+                    order={order}
+                    selectedCategory={selectedCategory}
+                    selectedStock={selectedStock}
+                    hanldeSelectedTime={hanldeSelectedTime}
+                    handleStockChange={handleStockChange}
+                    setSelectStockIndex={setSelectStockIndex}
+                    selectedTime={selectedTime}
+                    stocks={stocks}
+                    setStocks={setStocks}
+                    symbolFilter={symbolFilter}
+                    timeFilter={timeFilter}
+                    strategiesData={strategiesData}
+                    selectedStockIndex={selectedStockIndex}
+                    placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+                />
             </Grid>
         </Grid>
     );

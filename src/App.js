@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
-import { initialLayout, T0 } from "./Utils/defaults";
+import { initialLayout, templates, times } from "./Utils/defaults";
 
 import "./App.css";
 
@@ -19,7 +19,7 @@ function App({ dataBaseUrl }) {
     const [sidebarWidth, setSidebarWidth] = useState(6);
     const classes = useStyles(sidebarWidth);
     const [graphType, setGraphType] = useState("candlestick");
-    const [selectedCategory, setSelectedCategory] = useState("FOREX");
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
     const [enableDualChart, setEnableDualChart] = useState(false);
     const [layout, setLayout] = useState({ ...initialLayout });
@@ -27,18 +27,14 @@ function App({ dataBaseUrl }) {
     const [selectedStock, setSelectStock] = useState("MMM");
     const [selectedPattern, setSelectedPattern] = useState(null);
     const [strategiesData, setStrategiesData] = useState([]);
-    const [selectedTime, setSelectTime] = useState({
-        name: "1d",
-        desc: "1 Day",
-        ms: 86400000 * 1,
-    });
+    const [selectedTime, setSelectTime] = useState(times[11]); //1DAY
     const [secondaryLayout, setSecondaryLayout] = useState({
         ...layout,
         width: "50%",
         height: window.innerHeight - 80,
     });
-    const [selectedTemp, setSelectedTemp] = useState(T0);
-    const [switchToggle, setSwitchToggle] = useState(0);
+    const [selectedTemp, setSelectedTemp] = useState(templates[0]);
+    const [switchToggle, setSwitchToggle] = useState("0");
     const [selectedStrategy, setSelectedStrategy] = useState([]);
 
     const handleGrapthType = (type) => {

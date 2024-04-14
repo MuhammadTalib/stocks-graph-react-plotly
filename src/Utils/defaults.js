@@ -95,10 +95,13 @@ export const months = [
 ];
 
 export const T0 = {
-    id: 0,
     name: "T0",
+    id: 0,
     merged: {},
     separate: {},
+    layout: {
+        yaxis: { ...initialLayout.yaxis, domain: [0, 1] },
+    },
 };
 
 export const dummy = {

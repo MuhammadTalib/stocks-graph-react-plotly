@@ -24,7 +24,7 @@ function CustomTabPanel(props) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && <Typography>{children}</Typography>}
+            {value === index && <div>{children}</div>}
         </div>
     );
 }
@@ -55,11 +55,7 @@ const WatchList = ({
     const [categories, setCategories] = useState([]);
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
     const [loader, setLoader] = useState(false);
-    const [selectedTime, setSelectedTime] = useState({
-        name: "1d",
-        desc: "1 Day",
-        ms: 86400000 * 1,
-    });
+    const [selectedTime, setSelectedTime] = useState(times[11]);
 
     useEffect(() => {
         setLoader(true);
@@ -95,6 +91,7 @@ const WatchList = ({
     }, [selectedCategory]);
 
     const handleKeyDown = (e) => {
+        console.log("key down watch list");
         if (e.keyCode === 38) {
             hanldeSelectedTime(selectedTime);
             handleStockChange(stocks[selectedStockIndex - 1]);
@@ -110,11 +107,9 @@ const WatchList = ({
 
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("Symbol");
+
     const createSortHandler = (property) => (event) => {
-        handleRequestSort(event, property);
-        //comment
-    };
-    const handleRequestSort = (event, property) => {
+        console.log("property", property);
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
@@ -206,7 +201,7 @@ const WatchList = ({
                 </Grid>
 
                 <Grid item md={12} sm={12} xs={12}>
-                    <div onKeyPress={handleKeyDown}>
+                    <div onKeyDown={handleKeyDown}>
                         <WatchListTable
                             height={height}
                             scrollableListRef={scrollableListRef}
@@ -247,14 +242,8 @@ const WatchList = ({
     ]);
 
     const filters = useMemo(() => {
-        const filtersColumns = [
-            { label: "Symbol", numeric: false },
-            { label: "Interval", numeric: false },
-            { label: "Closing Session Time/Date", numeric: false },
-        ];
         return (
             <PatternTriggers
-                filtersColumns={filtersColumns}
                 height={height}
                 scrollableListRef={scrollableListRef}
                 selectedStrategy={selectedStrategy}

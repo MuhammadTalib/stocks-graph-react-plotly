@@ -356,7 +356,7 @@ export function getDataRequestService(
                 ? `stocks/strategy_data_against_symbol`
                 : `stocks${
                       dataBaseUrl || ""
-                  }?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
+                  }/?category=${selectedCategory}&symbol=${stock.name?.toLowerCase()}&source=${
                       stock?.selectedSource ||
                       (stock?.sources?.length && stock.sources[0])
                   }&interval=${time.name}`;
@@ -384,7 +384,7 @@ export function getDataRequestService(
         })
             .then((res) => {
                 setLoader(false);
-                let pattern_name_list = res.data?.patterns_list;
+                let pattern_name_list = res?.data?.patterns_list;
                 let responseData = [...res?.data?.data];
 
                 let high = [];
@@ -427,7 +427,7 @@ export function getDataRequestService(
                     close.push(m.close);
                     x.push(new Date(m.date).toUTCString());
 
-                    if (meta_trader_indicator) {
+                    if (meta_trader_indicator && m["meta-indicators"]) {
                         ConfrimHigh.push(m["meta-indicators"]["Confrim High"]);
                         ConfrimLow.push(m["meta-indicators"]["Confrim Low"]);
                         insertion_condition.push(m["insertion_condition"]);
