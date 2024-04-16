@@ -794,6 +794,7 @@ export const getOccuredReversalPatterns = (
             ) {
                 if (occured.length === 0) occured += pattern;
             } else if (
+                !isT3Pattern(pattern) &&
                 !isT3FailurePattern(pattern) &&
                 patternData?.[pointIndex]?.[key]
             ) {
