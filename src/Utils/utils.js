@@ -780,6 +780,8 @@ export const getOccuredReversalPatterns = (
     patternData.length &&
         Array.isArray(keys) &&
         keys.forEach((key, i) => {
+            console.log("pattern", patternData?.[pointIndex])
+
             if (
                 isT3Pattern(pattern) &&
                 patternData?.[pointIndex]?.["pattern_end"] &&
@@ -802,7 +804,6 @@ export const getOccuredReversalPatterns = (
                 occured += key;
             }
         });
-
     return isT3FailurePattern(pattern) && occured
         ? pattern
         : ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured

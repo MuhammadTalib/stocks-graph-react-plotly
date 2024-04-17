@@ -1,6 +1,6 @@
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { Box, Checkbox, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Checkbox, Grid, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../App.css";
 import { times } from "../Utils/defaults";
@@ -91,7 +91,6 @@ const WatchList = ({
     }, [selectedCategory]);
 
     const handleKeyDown = (e) => {
-        console.log("key down watch list");
         if (e.keyCode === 38) {
             hanldeSelectedTime(selectedTime);
             handleStockChange(stocks[selectedStockIndex - 1]);

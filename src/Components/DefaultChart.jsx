@@ -172,7 +172,7 @@ export function DefaultChart({
                         selectedPattern,
                         data.strategiesData
                     ) || []),
-                    ...(drawPatternTriggers(data, data.strategiesData) || []),
+                    ...(drawPatternTriggers(data, data.strategiesData,selectedPattern) || []),
                 ]}
                 separateGraphs={[
                     ...drawSeparateChart(

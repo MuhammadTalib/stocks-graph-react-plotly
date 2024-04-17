@@ -32,6 +32,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         selectedPattern === "All T3 Patterns" ||
         isT3Pattern(selectedPattern) ||
         selectedPattern === "All High/Low Patterns" ||
+        selectedPattern === "R/F Combo Pattern" ||
         strategiesData
     ) {
         patterns = data.patternData && data.patternData[0];
@@ -43,14 +44,19 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                     if (m[key]) {
                         ans = isT3Pattern(selectedPattern)
                             ? m?.["pattern_end"]
+                            : selectedPattern === "R/F Combo Pattern"
+                            ? m?.["trigger"]
                             : 1;
                         break;
                     }
+                    
                 }
             }
+             
             return ans;
         });
     }
+  
     if (isT3FailurePattern(selectedPattern)) {
         drawX = data.patternData;
         patterns = data.patternData.map((m) => {
@@ -65,6 +71,8 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
             return ans;
         });
     }
+
+    console.log("patt", patterns.length && patterns.reduce((accumulator, curr) => accumulator + curr))
     return patterns?.length
         ? [
               ...(drawX && drawX.length
@@ -154,7 +162,10 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         : [];
 };
 
-export const drawPatternTriggers = (data, strategiesData) => {
+export const drawPatternTriggers = (data, strategiesData, selectedPattern) => {
+    if(selectedPattern === "R/F Combo Pattern"){
+        return 
+    }
     let patterns = data.patternTrigger;
 
     if (strategiesData) {
