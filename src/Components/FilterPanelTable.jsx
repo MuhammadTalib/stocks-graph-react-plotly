@@ -114,7 +114,6 @@ const FilterPanelTable = ({
     };
 
     const handleKeyDown = (e) => {
-        console.log("key down filter panel");
         if (e.keyCode === 38) {
             hanldeSelectedTime(selectedTime);
             handleStockChange({
@@ -158,7 +157,6 @@ const FilterPanelTable = ({
     const [orderBy, setOrderBy] = React.useState("Symbol");
 
     const createSortHandler = (property) => (event) => {
-        console.log("property", property);
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);

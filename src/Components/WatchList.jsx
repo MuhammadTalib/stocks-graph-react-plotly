@@ -108,7 +108,6 @@ const WatchList = ({
     const [orderBy, setOrderBy] = React.useState("Symbol");
 
     const createSortHandler = (property) => (event) => {
-        console.log("property", property);
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);

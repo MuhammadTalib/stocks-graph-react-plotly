@@ -72,7 +72,6 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         });
     }
 
-    console.log("patt", patterns.length && patterns.reduce((accumulator, curr) => accumulator + curr))
     return patterns?.length
         ? [
               ...(drawX && drawX.length
