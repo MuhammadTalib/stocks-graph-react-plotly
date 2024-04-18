@@ -173,6 +173,8 @@ function App({ dataBaseUrl }) {
                 secondaryLayout={secondaryLayout}
                 setSecondaryLayout={setSecondaryLayout}
                 strategiesData={strategiesData}
+                selectedPattern={selectedPattern}
+                setSelectedPattern={setSelectedPattern}
             />
         </div>
     );

@@ -30,7 +30,8 @@ const FilterPanelTable = ({
     setSelectStockIndex,
     selectedStockIndex,
     startDate,
-    endDate
+    endDate,
+    setSelectedPattern
 }) => {
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
@@ -275,6 +276,7 @@ const FilterPanelTable = ({
                                             ],
                                         });
                                         setSelectStockIndex(index);
+                                        setSelectedPattern(row['Reversal'][0] || row['Double Close'][0] || row['Tower Patterns'][0])
                                     }}
                                     focus={(
                                         selectedStockIndex === index

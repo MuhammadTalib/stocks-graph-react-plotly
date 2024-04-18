@@ -30,6 +30,7 @@ const PatternTriggers = ({
     categories,
     setSelectedCategory,
     setSelectedTime,
+    setSelectedPattern
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -147,6 +148,7 @@ const PatternTriggers = ({
                     placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
                     startDate={startDate}
                     endDate={endDate}
+                    setSelectedPattern={setSelectedPattern}
                 />
             </Grid>
         </Grid>

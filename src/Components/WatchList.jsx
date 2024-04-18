@@ -50,6 +50,8 @@ const WatchList = ({
     secondaryLayout,
     setSecondaryLayout,
     strategiesData,
+    selectedPattern,
+    setSelectedPattern
 }) => {
     const [strategies, setStrategies] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -262,6 +264,8 @@ const WatchList = ({
                 setSelectedCategory={setSelectedCategory}
                 setSelectedTime={setSelectedTime}
                 placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+                selectedPattern={selectedPattern}
+                setSelectedPattern={setSelectedPattern}
             />
         );
     }, [selectedStock, selectedTime]);
