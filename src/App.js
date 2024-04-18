@@ -14,6 +14,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+
+
 function App({ dataBaseUrl }) {
     const [stocks, setStocks] = useState([]);
     const [sidebarWidth, setSidebarWidth] = useState(6);

@@ -34,6 +34,8 @@ const PatternTriggers = ({
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     return (
         <Grid container style={{ margin: "0px 6px" }}>
@@ -105,35 +107,19 @@ const PatternTriggers = ({
                         }}
                     />
                 </Grid>
-                <Grid item md={7} sm={7} xs={7}>
-                    <DateRangePickerWrapper />
-                    {/* <AutocompleteWrapper
-                        options={strategies}
-                        value={selectedStrategy}
-                        label="Strategies"
-                        handleChange={(v) => {
-                            if (v && v.length) {
-                                setSelectedStrategy([...v]);
-                            } else {
-                                setSelectedStrategy([]);
-                            }
-                        }}
-                        selectedStock={selectedStock}
-                        multiple={true}
-                        renderOption={(props, option, s) => {
-                            let selected = s?.selected;
-                            return (
-                                <li {...props}>
-                                    <Checkbox
-                                        icon={icon}
-                                        checkedIcon={checkedIcon}
-                                        checked={selected}
-                                    />
-                                    {option}
-                                </li>
-                            );
-                        }}
-                    /> */}
+                <Grid item md={3} sm={3} xs={3}>
+                    <DateRangePickerWrapper 
+                        label="Start Date" 
+                        value={startDate}
+                        setValue={setStartDate}
+                    />
+                </Grid>
+                <Grid item md={3} sm={3} xs={3}>
+                    <DateRangePickerWrapper 
+                        label="End Date"
+                        value={endDate}
+                        setValue={setEndDate}
+                    />
                 </Grid>
             </Grid>
 
@@ -159,6 +145,8 @@ const PatternTriggers = ({
                     strategiesData={strategiesData}
                     selectedStockIndex={selectedStockIndex}
                     placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
+                    startDate={startDate}
+                    endDate={endDate}
                 />
             </Grid>
         </Grid>

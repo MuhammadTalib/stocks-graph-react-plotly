@@ -29,6 +29,8 @@ const FilterPanelTable = ({
     timeFilter,
     setSelectStockIndex,
     selectedStockIndex,
+    startDate,
+    endDate
 }) => {
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
@@ -50,7 +52,7 @@ const FilterPanelTable = ({
 
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage]);
+    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, endDate]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -61,7 +63,7 @@ const FilterPanelTable = ({
 
     const processTableData = (data) => {
         let tableDict = {};
-        data.columns.forEach((col) => {
+        data?.columns.forEach((col) => {
             return data[col].forEach((patterns) => {
                 return Object.values(patterns).forEach((pattern) => {
                     let key = `${Object.values(pattern)[0].datetime}-${
@@ -95,8 +97,8 @@ const FilterPanelTable = ({
             if (timeFilter && timeFilter.length) {
                 url += `&interval=${timeFilter.map((m) => m.name).join(",")}`;
             }
-            if (true) {
-                // url += `&start_date=04/04/2024, 21:20:00&end_date=04/08/2024, 21:40:00`;
+            if (startDate && endDate) {
+                url += `&start_date=${startDate}&end_date=${endDate}`;
             }
             getAllStocks(url, "get").then((res) => {
                 // eslint-disable-next-line array-callback-return

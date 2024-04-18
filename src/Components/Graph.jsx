@@ -1,12 +1,7 @@
-import * as Plotly from "plotly.js";
 import React, { useEffect, useState } from "react";
-import createPlotlyComponent from "react-plotly.js/factory";
-
 import { drawFirstDateLine, drawStrategiesBar } from "../Utils/utils";
-
 import "../App.css";
-
-const Plot = createPlotlyComponent(Plotly);
+import Plot from 'react-plotly.js';
 
 export const Graph = ({
   data,
@@ -25,9 +20,11 @@ export const Graph = ({
   sidebarWidth,
   selectedStrategy,
 }) => {
+
   document
     .querySelector('[data-title="Autoscale"]')
     ?.addEventListener("onclick", function (event) {});
+
   let [bottomTemplate, setBottomTemplates] = useState([]);
   useEffect(() => {
     let temp = [];
@@ -46,7 +43,7 @@ export const Graph = ({
     return <div className="loadingLabel">Loading...</div>;
   } else
     return (
-      <Plot
+      data && layout && <Plot
         id={id}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
@@ -67,7 +64,7 @@ export const Graph = ({
         }}
         useResizeHandler={true}
         onRelayout={(e) => {
-          if (e["xaxis.autorange"]) {
+          if (e && e["xaxis.autorange"]) {
             setLayout({
               ...layout,
               xaxis: {
