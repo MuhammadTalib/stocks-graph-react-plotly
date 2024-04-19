@@ -1,8 +1,13 @@
-import Stack from "@mui/material/Stack";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton, InputAdornment } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import {
+    DateRangePicker,
+    SingleInputDateRangeField,
+} from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import * as React from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -12,24 +17,56 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DateRangePickerWrapper = ({ label, value, setValue }) => {
-    const [selectedDate, setSelectedDate] = React.useState(null);
+    const [selectedDate, setSelectedDate] = React.useState([null, null]);
     const classes = useStyles();
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date)
-        setValue(date.format('MM/DD/YYYY, HH:mm:ss'))
+    const handleDateChange = ([start, end]) => {
+        setSelectedDate([start, end]);
+        setValue([
+            start?.format("MM/DD/YYYY, HH:mm:ss"),
+            end?.format("MM/DD/YYYY, HH:mm:ss"),
+        ]);
     };
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
-            <DateTimePicker
-                className={classes.fullWidthPicker}
-                value={selectedDate}
-                onChange={handleDateChange}
-                label={label}
-                ampm={false} // Setting ampm to false for 24-hour format
-                format="MM-DD-YYYY, HH:mm:ss" // 24-hour format example 04/04/2024, 21:20:00
-            />
+        <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: "100%" }}>
+            <DemoContainer components={["SingleInputDateRangeField"]}>
+                <DemoItem component="DateRangePicker">
+                    <DateRangePicker
+                        slots={{ field: SingleInputDateRangeField }}
+                        slotProps={{
+                            openPickerIcon: { fontSize: "large" },
+                            openPickerButton: { color: "secondary" },
+                            textField: {
+                                InputProps: {
+                                    endAdornment: (
+                                        <InputAdornment
+                                            className={classes.selectAdornment}
+                                            position="end"
+                                        >
+                                            <IconButton
+                                                onClick={(e)=>{
+                                                    e.stopPropagation()
+                                                    setSelectedDate([null, null])
+                                                    setValue([null, null])
+                                                }}
+                                                aria-label="delete"
+                                                size="small"
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                },
+                            },
+                        }}
+                        name="allowedRange"
+                        onChange={handleDateChange}
+                        value={selectedDate}
+                        label={"Date Range"}
+                    />
+                </DemoItem>
+            </DemoContainer>
         </LocalizationProvider>
     );
 };

@@ -5,9 +5,9 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
-import { getAllStocks } from "../services/api";
 import { templates, times } from "../Utils/defaults";
 import { BAR_ICON, OHLC_ICON } from "../Utils/utils";
+import { getAllStocks } from "../services/api";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 
 import Box from "@mui/material/Box";

@@ -1,11 +1,12 @@
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { Checkbox, Grid } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { times } from "../Utils/defaults";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 import FilterPanelTable from "./FilterPanelTable";
 import DateRangePickerWrapper from "./DateRangePickerWrapper";
+import { getAllStocks } from "../services/api";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -30,13 +31,32 @@ const PatternTriggers = ({
     categories,
     setSelectedCategory,
     setSelectedTime,
-    setSelectedPattern
+    setSelectedPattern,
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [filterPattern, setFilterPatter] = useState([]);
+    let [patterns] = useState([
+        { name: "REVERSALS", key: "all reversal patterns" },
+        { name: "FAILURES", key: "all failure patterns" },
+        { name: "MACD DIVERGENCE", key: "all divergence patterns" },
+        { name: "RSI DIVERGENCE", key: "rsi divergence combo" },
+        { name: "S/L COMBO", key: "S/L combo patterns" },
+        { name: "RSI-R", key: "RSI-R POI patterns" },
+        { name: "ZLR", key: "zero line reversals" },
+        { name: "T3", key: "all t3 patterns" },
+        { name: "T3 FAILURES", key: "all t3 failures" },
+        { name: "FIBONACCI", key: "all fibonacci retracements" },
+        { name: "MOVING AVG", key: "moving average strategies" },
+        { name: "SMT", key: "smt divergence patterns" },
+    ]);
+
+    const handlePatternChange = (pattern) => {
+        setFilterPatter(pattern);
+    };
 
     return (
         <Grid container style={{ margin: "0px 6px" }}>
@@ -109,17 +129,36 @@ const PatternTriggers = ({
                     />
                 </Grid>
                 <Grid item md={3} sm={3} xs={3}>
-                    <DateRangePickerWrapper 
-                        label="Start Date" 
+                    <DateRangePickerWrapper
+                        label="Date Range"
                         value={startDate}
                         setValue={setStartDate}
                     />
                 </Grid>
                 <Grid item md={3} sm={3} xs={3}>
-                    <DateRangePickerWrapper 
-                        label="End Date"
-                        value={endDate}
-                        setValue={setEndDate}
+                    <AutocompleteWrapper
+                        options={patterns}
+                        value={filterPattern}
+                        label={"Pattern"}
+                        getOptionLabel={(option) => {
+                            return option ? option?.name : "";
+                        }}  
+                        renderOption={(props, option, s) => {
+                            let selected = s?.selected;
+                            return (
+                                <li {...props}>
+                                    <Checkbox
+                                        icon={icon}
+                                        checkedIcon={checkedIcon}
+                                        checked={selected}
+                                    />
+                                    {option.name}
+                                </li>
+                            );
+                        }}
+                        multiple={true}
+                        handleChange={handlePatternChange}
+                        selectedStock={selectedStock}
                     />
                 </Grid>
             </Grid>
@@ -149,6 +188,7 @@ const PatternTriggers = ({
                     startDate={startDate}
                     endDate={endDate}
                     setSelectedPattern={setSelectedPattern}
+                    filterPattern={filterPattern}
                 />
             </Grid>
         </Grid>

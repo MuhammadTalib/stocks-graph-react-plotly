@@ -21,8 +21,6 @@ const FilterPanelTable = ({
     hanldeSelectedTime,
     handleStockChange,
     selectedTime,
-    stocks,
-    setStocks,
     strategiesData,
     selectedCategory,
     symbolFilter,
@@ -31,7 +29,8 @@ const FilterPanelTable = ({
     selectedStockIndex,
     startDate,
     endDate,
-    setSelectedPattern
+    setSelectedPattern,
+    filterPattern
 }) => {
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
@@ -53,7 +52,7 @@ const FilterPanelTable = ({
 
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, endDate]);
+    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, endDate, filterPattern]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -100,6 +99,9 @@ const FilterPanelTable = ({
             }
             if (startDate && endDate) {
                 url += `&start_date=${startDate}&end_date=${endDate}`;
+            }
+            if(filterPattern && filterPattern.length) {
+                url += `&pattern=${filterPattern?.map((m) => m.key).join(",")}`;
             }
             getAllStocks(url, "get").then((res) => {
                 // eslint-disable-next-line array-callback-return
