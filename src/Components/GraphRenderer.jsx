@@ -25,6 +25,7 @@ const GraphRenderer = ({
   dataBaseUrl,
   setStrategiesData,
   strategiesData,
+  selectedTriggerFromPanel
 }) => {
   const [secondaryChartTime, setSecondayChartTime] = useState(null);
 
@@ -150,6 +151,7 @@ const GraphRenderer = ({
             dataBaseUrl={dataBaseUrl}
             setStrategiesData={setStrategiesData}
             strategiesData={strategiesData}
+            selectedTriggerFromPanel={selectedTriggerFromPanel}
           />
         </div>
       </div>
@@ -202,6 +204,7 @@ const GraphRenderer = ({
                 dataBaseUrl={dataBaseUrl}
                 setStrategiesData={setStrategiesData}
                 strategiesData={strategiesData}
+                selectedTriggerFromPanel={selectedTriggerFromPanel}
               />
             </div>
           </div>

@@ -49,14 +49,13 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                             : 1;
                         break;
                     }
-                    
                 }
             }
-             
+
             return ans;
         });
     }
-  
+
     if (isT3FailurePattern(selectedPattern)) {
         drawX = data.patternData;
         patterns = data.patternData.map((m) => {
@@ -162,8 +161,8 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
 };
 
 export const drawPatternTriggers = (data, strategiesData, selectedPattern) => {
-    if(selectedPattern === "R/F Combo Pattern"){
-        return 
+    if (selectedPattern === "R/F Combo Pattern") {
+        return;
     }
     let patterns = data.patternTrigger;
 
@@ -252,4 +251,109 @@ export const drawPatternTriggers = (data, strategiesData, selectedPattern) => {
               },
           ]
         : [];
+};
+const formatDate = (originalDateStr) => {
+    var originalDate = new Date(originalDateStr);
+    originalDate.setHours(originalDate.getHours() - 5);
+    // Format the date as "MM/DD/YYYY, HH:mm:ss"
+    return (
+        ("0" + (originalDate.getMonth() + 1)).slice(-2) +
+        "/" +
+        ("0" + originalDate.getDate()).slice(-2) +
+        "/" +
+        originalDate.getFullYear() +
+        ", " +
+        ("0" + originalDate.getHours()).slice(-2) +
+        ":" +
+        ("0" + originalDate.getMinutes()).slice(-2) +
+        ":" +
+        ("0" + originalDate.getSeconds()).slice(-2)
+    );
+};
+ 
+export const drawSidePanelClickedPatternTrigger = (
+    switchToggle, data, pointIndex,
+    // data,
+    selectedTriggerFromPanel
+) => {
+    console.log("selectedTriggerFromPanel", selectedTriggerFromPanel, selectedTriggerFromPanel?.datetime)
+    return selectedTriggerFromPanel? [
+        {
+            x: data?.x,
+            y: data.x.map((m, i) => {
+                let perc10 = ((data.max - data.min) / 100) * 2.5;
+                console.log("talib--",selectedTriggerFromPanel, m, formatDate(new Date(m)) , selectedTriggerFromPanel.datetime)
+                if(formatDate(new Date(m)) === selectedTriggerFromPanel.datetime){
+                    console.log("talib", formatDate(m) , formatDate(selectedTriggerFromPanel.datetime))
+                    if (data.close[i] > data.open[i]) {
+                        return Number(data.low[i]) - perc10;
+                    } else {
+                        return Number(data.high[i]) + perc10;
+                    }
+                }
+                return null
+                
+            }),
+            showlegend: false,
+            name: "Confirm Low " + data.low[pointIndex],
+            mode: "markers",
+            marker: {
+                color: data?.x.map((m, i) => {
+                    if (!m) return null;
+                    else {
+                        if (data.close[i] < data.open[i]) {
+                            return "red";
+                        }
+                        return "green";
+                    }
+                }),
+                symbol: data?.x.map((m, i) => {
+                    if (!m) return null;
+                    else {
+                        if (data.close[i] < data.open[i]) {
+                            return "triangle-down";
+                        }
+                        return "triangle-up";
+                    }
+                }),
+            },
+            hoverinfo: "skip",
+        },
+    ]:[]
+    // let a =  selectedTriggerFromPanel ? [
+    //     {
+    //         x: data?.x,
+    //         y: data.x.map((m,i) => {
+    //             if (formatDate('Sun, 21 Apr 2024 21:00:00 GMT') === selectedTriggerFromPanel?.datetime) { return data.low[i]}
+    //             else return null
+    //         }),
+    //         showlegend: false,
+    //         // name: "Confirm Low " + data.low[pointIndex],
+    //         mode: "markers",
+    //         marker: {
+    //             color: data.x?.map((m, i) => {
+    //                 if (formatDate('Sun, 21 Apr 2024 21:00:00 GMT') === selectedTriggerFromPanel?.datetime) {
+    //                     if (data.close[i] < data.open[i]) {
+    //                         return "red";
+    //                     }
+    //                     return "green";
+    //                 }
+    //                 return null;
+    //             }),
+    //             symbol: data.x.map((m, i) => {
+    //                 if (formatDate('Sun, 21 Apr 2024 21:00:00 GMT') === selectedTriggerFromPanel.datetime) {
+    //                     if (data.close[i] < data.open[i]) {
+    //                         return "triangle-down";
+    //                     }
+    //                     return "triangle-up";
+    //                 }
+    //                 return null;
+    //             }),
+    //             size: 7,
+    //         },
+    //         hoverinfo: "skip",
+    //     },
+    // ]:[];
+    // console.log("atta", a)
+    // return a
 };

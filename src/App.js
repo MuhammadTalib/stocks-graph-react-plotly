@@ -38,6 +38,7 @@ function App({ dataBaseUrl }) {
     const [selectedTemp, setSelectedTemp] = useState(templates[0]);
     const [switchToggle, setSwitchToggle] = useState("0");
     const [selectedStrategy, setSelectedStrategy] = useState([]);
+    const [selectedTriggerFromPanel, setSelectedTriggerFromPanel] = useState(null);
 
     const handleGrapthType = (type) => {
         setGraphType(type);
@@ -148,6 +149,7 @@ function App({ dataBaseUrl }) {
                         dataBaseUrl={dataBaseUrl}
                         setStrategiesData={setStrategiesData}
                         strategiesData={strategiesData}
+                        selectedTriggerFromPanel={selectedTriggerFromPanel}
                     />
                 </div>
             </div>
@@ -175,6 +177,7 @@ function App({ dataBaseUrl }) {
                 strategiesData={strategiesData}
                 selectedPattern={selectedPattern}
                 setSelectedPattern={setSelectedPattern}
+                setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
             />
         </div>
     );

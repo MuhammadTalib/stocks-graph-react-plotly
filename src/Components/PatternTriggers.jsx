@@ -28,10 +28,8 @@ const PatternTriggers = ({
     setStocks,
     strategiesData,
     selectedCategory,
-    categories,
-    setSelectedCategory,
-    setSelectedTime,
     setSelectedPattern,
+    setSelectedTriggerFromPanel
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -189,6 +187,7 @@ const PatternTriggers = ({
                     endDate={endDate}
                     setSelectedPattern={setSelectedPattern}
                     filterPattern={filterPattern}
+                    setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 />
             </Grid>
         </Grid>

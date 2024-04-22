@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
-import { drawPatternData, drawPatternTriggers } from "../Utils/patternUtils";
+import { drawPatternData, drawPatternTriggers, drawSidePanelClickedPatternTrigger } from "../Utils/patternUtils";
 import {
     drawConfirmHighAndLow,
     drawMergedChart,
@@ -41,6 +41,7 @@ export function DefaultChart({
     dataBaseUrl,
     setStrategiesData,
     strategiesData,
+    selectedTriggerFromPanel
 }) {
     const [data, setGraphData] = useState({ ...dummy });
     const [currentSelectedTemp, setCurrentSelectedTemp] =
@@ -173,6 +174,7 @@ export function DefaultChart({
                         data.strategiesData
                     ) || []),
                     ...(drawPatternTriggers(data, data.strategiesData,selectedPattern) || []),
+                    ...(drawSidePanelClickedPatternTrigger(switchToggle, data, pointIndex, selectedTriggerFromPanel) || [])
                 ]}
                 separateGraphs={[
                     ...drawSeparateChart(

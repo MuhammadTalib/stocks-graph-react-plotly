@@ -29,8 +29,8 @@ const FilterPanelTable = ({
     selectedStockIndex,
     startDate,
     endDate,
-    setSelectedPattern,
-    filterPattern
+    filterPattern,
+    setSelectedTriggerFromPanel
 }) => {
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
@@ -278,7 +278,8 @@ const FilterPanelTable = ({
                                             ],
                                         });
                                         setSelectStockIndex(index);
-                                        setSelectedPattern(row['Reversal'][0] || row['Double Close'][0] || row['Tower Patterns'][0])
+                                        setSelectedTriggerFromPanel(row)
+                                        // setSelectedPattern(row['Reversal'][0] || row['Double Close'][0] || row['Tower Patterns'][0])
                                     }}
                                     focus={(
                                         selectedStockIndex === index

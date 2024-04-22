@@ -51,7 +51,8 @@ const WatchList = ({
     setSecondaryLayout,
     strategiesData,
     selectedPattern,
-    setSelectedPattern
+    setSelectedPattern,
+    setSelectedTriggerFromPanel
 }) => {
     const [strategies, setStrategies] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -266,6 +267,7 @@ const WatchList = ({
                 placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
                 selectedPattern={selectedPattern}
                 setSelectedPattern={setSelectedPattern}
+                setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
             />
         );
     }, [selectedStock, selectedTime]);
