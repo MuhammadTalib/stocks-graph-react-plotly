@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { drawFirstDateLine, drawStrategiesBar } from "../Utils/utils";
 import "../App.css";
 import Plot from 'react-plotly.js';
+import { drawFVGPatterns } from "../Utils/patternUtils";
 
 export const Graph = ({
   data,
@@ -57,6 +58,7 @@ export const Graph = ({
             ...(selectedStrategy.length < 2
               ? drawStrategiesBar(data.strategiesData, data)
               : []),
+            ...drawFVGPatterns(data),
           ],
         }}
         config={{
@@ -76,6 +78,7 @@ export const Graph = ({
               shapes: [
                 ...drawFirstDateLine(toggleFirstDayLine, data),
                 ...drawStrategiesBar(data.strategiesData, data),
+                ...drawFVGPatterns(data)
               ],
             });
           }

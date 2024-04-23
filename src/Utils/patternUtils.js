@@ -18,9 +18,11 @@ export const getPatternNameList = (patterns) => {
 };
 
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
-    console.log("ans data", data)
-
-    if (selectedPattern === "All Failure Patterns") {
+    if (
+        selectedPattern === "All Failure Patterns" ||
+        selectedPattern === "FVG Up" ||
+        selectedPattern === "FVG Down"
+    ) {
         return [];
     }
     let patterns = data.patternData;
@@ -39,11 +41,8 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
     ) {
         patterns = data.patternData && data.patternData[0];
         let keys = data?.pattern_name_list || getPatternNameList(patterns);
-        console.log("ans data.patternData", data.patternData)
 
         patterns = data.patternData.map((m) => {
-            console.log("ans m", m)
-
             let ans = 0;
             if (Array.isArray(keys)) {
                 for (let key of keys) {
@@ -54,7 +53,6 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                             ? m?.["trigger"]
                             : 1;
 
-                        console.log("ans", ans)
                         break;
                     }
                 }
@@ -168,6 +166,88 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         : [];
 };
 
+export const drawFVGPatternsMarker = (data, selectedPattern, strategiesData) => {
+    if (
+        selectedPattern === "All Failure Patterns"
+    ) {
+        return [];
+    }
+    let patterns = data.patternData;
+    return patterns?.length
+        ? [
+              {
+                  //to normal pattern draw including T3 Failure arrows
+                  x: data?.x,
+                  y: patterns?.map((m, i) => {
+                      let perc10 = ((data.max - data.min) / 100) * 2.5;
+                      if (m) {
+                          if (data.close[i] > data.open[i]) {
+                              return Number(data.low[i]) - perc10;
+                          } else {
+                              return Number(data.high[i]) + perc10;
+                          }
+                      }
+                      return null;
+                  }),
+                  showlegend: false,
+                  mode: "markers",
+                  marker: {
+                      color: patterns?.map((m, i) => {
+                          if (m) {
+                              return "red";
+                          }
+                          return null;
+                      }),
+                      symbol: patterns.map((m, i) => {
+                          if (m) {
+                              return "square-open";
+                          }
+                          return null;
+                      }),
+                      size: 7,
+                  },
+                  hoverinfo: "skip",
+              },
+          ]
+        : [];
+};
+
+export const drawFVGPatterns = (data) => {
+    let frames = [];
+    
+    data?.patternData?.forEach((d,i) => {
+        if(d.pattern_end){
+            frames.push({
+                type: "rect",
+                x0: i - 2,
+                x1: i,
+                y1: d.point_1,
+                y0: d.point_4,
+                line: {
+                    color: "red",
+                    width: 1.5,
+                },
+                hoverinfo: "x",
+            });
+            frames.push({
+                type: "line",
+                x0: i - 2,
+                x1: i,
+                y1: d.point_1+((d.point_4-d.point_1)/2),
+                y0: d.point_1+((d.point_4-d.point_1)/2),
+                line: {
+                    color: "red",
+                    width: 1.5,
+                    dash: "dot",
+                },
+                hoverinfo: "x",
+            });
+        }
+       
+    });
+    return frames;
+};
+
 export const drawPatternTriggers = (data, strategiesData, selectedPattern) => {
     if (selectedPattern === "R/F Combo Pattern") {
         return;
@@ -278,89 +358,57 @@ const formatDate = (originalDateStr) => {
         ("0" + originalDate.getSeconds()).slice(-2)
     );
 };
- 
+
 export const drawSidePanelClickedPatternTrigger = (
-    switchToggle, data, pointIndex,
+    switchToggle,
+    data,
+    pointIndex,
     // data,
     selectedTriggerFromPanel
 ) => {
-    return selectedTriggerFromPanel? [
-        {
-            x: data?.x,
-            y: data.x.map((m, i) => {
-                let perc10 = ((data.max - data.min) / 100) * 2.5;
-                console.log("talib--",selectedTriggerFromPanel, m, formatDate(new Date(m)) , selectedTriggerFromPanel.datetime)
-                if(formatDate(new Date(m)) === selectedTriggerFromPanel.datetime){
-                    console.log("talib", formatDate(m) , formatDate(selectedTriggerFromPanel.datetime))
-                    if (data.close[i] > data.open[i]) {
-                        return Number(data.low[i]) - perc10;
-                    } else {
-                        return Number(data.high[i]) + perc10;
-                    }
-                }
-                return null
-                
-            }),
-            showlegend: false,
-            name: "Confirm Low " + data.low[pointIndex],
-            mode: "markers",
-            marker: {
-                color: data?.x.map((m, i) => {
-                    if (!m) return null;
-                    else {
-                        if (data.close[i] < data.open[i]) {
-                            return "red";
-                        }
-                        return "green";
-                    }
-                }),
-                symbol: data?.x.map((m, i) => {
-                    if (!m) return null;
-                    else {
-                        if (data.close[i] < data.open[i]) {
-                            return "triangle-down";
-                        }
-                        return "triangle-up";
-                    }
-                }),
-            },
-            hoverinfo: "skip",
-        },
-    ]:[]
-    // let a =  selectedTriggerFromPanel ? [
-    //     {
-    //         x: data?.x,
-    //         y: data.x.map((m,i) => {
-    //             if (formatDate('Sun, 21 Apr 2024 21:00:00 GMT') === selectedTriggerFromPanel?.datetime) { return data.low[i]}
-    //             else return null
-    //         }),
-    //         showlegend: false,
-    //         // name: "Confirm Low " + data.low[pointIndex],
-    //         mode: "markers",
-    //         marker: {
-    //             color: data.x?.map((m, i) => {
-    //                 if (formatDate('Sun, 21 Apr 2024 21:00:00 GMT') === selectedTriggerFromPanel?.datetime) {
-    //                     if (data.close[i] < data.open[i]) {
-    //                         return "red";
-    //                     }
-    //                     return "green";
-    //                 }
-    //                 return null;
-    //             }),
-    //             symbol: data.x.map((m, i) => {
-    //                 if (formatDate('Sun, 21 Apr 2024 21:00:00 GMT') === selectedTriggerFromPanel.datetime) {
-    //                     if (data.close[i] < data.open[i]) {
-    //                         return "triangle-down";
-    //                     }
-    //                     return "triangle-up";
-    //                 }
-    //                 return null;
-    //             }),
-    //             size: 7,
-    //         },
-    //         hoverinfo: "skip",
-    //     },
-    // ]:[];
-    // console.log("atta", a)
-    // return a
+    return selectedTriggerFromPanel
+        ? [
+              {
+                  x: data?.x,
+                  y: data.x.map((m, i) => {
+                      let perc10 = ((data.max - data.min) / 100) * 2.5;
+                      if (
+                          formatDate(new Date(m)) ===
+                          selectedTriggerFromPanel.datetime
+                      ) {
+                          if (data.close[i] > data.open[i]) {
+                              return Number(data.low[i]) - perc10;
+                          } else {
+                              return Number(data.high[i]) + perc10;
+                          }
+                      }
+                      return null;
+                  }),
+                  showlegend: false,
+                  name: "Confirm Low " + data.low[pointIndex],
+                  mode: "markers",
+                  marker: {
+                      color: data?.x.map((m, i) => {
+                          if (!m) return null;
+                          else {
+                              if (data.close[i] < data.open[i]) {
+                                  return "red";
+                              }
+                              return "green";
+                          }
+                      }),
+                      symbol: data?.x.map((m, i) => {
+                          if (!m) return null;
+                          else {
+                              if (data.close[i] < data.open[i]) {
+                                  return "triangle-down";
+                              }
+                              return "triangle-up";
+                          }
+                      }),
+                  },
+                  hoverinfo: "skip",
+              },
+          ]
+        : [];
 };

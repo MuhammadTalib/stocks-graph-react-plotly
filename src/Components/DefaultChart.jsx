@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
-import { drawPatternData, drawPatternTriggers, drawSidePanelClickedPatternTrigger } from "../Utils/patternUtils";
+import {
+    drawFVGPatterns,
+    drawFVGPatternsMarker,
+    drawPatternData,
+    drawPatternTriggers,
+    drawSidePanelClickedPatternTrigger,
+} from "../Utils/patternUtils";
 import {
     drawConfirmHighAndLow,
     drawMergedChart,
@@ -41,7 +47,7 @@ export function DefaultChart({
     dataBaseUrl,
     setStrategiesData,
     strategiesData,
-    selectedTriggerFromPanel
+    selectedTriggerFromPanel,
 }) {
     const [data, setGraphData] = useState({ ...dummy });
     const [currentSelectedTemp, setCurrentSelectedTemp] =
@@ -140,12 +146,15 @@ export function DefaultChart({
                               )
                             : selectedPattern
                         : undefined) ||
-                    (selectedPattern !== "R/F Combo Pattern" && data?.patternTrigger[pointIndex]?.trigger_failure
+                    (selectedPattern !== "R/F Combo Pattern" &&
+                    data?.patternTrigger[pointIndex]?.trigger_failure
                         ? selectedPattern
                         : undefined)
                 }
                 patternTrigger={
-                    selectedPattern === "R/F Combo Pattern" ? 0 : data?.patternTrigger[pointIndex]?.trigger_failure
+                    selectedPattern === "R/F Combo Pattern"
+                        ? 0
+                        : data?.patternTrigger[pointIndex]?.trigger_failure
                 }
                 selectedTime={selectedTime}
                 pointIndex={pointIndex}
@@ -174,8 +183,18 @@ export function DefaultChart({
                         selectedPattern,
                         data.strategiesData
                     ) || []),
-                    ...(drawPatternTriggers(data, data.strategiesData,selectedPattern) || []),
-                    ...(drawSidePanelClickedPatternTrigger(switchToggle, data, pointIndex, selectedTriggerFromPanel) || [])
+                    // ...(drawFVGPatternsMarker(data, selectedPattern) || []),
+                    ...(drawPatternTriggers(
+                        data,
+                        data.strategiesData,
+                        selectedPattern
+                    ) || []),
+                    ...(drawSidePanelClickedPatternTrigger(
+                        switchToggle,
+                        data,
+                        pointIndex,
+                        selectedTriggerFromPanel
+                    ) || []),
                 ]}
                 separateGraphs={[
                     ...drawSeparateChart(

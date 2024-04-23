@@ -242,10 +242,10 @@ export const drawStrategiesBar = (strategiesData, data) => {
                   type: "rect",
                   text: "ddd",
                   x0: dateIndex - 0.5,
-                  y0: 0,
                   x1: dateIndex + 0.5,
-                  yref: "paper",
+                  y0: 0,
                   y1: 1,
+                  yref: "paper",
                   line: {
                       color: "#ffff00",
                       width: 1.5,
@@ -806,8 +806,6 @@ export const getOccuredReversalPatterns = (
                 occured += key;
             }
         });
-    console.log("occured", occured,patternData?.[pointIndex], patternData?.[pointIndex]?.["trigger"])
-
     if((pattern === "R/F Combo Pattern")){
         if(patternData?.[pointIndex]?.["trigger"] && occured){
             return pattern + " - " + occured.replace(", trigger_reversal","")
