@@ -79,7 +79,9 @@ const FilterPanelTable = ({
                 });
             });
         });
-        setTableData([...Object.values(tableDict)]);
+        setTableData([...Object.values(tableDict)].sort(function(a, b) {
+            return new Date(b.datetime) - new Date(a.datetime);
+          }));
     };
 
     const fetchTableData = () => {

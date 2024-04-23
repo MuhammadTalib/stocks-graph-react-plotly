@@ -276,7 +276,6 @@ export const drawSidePanelClickedPatternTrigger = (
     // data,
     selectedTriggerFromPanel
 ) => {
-    console.log("selectedTriggerFromPanel", selectedTriggerFromPanel, selectedTriggerFromPanel?.datetime)
     return selectedTriggerFromPanel? [
         {
             x: data?.x,
