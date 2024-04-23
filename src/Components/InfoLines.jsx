@@ -22,7 +22,7 @@ const InfoLines = ({
       <div>
         Open: {open} High: {high} Low: {low} Close: {close}
       </div>
-      {selectedPattern || patternTrigger ? (
+      {(selectedPattern && selectedPattern.length) || patternTrigger ? (
         <div>Pattern: {selectedPattern}</div>
       ) : (
         <></>

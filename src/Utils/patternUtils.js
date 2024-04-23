@@ -18,6 +18,8 @@ export const getPatternNameList = (patterns) => {
 };
 
 export const drawPatternData = (data, selectedPattern, strategiesData) => {
+    console.log("ans data", data)
+
     if (selectedPattern === "All Failure Patterns") {
         return [];
     }
@@ -37,7 +39,11 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
     ) {
         patterns = data.patternData && data.patternData[0];
         let keys = data?.pattern_name_list || getPatternNameList(patterns);
+        console.log("ans data.patternData", data.patternData)
+
         patterns = data.patternData.map((m) => {
+            console.log("ans m", m)
+
             let ans = 0;
             if (Array.isArray(keys)) {
                 for (let key of keys) {
@@ -47,6 +53,8 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
                             : selectedPattern === "R/F Combo Pattern"
                             ? m?.["trigger"]
                             : 1;
+
+                        console.log("ans", ans)
                         break;
                     }
                 }

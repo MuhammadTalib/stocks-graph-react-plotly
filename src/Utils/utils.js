@@ -458,6 +458,7 @@ export function getDataRequestService(
                         }
                         if (
                             pattern === "All Failure Patterns" ||
+                            pattern === "R/F Combo Pattern" ||
                             isT3Pattern(pattern)
                         ) {
                             patternData.push(m[pattern]);
@@ -780,7 +781,10 @@ export const getOccuredReversalPatterns = (
     patternData.length &&
         Array.isArray(keys) &&
         keys.forEach((key, i) => {
-            if (
+            if(pattern === "R/F Combo Pattern" && patternData?.[pointIndex]?.["trigger"] && patternData?.[pointIndex]?.[key] && key !== "trigger_reversal" ){
+                if (occured.length > 0) occured += ", ";
+                occured += key;
+            } else if (
                 isT3Pattern(pattern) &&
                 patternData?.[pointIndex]?.["pattern_end"] &&
                 patternData?.[pointIndex]?.[key] &&
@@ -802,7 +806,16 @@ export const getOccuredReversalPatterns = (
                 occured += key;
             }
         });
-    return isT3FailurePattern(pattern) && occured
+    console.log("occured", occured,patternData?.[pointIndex], patternData?.[pointIndex]?.["trigger"])
+
+    if((pattern === "R/F Combo Pattern")){
+        if(patternData?.[pointIndex]?.["trigger"] && occured){
+            return pattern + " - " + occured.replace(", trigger_reversal","")
+        }
+        return ""
+    }
+
+    return ((isT3FailurePattern(pattern) && occured))
         ? pattern
         : ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured
               ? `${pattern} - `

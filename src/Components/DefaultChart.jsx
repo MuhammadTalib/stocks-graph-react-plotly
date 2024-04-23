@@ -124,6 +124,7 @@ export function DefaultChart({
                     (data.patternData[pointIndex]
                         ? data.patternData[pointIndex].is_combo_pattern ||
                           selectedPattern === "All Reversal Patterns" ||
+                          selectedPattern === "R/F Combo Pattern" ||
                           selectedPattern === "All Failure Patterns" ||
                           selectedPattern === "S Combo Pattern" ||
                           selectedPattern === "All T3 Patterns" ||
@@ -139,12 +140,12 @@ export function DefaultChart({
                               )
                             : selectedPattern
                         : undefined) ||
-                    (data?.patternTrigger[pointIndex]?.trigger_failure
+                    (selectedPattern !== "R/F Combo Pattern" && data?.patternTrigger[pointIndex]?.trigger_failure
                         ? selectedPattern
                         : undefined)
                 }
                 patternTrigger={
-                    data?.patternTrigger[pointIndex]?.trigger_failure
+                    selectedPattern === "R/F Combo Pattern" ? 0 : data?.patternTrigger[pointIndex]?.trigger_failure
                 }
                 selectedTime={selectedTime}
                 pointIndex={pointIndex}
