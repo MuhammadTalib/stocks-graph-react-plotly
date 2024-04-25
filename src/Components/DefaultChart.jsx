@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { dummy } from "../Utils/defaults";
 import {
-    drawFVGPatterns,
-    drawFVGPatternsMarker,
     drawPatternData,
     drawPatternTriggers,
     drawSidePanelClickedPatternTrigger,
@@ -190,7 +188,6 @@ export function DefaultChart({
                         selectedPattern
                     ) || []),
                     ...(drawSidePanelClickedPatternTrigger(
-                        switchToggle,
                         data,
                         pointIndex,
                         selectedTriggerFromPanel

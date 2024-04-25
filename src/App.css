@@ -177,3 +177,7 @@
   width: 100%;
   overflow: hidden;
 }
+
+.button-like:hover {
+  background-color: #ddd !important; /* Change to desired hover color */
+}

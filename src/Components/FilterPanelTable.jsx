@@ -30,7 +30,7 @@ const FilterPanelTable = ({
     startDate,
     endDate,
     filterPattern,
-    setSelectedTriggerFromPanel
+    setSelectedTriggerFromPanel,
 }) => {
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
@@ -52,7 +52,15 @@ const FilterPanelTable = ({
 
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, endDate, filterPattern, pagination.pageSize]);
+    }, [
+        symbolFilter,
+        timeFilter,
+        pagination.currentPage,
+        startDate,
+        endDate,
+        filterPattern,
+        pagination.pageSize,
+    ]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -62,26 +70,7 @@ const FilterPanelTable = ({
     });
 
     const processTableData = (data) => {
-        let tableDict = {};
-        data?.columns.forEach((col) => {
-            return data[col].forEach((patterns) => {
-                return Object.values(patterns).forEach((pattern) => {
-                    let key = `${Object.values(pattern)[0].datetime}-${
-                        Object.values(pattern)[0].interval
-                    }`;
-                    tableDict[key] = {
-                        ...Object.values(pattern)[0],
-                        [col]: [
-                            ...((tableDict[key] || {})[col] || []),
-                            Object.keys(pattern)[0],
-                        ],
-                    };
-                });
-            });
-        });
-        setTableData([...Object.values(tableDict)].sort(function(a, b) {
-            return new Date(b.datetime) - new Date(a.datetime);
-          }));
+        setTableData(data?.alert_data || []);
     };
 
     const fetchTableData = () => {
@@ -91,7 +80,11 @@ const FilterPanelTable = ({
             selectedStock.sources &&
             selectedStock.sources[0] !== undefined
         ) {
-            let url = `stocks/table_alert_data/${pagination.currentPage}?source=${selectedStock.sources[0]}&category=${selectedCategory}&per_page=${pagination.pageSize}`;
+            let url = `stocks/table_alert_data/${
+                pagination.currentPage || 1
+            }?source=${
+                selectedStock.sources[0]
+            }&category=${selectedCategory}&per_page=${pagination.pageSize}`;
 
             if (symbolFilter && symbolFilter.length) {
                 url += `&symbol=${symbolFilter.map((m) => m.name).join(",")}`;
@@ -102,7 +95,7 @@ const FilterPanelTable = ({
             if (startDate && endDate) {
                 url += `&start_date=${startDate}&end_date=${endDate}`;
             }
-            if(filterPattern && filterPattern.length) {
+            if (filterPattern && filterPattern.length) {
                 url += `&pattern=${filterPattern?.map((m) => m.key).join(",")}`;
             }
             getAllStocks(url, "get").then((res) => {
@@ -170,7 +163,7 @@ const FilterPanelTable = ({
 
         setTableData(
             stableSort(
-                tableData.map((m) => {
+                tableData?.map((m) => {
                     let obj = {};
                     selectedStrategy.forEach((s, i) => {
                         let t = strategiesData?.[i]?.data?.[m.name]?.time;
@@ -179,7 +172,7 @@ const FilterPanelTable = ({
 
                     return {
                         ...m,
-                        Symbol: m.symbol,
+                        Symbol: m.stock_symbol,
                         Interval: m.interval,
                         ...obj,
                     };
@@ -250,7 +243,7 @@ const FilterPanelTable = ({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tableData.map((row, index) => {
+                        {tableData?.map((row, index) => {
                             return (
                                 <TableRow
                                     className={
@@ -269,7 +262,7 @@ const FilterPanelTable = ({
                                         placeSelectedItemInTheMiddle(index);
                                         handleStockChange({
                                             description: "",
-                                            name: row.symbol,
+                                            name: row.stock_symbol,
                                             sectorName: "",
                                             sources: [
                                                 selectedStock &&
@@ -281,7 +274,6 @@ const FilterPanelTable = ({
                                         });
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row)
-                                        // setSelectedPattern(row['Reversal'][0] || row['Double Close'][0] || row['Tower Patterns'][0])
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -291,22 +283,34 @@ const FilterPanelTable = ({
                                         sx={{ width: "100px" }}
                                         align={"center"}
                                     >
-                                        {row?.symbol}
+                                        {row?.stock_symbol}
                                     </TableCell>
                                     <TableCell align={"center"}>
                                         {row?.interval}
                                     </TableCell>
                                     <TableCell align={"center"}>
-                                        {row.datetime}
+                                        {row.date}
                                     </TableCell>
                                     {patternColumns.map((col, index) => {
-                                        return (
+                                        return row.pattern_dict[col].join(", ")
+                                            ?.length ? (
                                             <TableCell
                                                 key={index}
                                                 align={"center"}
+                                              
+                                                className="button-like"
+                                                style={{
+                                                    cursor: "pointer",
+                                                    transition:
+                                                        "background-color 0.3s",
+                                                }}
                                             >
-                                                {(row[col] || []).join(", ")}
+                                                {row.pattern_dict[col].join(
+                                                    ", "
+                                                ) || "-"}
                                             </TableCell>
+                                        ) : (
+                                            <TableCell></TableCell>
                                         );
                                     })}
                                 </TableRow>
@@ -314,27 +318,41 @@ const FilterPanelTable = ({
                         })}
                     </TableBody>
                 </Table>
-                {pagination && ( <div style={{
+                {pagination && (
+                    <div
+                        style={{
                             display: "flex",
                             margin: "10px",
                             justifyContent: "flex-end",
-                        }}>
+                        }}
+                    >
                         <Select
                             size="small"
                             onChange={(e) => {
-                                setPagination({...pagination,pageSize: e.target.value })
+                                setPagination({
+                                    ...pagination,
+                                    pageSize: e.target.value,
+                                });
                             }}
                             value={pagination.pageSize}
                             MenuProps={{
-                                PaperProps: { sx: { maxHeight: 360 } }
+                                PaperProps: { sx: { maxHeight: 360 } },
                             }}
-                            >
-                            <MenuItem id={10} key={10} value={10}>{10}</MenuItem>
-                            <MenuItem id={25} key={25} value={25}>{25}</MenuItem>
-                            <MenuItem id={50} key={50} value={50}>{50}</MenuItem>
-                            <MenuItem id={100} key={100} value={100}>{100}</MenuItem>
+                        >
+                            <MenuItem id={10} key={10} value={10}>
+                                {10}
+                            </MenuItem>
+                            <MenuItem id={25} key={25} value={25}>
+                                {25}
+                            </MenuItem>
+                            <MenuItem id={50} key={50} value={50}>
+                                {50}
+                            </MenuItem>
+                            <MenuItem id={100} key={100} value={100}>
+                                {100}
+                            </MenuItem>
                         </Select>
-                        
+
                         <Pagination
                             count={pagination.total_pages}
                             page={pagination.page}

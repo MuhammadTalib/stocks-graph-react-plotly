@@ -360,10 +360,8 @@ const formatDate = (originalDateStr) => {
 };
 
 export const drawSidePanelClickedPatternTrigger = (
-    switchToggle,
     data,
     pointIndex,
-    // data,
     selectedTriggerFromPanel
 ) => {
     return selectedTriggerFromPanel
@@ -374,7 +372,7 @@ export const drawSidePanelClickedPatternTrigger = (
                       let perc10 = ((data.max - data.min) / 100) * 2.5;
                       if (
                           formatDate(new Date(m)) ===
-                          selectedTriggerFromPanel.datetime
+                          selectedTriggerFromPanel.date
                       ) {
                           if (data.close[i] > data.open[i]) {
                               return Number(data.low[i]) - perc10;
