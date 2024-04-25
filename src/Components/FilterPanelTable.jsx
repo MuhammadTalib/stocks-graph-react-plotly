@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select, TableSortLabel } from "@mui/material";
+import { Box, TableSortLabel } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -52,15 +52,7 @@ const FilterPanelTable = ({
 
     useEffect(() => {
         fetchTableData();
-    }, [
-        symbolFilter,
-        timeFilter,
-        pagination.currentPage,
-        startDate,
-        endDate,
-        filterPattern,
-        pagination.pageSize,
-    ]);
+    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, endDate, filterPattern]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -319,46 +311,16 @@ const FilterPanelTable = ({
                     </TableBody>
                 </Table>
                 {pagination && (
-                    <div
+                    <Pagination
                         style={{
                             display: "flex",
                             margin: "10px",
                             justifyContent: "flex-end",
                         }}
-                    >
-                        <Select
-                            size="small"
-                            onChange={(e) => {
-                                setPagination({
-                                    ...pagination,
-                                    pageSize: e.target.value,
-                                });
-                            }}
-                            value={pagination.pageSize}
-                            MenuProps={{
-                                PaperProps: { sx: { maxHeight: 360 } },
-                            }}
-                        >
-                            <MenuItem id={10} key={10} value={10}>
-                                {10}
-                            </MenuItem>
-                            <MenuItem id={25} key={25} value={25}>
-                                {25}
-                            </MenuItem>
-                            <MenuItem id={50} key={50} value={50}>
-                                {50}
-                            </MenuItem>
-                            <MenuItem id={100} key={100} value={100}>
-                                {100}
-                            </MenuItem>
-                        </Select>
-
-                        <Pagination
-                            count={pagination.total_pages}
-                            page={pagination.page}
-                            onChange={handleChange}
-                        />
-                    </div>
+                        count={pagination.total_pages}
+                        page={pagination.page}
+                        onChange={handleChange}
+                    />
                 )}
             </TableContainer>
         </div>
