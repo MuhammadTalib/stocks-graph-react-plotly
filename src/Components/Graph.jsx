@@ -20,6 +20,7 @@ export const Graph = ({
   dualChartWidth,
   sidebarWidth,
   selectedStrategy,
+  selectedPattern
 }) => {
 
   document
@@ -58,7 +59,7 @@ export const Graph = ({
             ...(selectedStrategy.length < 2
               ? drawStrategiesBar(data.strategiesData, data)
               : []),
-            ...drawFVGPatterns(data),
+            ...drawFVGPatterns(data, selectedPattern),
           ],
         }}
         config={{
@@ -78,7 +79,7 @@ export const Graph = ({
               shapes: [
                 ...drawFirstDateLine(toggleFirstDayLine, data),
                 ...drawStrategiesBar(data.strategiesData, data),
-                ...drawFVGPatterns(data)
+                ...drawFVGPatterns(data, selectedPattern)
               ],
             });
           }

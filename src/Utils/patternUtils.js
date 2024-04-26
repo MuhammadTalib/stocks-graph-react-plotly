@@ -212,8 +212,12 @@ export const drawFVGPatternsMarker = (data, selectedPattern, strategiesData) => 
         : [];
 };
 
-export const drawFVGPatterns = (data) => {
+export const drawFVGPatterns = (data,selectedPattern) => {
+    if(selectedPattern !== "FVG Down" && selectedPattern !== "FVG Up"){
+        return []
+    }
     let frames = [];
+    
     
     data?.patternData?.forEach((d,i) => {
         if(d.pattern_end){

@@ -168,6 +168,7 @@ export function DefaultChart({
                 data={{ ...data, type: graphType }}
                 layout={layout}
                 toggleFirstDayLine={toggleFirstDayLine}
+                selectedPattern={selectedPattern}
                 templates={[
                     ...drawMergedChart(
                         currentSelectedTemp,
@@ -181,7 +182,6 @@ export function DefaultChart({
                         selectedPattern,
                         data.strategiesData
                     ) || []),
-                    // ...(drawFVGPatternsMarker(data, selectedPattern) || []),
                     ...(drawPatternTriggers(
                         data,
                         data.strategiesData,
