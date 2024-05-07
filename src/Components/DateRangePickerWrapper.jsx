@@ -30,43 +30,44 @@ const DateRangePickerWrapper = ({ label, value, setValue }) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: "100%" }}>
-            <DemoContainer components={["SingleInputDateRangeField"]}>
-                <DemoItem component="DateRangePicker">
-                    <DateRangePicker
-                        slots={{ field: SingleInputDateRangeField }}
-                        slotProps={{
-                            openPickerIcon: { fontSize: "large" },
-                            openPickerButton: { color: "secondary" },
-                            textField: {
-                                InputProps: {
-                                    endAdornment: (
-                                        <InputAdornment
-                                            className={classes.selectAdornment}
-                                            position="end"
-                                        >
-                                            <IconButton
-                                                onClick={(e)=>{
-                                                    e.stopPropagation()
-                                                    setSelectedDate([null, null])
-                                                    setValue([null, null])
-                                                }}
-                                                aria-label="delete"
-                                                size="small"
-                                            >
-                                                <CloseIcon />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                },
+            {/* <DemoContainer components={["SingleInputDateRangeField"]}> */}
+            <DemoItem component="DateRangePicker">
+                <DateRangePicker
+                    slots={{ field: SingleInputDateRangeField }}
+                    slotProps={{
+                        openPickerIcon: { fontSize: "large" },
+                        openPickerButton: { color: "secondary" },
+                        textField: {
+                            fullWidth: true,
+                            InputProps: {
+                                endAdornment: (
+                                    <InputAdornment
+                                        className={classes.selectAdornment}
+                                        position="end"
+                                    >
+                                       {selectedDate && selectedDate.length && selectedDate[0] && <IconButton
+                                            onClick={(e)=>{
+                                                e.stopPropagation()
+                                                setSelectedDate([null, null])
+                                                setValue([null, null])
+                                            }}
+                                            aria-label="delete"
+                                            size="small"
+                                        >   
+                                            <CloseIcon />
+                                        </IconButton>}
+                                    </InputAdornment>
+                                ),
                             },
-                        }}
-                        name="allowedRange"
-                        onChange={handleDateChange}
-                        value={selectedDate}
-                        label={"Date Range"}
-                    />
-                </DemoItem>
-            </DemoContainer>
+                        },
+                    }}
+                    name="allowedRange"
+                    onChange={handleDateChange}
+                    value={selectedDate}
+                    label={"Date Range"}
+                />
+            </DemoItem>
+            {/* </DemoContainer> */}
         </LocalizationProvider>
     );
 };

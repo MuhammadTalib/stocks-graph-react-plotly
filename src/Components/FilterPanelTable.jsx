@@ -84,8 +84,8 @@ const FilterPanelTable = ({
             if (timeFilter && timeFilter.length) {
                 url += `&interval=${timeFilter.map((m) => m.name).join(",")}`;
             }
-            if (startDate && endDate) {
-                url += `&start_date=${startDate}&end_date=${endDate}`;
+            if (startDate && startDate.length > 1 && startDate[0] && startDate[1]) {
+                url += `&start_date=${startDate[0]}&end_date=${startDate[1]}`;
             }
             if (filterPattern && filterPattern.length) {
                 url += `&pattern=${filterPattern?.map((m) => m.key).join(",")}`;
