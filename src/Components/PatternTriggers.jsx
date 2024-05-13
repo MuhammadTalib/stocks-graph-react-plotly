@@ -29,18 +29,39 @@ const PatternTriggers = ({
     strategiesData,
     selectedCategory,
     setSelectedPattern,
-    setSelectedTriggerFromPanel
+    setSelectedTriggerFromPanel,
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
     const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
     const [filterPattern, setFilterPatter] = useState([]);
     let [patterns] = useState([
-        { name: "REVERSALS", key: "all reversal patterns" },
-        { name: "FAILURES", key: "all failure patterns" },
-        { name: "MACD DIVERGENCE", key: "all divergence patterns" },
+        {
+            name: "Reversal",
+            key: "all reversal patterns",
+            pattern: "All Reversal Patterns",
+        },
+        {
+            name: "Double Close",
+            key: "double close",
+            pattern: "All Reversal Patterns",
+        },
+        {
+            name: "Tower Patterns",
+            key: "tower patterns",
+            pattern: "All Reversal Patterns",
+        },
+        {
+            name: "Failure",
+            key: "all failure patterns",
+            pattern: "All Failure Patterns",
+        },
+        {
+            name: "MACD DIVERGENCE",
+            key: "all divergence patterns",
+            pattern: "All Divergence Patterns",
+        },
         { name: "RSI DIVERGENCE", key: "rsi divergence combo" },
         { name: "S/L COMBO", key: "S/L combo patterns" },
         { name: "RSI-R", key: "RSI-R POI patterns" },
@@ -140,7 +161,7 @@ const PatternTriggers = ({
                         label={"Pattern"}
                         getOptionLabel={(option) => {
                             return option ? option?.name : "";
-                        }}  
+                        }}
                         renderOption={(props, option, s) => {
                             let selected = s?.selected;
                             return (
@@ -184,7 +205,6 @@ const PatternTriggers = ({
                     selectedStockIndex={selectedStockIndex}
                     placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
                     startDate={startDate}
-                    endDate={endDate}
                     setSelectedPattern={setSelectedPattern}
                     filterPattern={filterPattern}
                     setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}

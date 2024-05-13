@@ -30,7 +30,6 @@ const DateRangePickerWrapper = ({ label, value, setValue }) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ width: "100%" }}>
-            {/* <DemoContainer components={["SingleInputDateRangeField"]}> */}
             <DemoItem component="DateRangePicker">
                 <DateRangePicker
                     slots={{ field: SingleInputDateRangeField }}
@@ -67,7 +66,6 @@ const DateRangePickerWrapper = ({ label, value, setValue }) => {
                     label={"Date Range"}
                 />
             </DemoItem>
-            {/* </DemoContainer> */}
         </LocalizationProvider>
     );
 };

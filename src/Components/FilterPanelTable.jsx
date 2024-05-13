@@ -28,7 +28,6 @@ const FilterPanelTable = ({
     setSelectStockIndex,
     selectedStockIndex,
     startDate,
-    endDate,
     filterPattern,
     setSelectedTriggerFromPanel,
 }) => {
@@ -52,7 +51,7 @@ const FilterPanelTable = ({
 
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, endDate, filterPattern]);
+    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -110,7 +109,7 @@ const FilterPanelTable = ({
             hanldeSelectedTime(selectedTime);
             handleStockChange({
                 description: "",
-                name: tableData[selectedStockIndex - 1].symbol,
+                name: tableData[selectedStockIndex - 1].stock_symbol,
                 sectorName: "",
                 sources: [
                     selectedStock &&
@@ -125,7 +124,7 @@ const FilterPanelTable = ({
             hanldeSelectedTime(selectedTime);
             handleStockChange({
                 description: "",
-                name: tableData[selectedStockIndex - 1].symbol,
+                name: tableData[selectedStockIndex + 1] && tableData[selectedStockIndex + 1].stock_symbol,
                 sectorName: "",
                 sources: [
                     selectedStock &&
@@ -243,7 +242,7 @@ const FilterPanelTable = ({
                                             ? "selectedRowStyle"
                                             : ""
                                     }
-                                    key={row?.symbol + index}
+                                    key={row?.stock_symbol + index}
                                     active={(
                                         selectedStockIndex === index
                                     ).toString()}
