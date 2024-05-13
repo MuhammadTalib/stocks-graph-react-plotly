@@ -1,4 +1,5 @@
 import { Box, TableSortLabel } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,10 +8,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { visuallyHidden } from "@mui/utils";
 import React, { useEffect, useState } from "react";
-import { getAllStocks } from "../services/api";
-import { getTimeObject } from "../Utils/utils";
-import Pagination from "@mui/material/Pagination";
 import { getComparator, stableSort } from "../Utils/sorting";
+import { getTimeObject } from "../Utils/utils";
+import { getAllStocks } from "../services/api";
 
 const FilterPanelTable = ({
     height,
