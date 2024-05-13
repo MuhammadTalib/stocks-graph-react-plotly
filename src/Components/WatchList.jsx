@@ -52,7 +52,8 @@ const WatchList = ({
     strategiesData,
     selectedPattern,
     setSelectedPattern,
-    setSelectedTriggerFromPanel
+    setSelectedTriggerFromPanel,
+    handlePatternChange
 }) => {
     const [strategies, setStrategies] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -268,6 +269,7 @@ const WatchList = ({
                 selectedPattern={selectedPattern}
                 setSelectedPattern={setSelectedPattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
+                handlePatternChange={handlePatternChange}
             />
         );
     }, [selectedStock, selectedTime]);

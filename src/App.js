@@ -178,6 +178,7 @@ function App({ dataBaseUrl }) {
                 selectedPattern={selectedPattern}
                 setSelectedPattern={setSelectedPattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
+                handlePatternChange={handlePatternChange}
             />
         </div>
     );

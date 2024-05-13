@@ -30,6 +30,7 @@ const PatternTriggers = ({
     selectedCategory,
     setSelectedPattern,
     setSelectedTriggerFromPanel,
+    handlePatternChange
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -73,7 +74,7 @@ const PatternTriggers = ({
         { name: "SMT", key: "smt divergence patterns" },
     ]);
 
-    const handlePatternChange = (pattern) => {
+    const handlePatternFilterChange = (pattern) => {
         setFilterPatter(pattern);
     };
 
@@ -176,7 +177,7 @@ const PatternTriggers = ({
                             );
                         }}
                         multiple={true}
-                        handleChange={handlePatternChange}
+                        handleChange={handlePatternFilterChange}
                         selectedStock={selectedStock}
                     />
                 </Grid>
@@ -208,6 +209,8 @@ const PatternTriggers = ({
                     setSelectedPattern={setSelectedPattern}
                     filterPattern={filterPattern}
                     setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
+                    handlePatternChange={handlePatternChange}
+                    patterns={patterns}
                 />
             </Grid>
         </Grid>

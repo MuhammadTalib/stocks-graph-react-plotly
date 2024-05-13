@@ -30,6 +30,8 @@ const FilterPanelTable = ({
     startDate,
     filterPattern,
     setSelectedTriggerFromPanel,
+    handlePatternChange,
+    patterns
 }) => {
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
@@ -288,7 +290,11 @@ const FilterPanelTable = ({
                                             <TableCell
                                                 key={index}
                                                 align={"center"}
-                                              
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                    let pObj =  patterns.find(p=>p.name === col)
+                                                    handlePatternChange(pObj.pattern)
+                                                }}
                                                 className="button-like"
                                                 style={{
                                                     cursor: "pointer",
