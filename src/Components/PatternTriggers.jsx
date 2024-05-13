@@ -1,12 +1,12 @@
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { Checkbox, Grid } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Checkbox, Grid, IconButton } from "@mui/material";
+import React, { useState } from "react";
 import { times } from "../Utils/defaults";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 import FilterPanelTable from "./FilterPanelTable";
 import DateRangePickerWrapper from "./DateRangePickerWrapper";
-import { getAllStocks } from "../services/api";
+import ReplayIcon from '@mui/icons-material/Replay';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -37,6 +37,7 @@ const PatternTriggers = ({
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
     const [startDate, setStartDate] = useState(null);
     const [filterPattern, setFilterPatter] = useState([]);
+    const [fetchTimeStamp, setTimeStamp] = useState(0)
     let [patterns] = useState([
         {
             name: "Reversal",
@@ -155,31 +156,38 @@ const PatternTriggers = ({
                         setValue={setStartDate}
                     />
                 </Grid>
-                <Grid item md={3} sm={3} xs={3}>
-                    <AutocompleteWrapper
-                        options={patterns}
-                        value={filterPattern}
-                        label={"Pattern"}
-                        getOptionLabel={(option) => {
-                            return option ? option?.name : "";
-                        }}
-                        renderOption={(props, option, s) => {
-                            let selected = s?.selected;
-                            return (
-                                <li {...props}>
-                                    <Checkbox
-                                        icon={icon}
-                                        checkedIcon={checkedIcon}
-                                        checked={selected}
-                                    />
-                                    {option.name}
-                                </li>
-                            );
-                        }}
-                        multiple={true}
-                        handleChange={handlePatternFilterChange}
-                        selectedStock={selectedStock}
-                    />
+                <Grid item container md={3} sm={3} xs={3}>
+                    <Grid item md={9} sm={9} xs={9}>
+                        <AutocompleteWrapper
+                            options={patterns}
+                            value={filterPattern}
+                            label={"Pattern"}
+                            getOptionLabel={(option) => {
+                                return option ? option?.name : "";
+                            }}
+                            renderOption={(props, option, s) => {
+                                let selected = s?.selected;
+                                return (
+                                    <li {...props}>
+                                        <Checkbox
+                                            icon={icon}
+                                            checkedIcon={checkedIcon}
+                                            checked={selected}
+                                        />
+                                        {option.name}
+                                    </li>
+                                );
+                            }}
+                            multiple={true}
+                            handleChange={handlePatternFilterChange}
+                            selectedStock={selectedStock}
+                        />
+                    </Grid>
+                    <Grid item md={3} sm={3} xs={3}>
+                        <IconButton onClick={()=>{setTimeStamp(Date.now())}} style={{ padding: "11px" }} aria-label="replay" color="primary">
+                            <ReplayIcon />
+                        </IconButton>
+                    </Grid>
                 </Grid>
             </Grid>
 
@@ -211,6 +219,7 @@ const PatternTriggers = ({
                     setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                     handlePatternChange={handlePatternChange}
                     patterns={patterns}
+                    fetchTimeStamp={fetchTimeStamp}
                 />
             </Grid>
         </Grid>

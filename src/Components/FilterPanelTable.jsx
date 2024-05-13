@@ -31,8 +31,10 @@ const FilterPanelTable = ({
     filterPattern,
     setSelectedTriggerFromPanel,
     handlePatternChange,
-    patterns
+    patterns,
+    fetchTimeStamp
 }) => {
+    const pollingTime = 100 //seconds
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
         { label: "Interval", numeric: false, type: "string" },
@@ -53,7 +55,7 @@ const FilterPanelTable = ({
 
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern]);
+    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern, fetchTimeStamp]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -65,6 +67,11 @@ const FilterPanelTable = ({
     const processTableData = (data) => {
         setTableData(data?.alert_data || []);
     };
+
+    useEffect(() => { //POLLING data
+        const timer = setInterval(fetchTableData, 1000 * pollingTime);
+        return () => clearInterval(timer);
+    }, []);
 
     const fetchTableData = () => {
         if (
@@ -207,6 +214,7 @@ const FilterPanelTable = ({
                                     sortDirection={
                                         orderBy === column.label ? order : false
                                     }
+                                    style={{ padding:"16px 0px !important" }}
                                 >
                                     <TableSortLabel
                                         active={orderBy === column.label}
