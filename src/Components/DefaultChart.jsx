@@ -88,7 +88,7 @@ export function DefaultChart({
             getDataRequest(
                 selectedStock,
                 selectedTime,
-                currentSelectedTemp,
+                selectedTemp,
                 selectedPattern,
                 switchToggle,
                 data,

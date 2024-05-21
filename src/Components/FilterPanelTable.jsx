@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { getComparator, stableSort } from "../Utils/sorting";
 import { getTimeObject } from "../Utils/utils";
 import { getAllStocks } from "../services/api";
-import { templates } from "../Utils/defaults";
+import { T0, templates } from "../Utils/defaults";
 
 const FilterPanelTable = ({
     height,
@@ -279,8 +279,8 @@ const FilterPanelTable = ({
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row);
                                         handlePatternChange(null)
-                                        let template = templates.find(t=>t.name==='T0')
-                                        templateChange(template)
+                                        templateChange(T0)
+                                        setSelectedColumnIndex(null)
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -307,8 +307,10 @@ const FilterPanelTable = ({
                                                 onClick={(event) => {
                                                     event.stopPropagation()
                                                     let pObj =  patterns.find(p=>p.name === col)
-                                                    let template = templates.find(t=>t.name===pObj.template)
+                                                    let template = templates.find(t=>t.name===(pObj.template || "T0"))
                                                     if(pObj.template){
+                                                        templateChange(template)
+                                                    }else{
                                                         templateChange(template)
                                                     }
                                                     handlePatternChange(pObj.pattern)
@@ -331,7 +333,7 @@ const FilterPanelTable = ({
                                                     setSelectStockIndex(index);
                                                     setSelectedColumnIndex(col_index)
                                                 }}
-                                                className="button-like"
+                                                className={`button-like ${(selectedStockIndex === index && col_index === selectedColumnIndex) ?'selectedColumnStyle':''}`}
                                                 style={{
                                                     cursor: "pointer",
                                                     transition:
