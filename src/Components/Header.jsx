@@ -31,6 +31,7 @@ const Header = ({
     selectedStock,
     dataBaseUrl,
     setSidebarWidth,
+    setResizeFromWatchlistButton
 }) => {
     let linkRef = useRef();
     let [patterns, setPatterns] = useState([]);
@@ -45,7 +46,7 @@ const Header = ({
     const openSidebar = () => {
         if (!sidebarOpen) setSidebarWidth(500);
         if (sidebarOpen) setSidebarWidth(6);
-
+        setResizeFromWatchlistButton(true)
         setSidebarOpen(!sidebarOpen);
     };
 

@@ -39,6 +39,7 @@ function App({ dataBaseUrl }) {
     const [switchToggle, setSwitchToggle] = useState("0");
     const [selectedStrategy, setSelectedStrategy] = useState([]);
     const [selectedTriggerFromPanel, setSelectedTriggerFromPanel] = useState(null);
+    const [resizeFromWatchlistButton, setResizeFromWatchlistButton] = useState(false);
 
     const handleGrapthType = (type) => {
         setGraphType(type);
@@ -123,6 +124,7 @@ function App({ dataBaseUrl }) {
                     toggleFirstDayLine={toggleFirstDayLine}
                     setToggleFirstDayLine={setToggleFirstDayLine}
                     dataBaseUrl={dataBaseUrl}
+                    setResizeFromWatchlistButton={setResizeFromWatchlistButton}
                 />
                 <div
                     style={{
@@ -179,6 +181,8 @@ function App({ dataBaseUrl }) {
                 setSelectedPattern={setSelectedPattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 handlePatternChange={handlePatternChange}
+                resizeFromWatchlistButton={resizeFromWatchlistButton}
+                setResizeFromWatchlistButton={setResizeFromWatchlistButton}
             />
         </div>
     );

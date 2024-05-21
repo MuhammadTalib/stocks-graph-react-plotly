@@ -53,13 +53,33 @@ const WatchList = ({
     selectedPattern,
     setSelectedPattern,
     setSelectedTriggerFromPanel,
-    handlePatternChange
+    handlePatternChange,
+    resizeFromWatchlistButton,
+    setResizeFromWatchlistButton
 }) => {
     const [strategies, setStrategies] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
     const [loader, setLoader] = useState(false);
     const [selectedTime, setSelectedTime] = useState(times[11]);
+
+    useEffect(()=>{
+        if(resizeFromWatchlistButton){
+            console.log(resizeFromWatchlistButton)
+            setResizeFromWatchlistButton(false)
+             let wGraph = window.innerWidth - sidebarWidth - 10;
+    
+            console.log("sidebarRef.current.getBoundingClientRect().right", sidebarRef.current.getBoundingClientRect().right)
+            // setIsResizing(true)
+            setLayout({
+                ...layout,
+                width: wGraph,
+                height: window.innerHeight - 80,
+            });
+            setSecondaryLayout({ ...secondaryLayout, width: sidebarWidth });
+            setSidebarWidth( sidebarWidth );
+        }
+    },[resizeFromWatchlistButton])
 
     useEffect(() => {
         setLoader(true);
