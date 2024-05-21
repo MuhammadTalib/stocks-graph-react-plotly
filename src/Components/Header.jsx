@@ -151,7 +151,10 @@ const Header = ({
                                 options={templates}
                                 value={selectedTemp}
                                 label={"Template"}
-                                handleChange={templateChange}
+                                handleChange={(e)=>{
+                                    console.log("handle change")
+                                    templateChange(e)
+                                }}
                                 selectedStock={selectedStock}
                                 getOptionLabel={(option) => {
                                     return option ? option?.name : "";

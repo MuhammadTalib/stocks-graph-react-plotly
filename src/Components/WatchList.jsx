@@ -55,7 +55,8 @@ const WatchList = ({
     setSelectedTriggerFromPanel,
     handlePatternChange,
     resizeFromWatchlistButton,
-    setResizeFromWatchlistButton
+    setResizeFromWatchlistButton,
+    templateChange
 }) => {
     const [strategies, setStrategies] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -69,8 +70,6 @@ const WatchList = ({
             setResizeFromWatchlistButton(false)
              let wGraph = window.innerWidth - sidebarWidth - 10;
     
-            console.log("sidebarRef.current.getBoundingClientRect().right", sidebarRef.current.getBoundingClientRect().right)
-            // setIsResizing(true)
             setLayout({
                 ...layout,
                 width: wGraph,
@@ -290,6 +289,7 @@ const WatchList = ({
                 setSelectedPattern={setSelectedPattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 handlePatternChange={handlePatternChange}
+                templateChange={templateChange}
             />
         );
     }, [selectedStock, selectedTime]);

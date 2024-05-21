@@ -385,7 +385,7 @@ export function getDataRequestService(
             .then((res) => {
                 setLoader(false);
                 let pattern_name_list = res?.data?.patterns_list;
-                let responseData = [...res?.data?.data];
+                let responseData = [...(res?.data?.data || [])];
 
                 let high = [];
                 let low = [];
@@ -558,7 +558,8 @@ export function getDataRequestService(
                     }
                 }
 
-                if (template) {
+                if (template && template.id !== 0) {
+                    console.log("template--", template)
                     setSelectedTemp({
                         ...template,
                         merged: resMerged,

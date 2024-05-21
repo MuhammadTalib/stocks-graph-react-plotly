@@ -30,7 +30,8 @@ const PatternTriggers = ({
     selectedCategory,
     setSelectedPattern,
     setSelectedTriggerFromPanel,
-    handlePatternChange
+    handlePatternChange,
+    templateChange
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -63,6 +64,7 @@ const PatternTriggers = ({
             name: "MACD DIVERGENCE",
             key: "all divergence patterns",
             pattern: "All Divergence Patterns",
+            template: "T6"
         },
         { name: "RSI DIVERGENCE", key: "rsi divergence combo" },
         { name: "S/L COMBO", key: "S/L combo patterns" },
@@ -220,6 +222,7 @@ const PatternTriggers = ({
                     handlePatternChange={handlePatternChange}
                     patterns={patterns}
                     fetchTimeStamp={fetchTimeStamp}
+                    templateChange={templateChange}
                 />
             </Grid>
         </Grid>

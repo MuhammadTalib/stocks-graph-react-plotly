@@ -48,10 +48,10 @@ export function DefaultChart({
     selectedTriggerFromPanel,
 }) {
     const [data, setGraphData] = useState({ ...dummy });
-    const [currentSelectedTemp, setCurrentSelectedTemp] =
-        useState(selectedTemp);
+    const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
 
     useEffect(() => {
+        console.log("useEffect")
         setCurrentSelectedTemp(selectedTemp);
     }, [selectedTemp]);
 
@@ -75,6 +75,9 @@ export function DefaultChart({
     );
 
     useEffect(() => {
+        console.log("currentSelectedTemp", currentSelectedTemp)
+        console.log("selectedTemp", selectedTemp)
+
         let addPreviousStrategy = true;
         if (selectedStock !== prevCountRef.current) {
             addPreviousStrategy = false;

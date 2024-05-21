@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { getComparator, stableSort } from "../Utils/sorting";
 import { getTimeObject } from "../Utils/utils";
 import { getAllStocks } from "../services/api";
+import { templates } from "../Utils/defaults";
 
 const FilterPanelTable = ({
     height,
@@ -32,7 +33,8 @@ const FilterPanelTable = ({
     setSelectedTriggerFromPanel,
     handlePatternChange,
     patterns,
-    fetchTimeStamp
+    fetchTimeStamp,
+    templateChange
 }) => {
     const pollingTime = 100 //seconds
     const filtersColumns = [
@@ -52,7 +54,7 @@ const FilterPanelTable = ({
         total_count: 0,
         total_pages: 0,
     });
-
+    const [selectedColumnIndex, setSelectedColumnIndex] = useState(null)
     useEffect(() => {
         fetchTableData();
     }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern, fetchTimeStamp]);
@@ -264,7 +266,7 @@ const FilterPanelTable = ({
                                         placeSelectedItemInTheMiddle(index);
                                         handleStockChange({
                                             description: "",
-                                            name: row.stock_symbol,
+                                            name: row.stock_symbol.replace("/", ''),
                                             sectorName: "",
                                             sources: [
                                                 selectedStock &&
@@ -277,6 +279,8 @@ const FilterPanelTable = ({
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row);
                                         handlePatternChange(null)
+                                        let template = templates.find(t=>t.name==='T0')
+                                        templateChange(template)
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -294,25 +298,27 @@ const FilterPanelTable = ({
                                     <TableCell align={"center"}>
                                         {row.date}
                                     </TableCell>
-                                    {patternColumns.map((col, index) => {
+                                    {patternColumns.map((col, col_index) => {
                                         return row.pattern_dict[col].join(", ")
                                             ?.length ? (
                                             <TableCell
-                                                key={index}
+                                                key={col+col_index}
                                                 align={"center"}
                                                 onClick={(event) => {
-                                                    console.log("column clicked")
                                                     event.stopPropagation()
                                                     let pObj =  patterns.find(p=>p.name === col)
+                                                    let template = templates.find(t=>t.name===pObj.template)
+                                                    if(pObj.template){
+                                                        templateChange(template)
+                                                    }
                                                     handlePatternChange(pObj.pattern)
-
                                                     hanldeSelectedTime(
                                                         getTimeObject(row?.interval)
                                                     );
                                                     placeSelectedItemInTheMiddle(index);
                                                     handleStockChange({
                                                         description: "",
-                                                        name: row.stock_symbol,
+                                                        name: row.stock_symbol.replace("/", ''),
                                                         sectorName: "",
                                                         sources: [
                                                             selectedStock &&
@@ -323,13 +329,16 @@ const FilterPanelTable = ({
                                                         ],
                                                     });
                                                     setSelectStockIndex(index);
-                                                    // setSelectedTriggerFromPanel(row)
+                                                    setSelectedColumnIndex(col_index)
                                                 }}
                                                 className="button-like"
                                                 style={{
                                                     cursor: "pointer",
                                                     transition:
                                                         "background-color 0.3s",
+                                                    backgroundColor:  selectedColumnIndex === col_index
+                                                    ? "beige !important"
+                                                    : "red !important"
                                                 }}
                                             >
                                                 {row.pattern_dict[col].join(

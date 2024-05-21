@@ -132,6 +132,12 @@
 .selectedRowStyle :active {
   background-color: #b3d6f9;
 }
+.selectedColumnStyle {
+  background-color: beige;
+}
+.selectedColumnStyle :active {
+  background-color: beige;
+}
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 6px;

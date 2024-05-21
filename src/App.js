@@ -81,6 +81,7 @@ function App({ dataBaseUrl }) {
     };
 
     const templateChange = (tempData) => {
+        console.log("template change called")
         setSelectedTemp(tempData);
     };
 
@@ -183,6 +184,7 @@ function App({ dataBaseUrl }) {
                 handlePatternChange={handlePatternChange}
                 resizeFromWatchlistButton={resizeFromWatchlistButton}
                 setResizeFromWatchlistButton={setResizeFromWatchlistButton}
+                templateChange={templateChange}
             />
         </div>
     );
