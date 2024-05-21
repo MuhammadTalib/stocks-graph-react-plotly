@@ -506,7 +506,7 @@ export function getDataRequestService(
                             Object.keys(tempMerged).forEach((key) => {
                                 resMerged[key].data = [
                                     ...resMerged[key].data,
-                                    m.indicators[key],
+                                    m.indicators?.[key],
                                 ];
                             });
 
@@ -517,7 +517,7 @@ export function getDataRequestService(
                                     ...resSeparate[key].data,
                                     resSeparate[key].customLine
                                         ? resSeparate[key].customLine
-                                        : m.indicators[key],
+                                        : m.indicators?.[key],
                                 ];
                             });
 

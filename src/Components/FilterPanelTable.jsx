@@ -257,6 +257,7 @@ const FilterPanelTable = ({
                                         selectedStockIndex === index
                                     ).toString()}
                                     onClick={() => {
+                                        console.log("row clicked")
                                         hanldeSelectedTime(
                                             getTimeObject(row?.interval)
                                         );
@@ -274,7 +275,8 @@ const FilterPanelTable = ({
                                             ],
                                         });
                                         setSelectStockIndex(index);
-                                        setSelectedTriggerFromPanel(row)
+                                        setSelectedTriggerFromPanel(row);
+                                        handlePatternChange(null)
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -299,9 +301,29 @@ const FilterPanelTable = ({
                                                 key={index}
                                                 align={"center"}
                                                 onClick={(event) => {
-                                                    event.preventDefault()
+                                                    console.log("column clicked")
+                                                    event.stopPropagation()
                                                     let pObj =  patterns.find(p=>p.name === col)
                                                     handlePatternChange(pObj.pattern)
+
+                                                    hanldeSelectedTime(
+                                                        getTimeObject(row?.interval)
+                                                    );
+                                                    placeSelectedItemInTheMiddle(index);
+                                                    handleStockChange({
+                                                        description: "",
+                                                        name: row.stock_symbol,
+                                                        sectorName: "",
+                                                        sources: [
+                                                            selectedStock &&
+                                                                selectedStock.sources &&
+                                                                selectedStock.sources
+                                                                    .length &&
+                                                                selectedStock.sources[0],
+                                                        ],
+                                                    });
+                                                    setSelectStockIndex(index);
+                                                    // setSelectedTriggerFromPanel(row)
                                                 }}
                                                 className="button-like"
                                                 style={{
