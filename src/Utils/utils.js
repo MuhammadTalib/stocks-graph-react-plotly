@@ -904,6 +904,8 @@ export const isT3FailurePattern = (pattern) => {
         "Tower Bottom Modified 2 Failure",
         "Tower Top Modified Failure",
         "Tower Bottom Modified Failure",
+        "Tower Top Modified V2 Failure",
+        "Tower Bottom Modified V2 Failure"
     ];
     return T3FailuesPatterns.includes(pattern);
 };
