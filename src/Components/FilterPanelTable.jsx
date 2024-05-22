@@ -55,9 +55,10 @@ const FilterPanelTable = ({
         total_pages: 0,
     });
     const [selectedColumnIndex, setSelectedColumnIndex] = useState(null)
+    const [time, setTime] = useState(0)
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern, fetchTimeStamp]);
+    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern, fetchTimeStamp, time]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -71,7 +72,9 @@ const FilterPanelTable = ({
     };
 
     useEffect(() => { //POLLING data
-        const timer = setInterval(fetchTableData, 1000 * pollingTime);
+        const timer = setInterval(()=>{
+            setTime(new Date().getTime());
+        }, 1000 * pollingTime);
         return () => clearInterval(timer);
     }, []);
 
