@@ -49,12 +49,12 @@ export function DefaultChart({
 }) {
     const [data, setGraphData] = useState({ ...dummy });
     const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
+    const [loader, setLoader] = useState(false);
 
     useEffect(() => {
         setCurrentSelectedTemp(selectedTemp);
     }, [selectedTemp]);
 
-    const [loader, setLoader] = useState(false);
     const prevCountRef = useRef();
 
     const getDataRequest = getDataRequestService(
