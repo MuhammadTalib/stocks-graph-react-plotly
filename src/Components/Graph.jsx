@@ -21,7 +21,7 @@ export const Graph = ({
     dualChartWidth,
     sidebarWidth,
     selectedStrategy,
-    selectedPattern,
+    graphConfigs
 }) => {
     document
         .querySelector('[data-title="Autoscale"]')
@@ -72,7 +72,7 @@ export const Graph = ({
                                           data
                                       )
                                     : []),
-                                ...drawFVGPatterns(data, selectedPattern),
+                                ...drawFVGPatterns(data, graphConfigs.pattern),
                             ],
                         }}
                         config={{
@@ -106,7 +106,7 @@ export const Graph = ({
                                         ),
                                         ...drawFVGPatterns(
                                             data,
-                                            selectedPattern
+                                            graphConfigs.pattern
                                         ),
                                     ],
                                 });

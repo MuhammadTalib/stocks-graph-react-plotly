@@ -5,7 +5,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
-import { templates, times } from "../Utils/defaults";
+import { T0, templates, times } from "../Utils/defaults";
 import { BAR_ICON, OHLC_ICON } from "../Utils/utils";
 import { getAllStocks } from "../services/api";
 import AutocompleteWrapper from "./AutocompleteWrapper";
@@ -20,18 +20,15 @@ const Header = ({
     setEnableDualChart,
     enableDualChart,
     handlePatternChange,
-    selectedTime,
     hanldeSelectedTime,
-    selectedTemp,
-    selectedPattern,
     handlSwitchToggle,
     switchToggle,
     toggleFirstDayLine,
     setToggleFirstDayLine,
-    selectedStock,
     dataBaseUrl,
     setSidebarWidth,
-    setResizeFromWatchlistButton
+    setResizeFromWatchlistButton,
+    graphConfigs
 }) => {
     let linkRef = useRef();
     let [patterns, setPatterns] = useState([]);
@@ -62,10 +59,10 @@ const Header = ({
                         <Grid item xs={12}>
                             <AutocompleteWrapper
                                 options={patterns}
-                                value={selectedPattern}
+                                value={graphConfigs.pattern}
                                 label={"Pattern"}
                                 handleChange={handlePatternChange}
-                                selectedStock={selectedStock}
+                                selectedStock={graphConfigs.stock}
                             />
                         </Grid>
                     </Grid>
@@ -76,7 +73,7 @@ const Header = ({
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        disabled={selectedTime.name !== "1d"}
+                                        disabled={graphConfigs.time.name !== "1d"}
                                         checked={toggleFirstDayLine}
                                         onChange={(e) => {
                                             setToggleFirstDayLine(
@@ -123,7 +120,7 @@ const Header = ({
                                 value={switchToggle}
                                 label={"MT4"}
                                 handleChange={handlSwitchToggle}
-                                selectedStock={selectedStock}
+                                selectedStock={graphConfigs.stock}
                                 getOptionLabel={(option) => {
                                     return option;
                                 }}
@@ -132,10 +129,10 @@ const Header = ({
                         <Grid item xs={2}>
                             <AutocompleteWrapper
                                 options={times}
-                                value={selectedTime}
+                                value={graphConfigs.time}
                                 label={"Time"}
                                 handleChange={hanldeSelectedTime}
-                                selectedStock={selectedStock}
+                                selectedStock={graphConfigs.stock}
                                 getOptionLabel={(option) => {
                                     return option ? option?.name : "";
                                 }}
@@ -149,13 +146,15 @@ const Header = ({
                         <Grid item xs={2}>
                             <AutocompleteWrapper
                                 options={templates}
-                                value={selectedTemp}
+                                value={graphConfigs.template}
                                 label={"Template"}
                                 handleChange={(e)=>{
-                                    console.log("handle change")
+                                    if(!e){
+                                        e = T0
+                                    }
                                     templateChange(e)
                                 }}
-                                selectedStock={selectedStock}
+                                selectedStock={graphConfigs.stock}
                                 getOptionLabel={(option) => {
                                     return option ? option?.name : "";
                                 }}

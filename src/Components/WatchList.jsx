@@ -15,7 +15,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
         <div
             role="tabpanel"
@@ -31,12 +30,8 @@ function CustomTabPanel(props) {
 
 const WatchList = ({
     handleStockChange,
-    selectedStock,
     stocks,
     setStocks,
-    height,
-    scrollableListRef,
-    placeSelectedItemInTheMiddle,
     selectedCategory,
     setSelectedCategory,
     hanldeSelectedTime,
@@ -50,19 +45,23 @@ const WatchList = ({
     secondaryLayout,
     setSecondaryLayout,
     strategiesData,
-    selectedPattern,
-    setSelectedPattern,
     setSelectedTriggerFromPanel,
     handlePatternChange,
     resizeFromWatchlistButton,
     setResizeFromWatchlistButton,
-    templateChange
+    templateChange,
+    graphConfigs,
+    setGraphConfigs,
 }) => {
+    const scrollableListRef = useRef(null);
+
     const [strategies, setStrategies] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedStockIndex, setSelectStockIndex] = useState(0);
     const [loader, setLoader] = useState(false);
     const [selectedTime, setSelectedTime] = useState(times[11]);
+    const [order, setOrder] = React.useState("asc");
+    const [orderBy, setOrderBy] = React.useState("Symbol");
 
     useEffect(()=>{
         if(resizeFromWatchlistButton){
@@ -127,10 +126,16 @@ const WatchList = ({
         }
     };
 
-    const [order, setOrder] = React.useState("asc");
-    const [orderBy, setOrderBy] = React.useState("Symbol");
+    const placeSelectedItemInTheMiddle = (index) => {
+        const LIST_ITEM_HEIGHT = 21;
+        const NUM_OF_VISIBLE_LIST_ITEMS = 15;
+        const amountToScroll =
+            LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS +
+            index * LIST_ITEM_HEIGHT;
+        scrollableListRef.current.scrollTo(amountToScroll, 0);
+    };
 
-    const createSortHandler = (property) => (event) => {
+    const createSortHandler = (property) => () => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
@@ -172,7 +177,7 @@ const WatchList = ({
                             value={selectedCategory}
                             label={"Categrories"}
                             handleChange={setSelectedCategory}
-                            selectedStock={selectedStock}
+                            selectedStock={graphConfigs.stock}
                         />
                     </Grid>
                     <Grid item md={2} sm={2} xs={2}>
@@ -184,7 +189,7 @@ const WatchList = ({
                                 setSelectedTime(newValue);
                                 hanldeSelectedTime(newValue);
                             }}
-                            selectedStock={selectedStock}
+                            selectedStock={graphConfigs.stock}
                             getOptionLabel={(option) => {
                                 return option ? option?.name : "";
                             }}
@@ -202,7 +207,7 @@ const WatchList = ({
                                     setSelectedStrategy([]);
                                 }
                             }}
-                            selectedStock={selectedStock}
+                            selectedStock={graphConfigs.stock}
                             multiple={true}
                             renderOption={(props, option, s) => {
                                 let selected = s?.selected;
@@ -224,7 +229,7 @@ const WatchList = ({
                 <Grid item md={12} sm={12} xs={12}>
                     <div onKeyDown={handleKeyDown}>
                         <WatchListTable
-                            height={height}
+                            height={layout.height}
                             scrollableListRef={scrollableListRef}
                             selectedStrategy={selectedStrategy}
                             orderBy={orderBy}
@@ -233,7 +238,6 @@ const WatchList = ({
                             placeSelectedItemInTheMiddle={
                                 placeSelectedItemInTheMiddle
                             }
-                            selectedStock={selectedStock}
                             hanldeSelectedTime={hanldeSelectedTime}
                             handleStockChange={handleStockChange}
                             setSelectStockIndex={setSelectStockIndex}
@@ -241,6 +245,7 @@ const WatchList = ({
                             stocks={stocks}
                             setStocks={setStocks}
                             strategiesData={strategiesData}
+                            graphConfigs={graphConfigs}
                         />
                     </div>
                 </Grid>
@@ -249,7 +254,9 @@ const WatchList = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         stocks,
-        selectedStock,
+        graphConfigs,
+        graphConfigs.stock,
+        graphConfigs.pattern,
         order,
         orderBy,
         selectedCategory,
@@ -265,14 +272,13 @@ const WatchList = ({
     const filters = useMemo(() => {
         return (
             <PatternTriggers
-                height={height}
+                height={layout.height}
                 scrollableListRef={scrollableListRef}
                 selectedStrategy={selectedStrategy}
                 orderBy={orderBy}
-                createSortHandler={createSortHandler}
                 order={order}
                 selectedCategory={selectedCategory}
-                selectedStock={selectedStock}
+                selectedStock={graphConfigs.stock}
                 hanldeSelectedTime={hanldeSelectedTime}
                 handleStockChange={handleStockChange}
                 setSelectStockIndex={setSelectStockIndex}
@@ -285,14 +291,14 @@ const WatchList = ({
                 setSelectedCategory={setSelectedCategory}
                 setSelectedTime={setSelectedTime}
                 placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
-                selectedPattern={selectedPattern}
-                setSelectedPattern={setSelectedPattern}
+                selectedPattern={graphConfigs.pattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 handlePatternChange={handlePatternChange}
                 templateChange={templateChange}
+                setGraphConfigs={setGraphConfigs}
             />
         );
-    }, [selectedStock, selectedTime]);
+    }, [graphConfigs.stock, selectedTime]);
 
     const sidebarRef = useRef(null);
     const [isResizing, setIsResizing] = useState(false);

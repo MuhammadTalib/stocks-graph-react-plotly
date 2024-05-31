@@ -18,6 +18,7 @@ import {
 } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
+const style = { width: "100%", height: "100%", border: "1px solid red"  };
 
 export function DefaultChart({
     onHover,
@@ -25,15 +26,11 @@ export function DefaultChart({
     onClick,
     pointIndex,
     graphType,
-    style,
     layout,
     toggleFirstDayLine,
     switchToggle,
-    selectedTemp,
-    selectedPattern,
     type,
     onDoubleClick,
-    selectedStock,
     selectedTime,
     selectedCategory,
     id,
@@ -46,14 +43,15 @@ export function DefaultChart({
     setStrategiesData,
     strategiesData,
     selectedTriggerFromPanel,
+    graphConfigs
 }) {
     const [data, setGraphData] = useState({ ...dummy });
-    const [currentSelectedTemp, setCurrentSelectedTemp] = useState(selectedTemp);
+    const [currentSelectedTemp, setCurrentSelectedTemp] = useState(graphConfigs.template);
     const [loader, setLoader] = useState(false);
 
     useEffect(() => {
-        setCurrentSelectedTemp(selectedTemp);
-    }, [selectedTemp]);
+        setCurrentSelectedTemp(graphConfigs.template);
+    }, [graphConfigs.template]);
 
     const prevCountRef = useRef();
 
@@ -75,29 +73,30 @@ export function DefaultChart({
 
     useEffect(() => {
         let addPreviousStrategy = true;
-        if (selectedStock !== prevCountRef.current) {
+        if (graphConfigs.stock !== prevCountRef.current) {
             addPreviousStrategy = false;
         }
-        prevCountRef.current = selectedStock;
+        prevCountRef.current = graphConfigs.stock;
 
         selectedTime &&
             getDataRequest(
-                selectedStock,
+                graphConfigs.stock,
                 selectedTime,
-                selectedTemp,
-                selectedPattern,
+                graphConfigs.template,
+                graphConfigs.pattern,
                 switchToggle,
                 data,
                 addPreviousStrategy
             );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        selectedStock,
+        graphConfigs.stock,
         selectedTime,
         selectedCategory,
-        selectedPattern,
+        graphConfigs,
+        graphConfigs.pattern,
         switchToggle,
-        currentSelectedTemp.id,
+        graphConfigs.template.id,
         graphType,
         enableDualChart,
         selectedStrategy,
@@ -106,7 +105,7 @@ export function DefaultChart({
     return data && data?.x?.length ? (
         <>
             <InfoLines
-                selectedStock={selectedStock}
+                selectedStock={graphConfigs.stock}
                 ohlc={{
                     high: data.high[pointIndex],
                     low: data.low[pointIndex],
@@ -126,30 +125,30 @@ export function DefaultChart({
                 selectedPattern={
                     (data.patternData[pointIndex]
                         ? data.patternData[pointIndex].is_combo_pattern ||
-                          selectedPattern === "All Reversal Patterns" ||
-                          selectedPattern === "R/F Combo Pattern" ||
-                          selectedPattern === "All Failure Patterns" ||
-                          selectedPattern === "S Combo Pattern" ||
-                          selectedPattern === "All T3 Patterns" ||
-                          isT3Pattern(selectedPattern) ||
-                          isT3FailurePattern(selectedPattern) ||
-                          selectedPattern === "All High/Low Patterns" ||
+                          graphConfigs.pattern === "All Reversal Patterns" ||
+                          graphConfigs.pattern === "R/F Combo Pattern" ||
+                          graphConfigs.pattern === "All Failure Patterns" ||
+                          graphConfigs.pattern === "S Combo Pattern" ||
+                          graphConfigs.pattern === "All T3 Patterns" ||
+                          isT3Pattern(graphConfigs.pattern) ||
+                          isT3FailurePattern(graphConfigs.pattern) ||
+                          graphConfigs.pattern === "All High/Low Patterns" ||
                           data.strategiesData
                             ? getOccuredReversalPatterns(
                                   data.patternData,
                                   pointIndex,
-                                  selectedPattern,
+                                  graphConfigs.pattern,
                                   data
                               )
-                            : selectedPattern
+                            : graphConfigs.pattern
                         : undefined) ||
-                    (selectedPattern !== "R/F Combo Pattern" &&
+                    (graphConfigs.pattern !== "R/F Combo Pattern" &&
                     data?.patternTrigger[pointIndex]?.trigger_failure
-                        ? selectedPattern
+                        ? graphConfigs.pattern
                         : undefined)
                 }
                 patternTrigger={
-                    selectedPattern === "R/F Combo Pattern"
+                    graphConfigs.pattern === "R/F Combo Pattern"
                         ? 0
                         : data?.patternTrigger[pointIndex]?.trigger_failure
                 }
@@ -163,11 +162,11 @@ export function DefaultChart({
                 onUnhover={onUnhover}
                 onClick={onClick}
                 onDoubleClick={() => onDoubleClick(type)}
-                style={{ ...style, border: "1px solid red" }}
+                style={style}
                 data={{ ...data, type: graphType }}
                 layout={layout}
                 toggleFirstDayLine={toggleFirstDayLine}
-                selectedPattern={selectedPattern}
+                selectedPattern={graphConfigs.pattern}
                 templates={[
                     ...drawMergedChart(
                         currentSelectedTemp,
@@ -178,13 +177,13 @@ export function DefaultChart({
                     ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
                     ...(drawPatternData(
                         data,
-                        selectedPattern,
+                        graphConfigs.pattern,
                         data.strategiesData
                     ) || []),
                     ...(drawPatternTriggers(
                         data,
                         data.strategiesData,
-                        selectedPattern
+                        graphConfigs.pattern
                     ) || []),
                     ...(drawSidePanelClickedPatternTrigger(
                         data,
@@ -205,6 +204,7 @@ export function DefaultChart({
                 dualChartWidth={dualChartWidth}
                 sidebarWidth={sidebarWidth}
                 selectedStrategy={selectedStrategy}
+                graphConfigs={graphConfigs}
             />
         </>
     ) : (

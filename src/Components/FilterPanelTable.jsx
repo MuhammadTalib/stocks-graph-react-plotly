@@ -31,10 +31,9 @@ const FilterPanelTable = ({
     startDate,
     filterPattern,
     setSelectedTriggerFromPanel,
-    handlePatternChange,
     patterns,
     fetchTimeStamp,
-    templateChange
+    setGraphConfigs
 }) => {
     const pollingTime = 100 //seconds
     const filtersColumns = [
@@ -214,7 +213,7 @@ const FilterPanelTable = ({
                                 }),
                             ].map((column, index) => (
                                 <TableCell
-                                    key={column?.label + index}
+                                    key={"key column"+column?.label + index}
                                     align={column.numeric ? "center" : "center"}
                                     sortDirection={
                                         orderBy === column.label ? order : false
@@ -252,38 +251,56 @@ const FilterPanelTable = ({
                         {tableData?.map((row, index) => {
                             return (
                                 <TableRow
+                                    key={'row'+row?.stock_symbol +index+ Date.now()}
                                     className={
                                         selectedStockIndex === index
                                             ? "selectedRowStyle"
                                             : ""
                                     }
-                                    key={row?.stock_symbol + index}
                                     active={(
                                         selectedStockIndex === index
                                     ).toString()}
                                     onClick={() => {
-                                        console.log("row clicked")
-                                        hanldeSelectedTime(
-                                            getTimeObject(row?.interval)
-                                        );
+                                        setGraphConfigs({
+                                            time: getTimeObject(row?.interval),
+                                            stock: {
+                                                description: "",
+                                                name: row.stock_symbol.replace("/", ''),
+                                                sectorName: "",
+                                                sources: [
+                                                    selectedStock &&
+                                                        selectedStock.sources &&
+                                                        selectedStock.sources
+                                                            .length &&
+                                                        selectedStock.sources[0],
+                                                ],
+                                            },
+                                            pattern: null,
+                                            template: T0
+                                        })
+                                        
                                         placeSelectedItemInTheMiddle(index);
-                                        handleStockChange({
-                                            description: "",
-                                            name: row.stock_symbol.replace("/", ''),
-                                            sectorName: "",
-                                            sources: [
-                                                selectedStock &&
-                                                    selectedStock.sources &&
-                                                    selectedStock.sources
-                                                        .length &&
-                                                    selectedStock.sources[0],
-                                            ],
-                                        });
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row);
-                                        handlePatternChange(null)
-                                        templateChange(T0)
                                         setSelectedColumnIndex(null)
+                                        // hanldeSelectedTime(
+                                        //     getTimeObject(row?.interval)
+                                        // );
+                                        // handleStockChange({
+                                        //     description: "",
+                                        //     name: row.stock_symbol.replace("/", ''),
+                                        //     sectorName: "",
+                                        //     sources: [
+                                        //         selectedStock &&
+                                        //             selectedStock.sources &&
+                                        //             selectedStock.sources
+                                        //                 .length &&
+                                        //             selectedStock.sources[0],
+                                        //     ],
+                                        // });
+                                        
+                                        // handlePatternChange(null)
+                                        // templateChange(T0)
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -310,31 +327,44 @@ const FilterPanelTable = ({
                                                 onClick={(event) => {
                                                     event.stopPropagation()
                                                     let pObj =  patterns.find(p=>p.name === col)
-                                                    let template = templates.find(t=>t.name===(pObj.template || "T0"))
-                                                    if(pObj.template){
-                                                        templateChange(template)
-                                                    }else{
-                                                        templateChange(template)
-                                                    }
-                                                    handlePatternChange(pObj.pattern)
-                                                    hanldeSelectedTime(
-                                                        getTimeObject(row?.interval)
-                                                    );
+                                                    let template = templates.find(t=>t.name===(pObj?.template || "T0"))
+                                                    // templateChange(template)
+                                                    // handlePatternChange(pObj.pattern)
+                                                    // hanldeSelectedTime(
+                                                    //     getTimeObject(row?.interval)
+                                                    // );
+                                                    // handleStockChange({
+                                                    //     description: "",
+                                                    //     name: row.stock_symbol.replace("/", ''),
+                                                    //     sectorName: "",
+                                                    //     sources: [
+                                                    //         selectedStock &&
+                                                    //             selectedStock.sources &&
+                                                    //             selectedStock.sources
+                                                    //                 .length &&
+                                                    //             selectedStock.sources[0],
+                                                    //     ],
+                                                    // });
                                                     placeSelectedItemInTheMiddle(index);
-                                                    handleStockChange({
-                                                        description: "",
-                                                        name: row.stock_symbol.replace("/", ''),
-                                                        sectorName: "",
-                                                        sources: [
-                                                            selectedStock &&
-                                                                selectedStock.sources &&
-                                                                selectedStock.sources
-                                                                    .length &&
-                                                                selectedStock.sources[0],
-                                                        ],
-                                                    });
                                                     setSelectStockIndex(index);
                                                     setSelectedColumnIndex(col_index)
+                                                    setGraphConfigs({
+                                                        time: getTimeObject(row?.interval),
+                                                        stock: {
+                                                            description: "",
+                                                            name: row.stock_symbol.replace("/", ''),
+                                                            sectorName: "",
+                                                            sources: [
+                                                                selectedStock &&
+                                                                    selectedStock.sources &&
+                                                                    selectedStock.sources
+                                                                        .length &&
+                                                                    selectedStock.sources[0],
+                                                            ],
+                                                        },
+                                                        pattern: pObj.pattern,
+                                                        template: template
+                                                    })
                                                 }}
                                                 className={`button-like ${(selectedStockIndex === index && col_index === selectedColumnIndex) ?'selectedColumnStyle':''}`}
                                                 style={{

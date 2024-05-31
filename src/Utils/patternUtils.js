@@ -62,7 +62,7 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         });
     }
 
-    if (isT3FailurePattern(selectedPattern)) {
+    if (isT3FailurePattern(selectedPattern)) { //for all failures
         drawX = data.patternData;
         patterns = data.patternData.map((m) => {
             let ans = 0;

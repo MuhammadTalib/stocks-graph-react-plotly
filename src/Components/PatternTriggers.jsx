@@ -17,7 +17,6 @@ const PatternTriggers = ({
     scrollableListRef,
     selectedStrategy,
     orderBy,
-    createSortHandler,
     order,
     placeSelectedItemInTheMiddle,
     selectedStock,
@@ -28,10 +27,10 @@ const PatternTriggers = ({
     setStocks,
     strategiesData,
     selectedCategory,
-    setSelectedPattern,
     setSelectedTriggerFromPanel,
     handlePatternChange,
-    templateChange
+    templateChange,
+    setGraphConfigs
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -39,7 +38,7 @@ const PatternTriggers = ({
     const [startDate, setStartDate] = useState(null);
     const [filterPattern, setFilterPatter] = useState([]);
     const [fetchTimeStamp, setTimeStamp] = useState(0)
-    let [patterns] = useState([
+    let [patterns, setPatterns] = useState([
         {
             name: "Reversal",
             key: "all reversal patterns",
@@ -200,7 +199,6 @@ const PatternTriggers = ({
                     scrollableListRef={scrollableListRef}
                     selectedStrategy={selectedStrategy}
                     orderBy={orderBy}
-                    createSortHandler={createSortHandler}
                     order={order}
                     selectedCategory={selectedCategory}
                     selectedStock={selectedStock}
@@ -216,13 +214,13 @@ const PatternTriggers = ({
                     selectedStockIndex={selectedStockIndex}
                     placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
                     startDate={startDate}
-                    setSelectedPattern={setSelectedPattern}
                     filterPattern={filterPattern}
                     setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                     handlePatternChange={handlePatternChange}
                     patterns={patterns}
                     fetchTimeStamp={fetchTimeStamp}
                     templateChange={templateChange}
+                    setGraphConfigs={setGraphConfigs}
                 />
             </Grid>
         </Grid>

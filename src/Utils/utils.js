@@ -559,7 +559,6 @@ export function getDataRequestService(
                 }
 
                 if (template && template.id !== 0) {
-                    console.log("template--", template)
                     setSelectedTemp({
                         ...template,
                         merged: resMerged,

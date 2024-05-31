@@ -1,11 +1,9 @@
 import { makeStyles } from "@mui/styles";
 import React, { useRef, useState } from "react";
-
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
 import { initialLayout, templates, times } from "./Utils/defaults";
-
 import "./App.css";
 
 const useStyles = makeStyles(() => ({
@@ -25,21 +23,29 @@ function App({ dataBaseUrl }) {
     const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
     const [enableDualChart, setEnableDualChart] = useState(false);
     const [layout, setLayout] = useState({ ...initialLayout });
-    const scrollableListRef = useRef(null);
-    const [selectedStock, setSelectStock] = useState("MMM");
-    const [selectedPattern, setSelectedPattern] = useState(null);
     const [strategiesData, setStrategiesData] = useState([]);
-    const [selectedTime, setSelectTime] = useState(times[11]); //1DAY
     const [secondaryLayout, setSecondaryLayout] = useState({
         ...layout,
         width: "50%",
         height: window.innerHeight - 80,
     });
-    const [selectedTemp, setSelectedTemp] = useState(templates[0]);
     const [switchToggle, setSwitchToggle] = useState("0");
     const [selectedStrategy, setSelectedStrategy] = useState([]);
     const [selectedTriggerFromPanel, setSelectedTriggerFromPanel] = useState(null);
     const [resizeFromWatchlistButton, setResizeFromWatchlistButton] = useState(false);
+
+    // Graph configurationData
+    const [graphConfigs, setGraphConfigs] = useState({
+        stock:"MMM",
+        time:times[11],
+        template:templates[0],
+        pattern: ""
+    })
+    // const [selectedStock, setSelectStock] = useState("MMM");
+    // const [selectedTime, setSelectTime] = useState(times[11]); //1DAY
+    // const [selectedTemp, setSelectedTemp] = useState(templates[0]);
+    // const [selectedPattern, setSelectedPattern] = useState(null);
+
 
     const handleGrapthType = (type) => {
         setGraphType(type);
@@ -64,62 +70,60 @@ function App({ dataBaseUrl }) {
     }, [window.innerWidth, window.innerHeight]);
 
     const handlePatternChange = (pattern) => {
-        setSelectedPattern(pattern);
         setSelectedStrategy([]);
         setStrategiesData([]);
+        setGraphConfigs({
+            ...graphConfigs, pattern: pattern
+        })
     };
 
     const handleStockChange = (stock) => {
-        setSelectStock(stock);
+        setGraphConfigs({
+            ...graphConfigs, stock
+        })
     };
 
     const hanldeSelectedTime = (time) => {
         if (time?.name !== "1d") {
             setToggleFirstDayLine(false);
         }
-        setSelectTime(time);
+        setGraphConfigs({
+            ...graphConfigs, time
+        })
     };
 
-    const templateChange = (tempData) => {
-        console.log("template change called")
-        setSelectedTemp(tempData);
+    const templateChange = (template) => {
+        setGraphConfigs({
+            ...graphConfigs, template
+        })
     };
 
     const handlSwitchToggle = (v) => {
         setSwitchToggle(v);
     };
 
-    const placeSelectedItemInTheMiddle = (index) => {
-        const LIST_ITEM_HEIGHT = 21;
-        const NUM_OF_VISIBLE_LIST_ITEMS = 15;
-        const amountToScroll =
-            LIST_ITEM_HEIGHT * NUM_OF_VISIBLE_LIST_ITEMS +
-            index * LIST_ITEM_HEIGHT;
-        scrollableListRef.current.scrollTo(amountToScroll, 0);
-    };
+    
 
     const handleChangeSelectedStrategy = (s) => {
         setSelectedStrategy([...s]);
-        setSelectedPattern(null);
-    };
+        setGraphConfigs({
+            ...graphConfigs, pattern: null
+        })    };
 
     return (
         <div className="app-container">
             <div className={classes.container + " app-frame"}>
                 <Header
+                    graphConfigs={graphConfigs}
                     setEnableDualChart={setEnableDualChart}
                     enableDualChart={enableDualChart}
                     handleGrapthType={handleGrapthType}
                     graphType={graphType}
                     templateChange={templateChange}
                     setSidebarWidth={setSidebarWidth}
-                    selectedStock={selectedStock}
                     handleStockChange={handleStockChange}
                     handlePatternChange={handlePatternChange}
-                    selectedTime={selectedTime}
                     hanldeSelectedTime={hanldeSelectedTime}
-                    selectedTemp={selectedTemp}
-                    selectedPattern={selectedPattern}
                     handlSwitchToggle={handlSwitchToggle}
                     switchToggle={switchToggle}
                     toggleFirstDayLine={toggleFirstDayLine}
@@ -134,16 +138,13 @@ function App({ dataBaseUrl }) {
                     }}
                 >
                     <GraphRenderer
+                        graphConfigs={graphConfigs}
                         layout={layout}
                         enableDualChart={enableDualChart}
                         graphType={graphType}
-                        selectedTemp={selectedTemp}
                         toggleFirstDayLine={toggleFirstDayLine}
                         switchToggle={switchToggle}
-                        selectedPattern={selectedPattern}
-                        selectedStock={selectedStock}
                         setLayout={setLayout}
-                        selectedTime={selectedTime}
                         selectedCategory={selectedCategory}
                         selectedStrategy={selectedStrategy}
                         sidebarWidth={sidebarWidth}
@@ -158,13 +159,10 @@ function App({ dataBaseUrl }) {
             </div>
 
             <WatchList
-                selectedStock={selectedStock}
+                graphConfigs={graphConfigs}
                 handleStockChange={handleStockChange}
                 stocks={stocks}
                 setStocks={setStocks}
-                height={layout.height}
-                scrollableListRef={scrollableListRef}
-                placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
                 hanldeSelectedTime={hanldeSelectedTime}
@@ -178,13 +176,12 @@ function App({ dataBaseUrl }) {
                 secondaryLayout={secondaryLayout}
                 setSecondaryLayout={setSecondaryLayout}
                 strategiesData={strategiesData}
-                selectedPattern={selectedPattern}
-                setSelectedPattern={setSelectedPattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 handlePatternChange={handlePatternChange}
                 resizeFromWatchlistButton={resizeFromWatchlistButton}
                 setResizeFromWatchlistButton={setResizeFromWatchlistButton}
                 templateChange={templateChange}
+                setGraphConfigs={setGraphConfigs}
             />
         </div>
     );
