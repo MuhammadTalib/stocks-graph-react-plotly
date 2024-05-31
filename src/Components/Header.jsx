@@ -187,7 +187,6 @@ const Header = ({
                                     variant="text"
                                     aria-label="text button group"
                                 >
-                                    {/* <React.Fragment> */}
                                     <Link
                                         style={{ display: "none" }}
                                         ref={linkRef}
@@ -203,7 +202,6 @@ const Header = ({
                                     >
                                         {"__"}
                                     </Button>
-                                    {/* </React.Fragment> */}
                                 </ButtonGroup>
                             ) : (
                                 <></>

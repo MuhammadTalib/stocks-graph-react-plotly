@@ -31,9 +31,10 @@ const FilterPanelTable = ({
     startDate,
     filterPattern,
     setSelectedTriggerFromPanel,
-    patterns,
     fetchTimeStamp,
-    setGraphConfigs
+    setGraphConfigs,
+    setPatterns,
+    patterns
 }) => {
     const pollingTime = 100 //seconds
     const filtersColumns = [
@@ -100,13 +101,16 @@ const FilterPanelTable = ({
                 url += `&start_date=${startDate[0]}&end_date=${startDate[1]}`;
             }
             if (filterPattern && filterPattern.length) {
-                url += `&pattern=${filterPattern?.map((m) => m.key).join(",")}`;
+                url += `&pattern=${filterPattern?.map((m) => m.be_pattern).join(",")}`;
             }
             getAllStocks(url, "get").then((res) => {
                 // eslint-disable-next-line array-callback-return
                 let data = res?.data?.data;
                 processTableData(data);
-                setPatternColumns(data?.columns || []);
+                if(!(filterPattern && filterPattern.length)){
+                    setPatterns(data?.fe_dropdown_column || []) //used for dropdown
+                }
+                setPatternColumns(data?.columns || []); //columns
                 setPagination({
                     ...pagination,
                     currentPage: data?.page,
@@ -283,24 +287,6 @@ const FilterPanelTable = ({
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row);
                                         setSelectedColumnIndex(null)
-                                        // hanldeSelectedTime(
-                                        //     getTimeObject(row?.interval)
-                                        // );
-                                        // handleStockChange({
-                                        //     description: "",
-                                        //     name: row.stock_symbol.replace("/", ''),
-                                        //     sectorName: "",
-                                        //     sources: [
-                                        //         selectedStock &&
-                                        //             selectedStock.sources &&
-                                        //             selectedStock.sources
-                                        //                 .length &&
-                                        //             selectedStock.sources[0],
-                                        //     ],
-                                        // });
-                                        
-                                        // handlePatternChange(null)
-                                        // templateChange(T0)
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -319,32 +305,16 @@ const FilterPanelTable = ({
                                         {row.date}
                                     </TableCell>
                                     {patternColumns.map((col, col_index) => {
-                                        return row.pattern_dict[col].join(", ")
+                                        console.log("col", col)
+                                        return row.pattern_dict[col]?.join(", ")
                                             ?.length ? (
                                             <TableCell
                                                 key={col+col_index}
                                                 align={"center"}
                                                 onClick={(event) => {
                                                     event.stopPropagation()
-                                                    let pObj =  patterns.find(p=>p.name === col)
+                                                    let pObj = patterns.find(p=>p.name === col)
                                                     let template = templates.find(t=>t.name===(pObj?.template || "T0"))
-                                                    // templateChange(template)
-                                                    // handlePatternChange(pObj.pattern)
-                                                    // hanldeSelectedTime(
-                                                    //     getTimeObject(row?.interval)
-                                                    // );
-                                                    // handleStockChange({
-                                                    //     description: "",
-                                                    //     name: row.stock_symbol.replace("/", ''),
-                                                    //     sectorName: "",
-                                                    //     sources: [
-                                                    //         selectedStock &&
-                                                    //             selectedStock.sources &&
-                                                    //             selectedStock.sources
-                                                    //                 .length &&
-                                                    //             selectedStock.sources[0],
-                                                    //     ],
-                                                    // });
                                                     placeSelectedItemInTheMiddle(index);
                                                     setSelectStockIndex(index);
                                                     setSelectedColumnIndex(col_index)

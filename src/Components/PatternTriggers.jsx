@@ -38,43 +38,7 @@ const PatternTriggers = ({
     const [startDate, setStartDate] = useState(null);
     const [filterPattern, setFilterPatter] = useState([]);
     const [fetchTimeStamp, setTimeStamp] = useState(0)
-    let [patterns, setPatterns] = useState([
-        {
-            name: "Reversal",
-            key: "all reversal patterns",
-            pattern: "All Reversal Patterns",
-        },
-        {
-            name: "Double Close",
-            key: "double close",
-            pattern: "All Reversal Patterns",
-        },
-        {
-            name: "Tower Patterns",
-            key: "tower patterns",
-            pattern: "All Reversal Patterns",
-        },
-        {
-            name: "Failure",
-            key: "all failure patterns",
-            pattern: "All Failure Patterns",
-        },
-        {
-            name: "MACD DIVERGENCE",
-            key: "all divergence patterns",
-            pattern: "All Divergence Patterns",
-            template: "T6"
-        },
-        { name: "RSI DIVERGENCE", key: "rsi divergence combo" },
-        { name: "S/L COMBO", key: "S/L combo patterns" },
-        { name: "RSI-R", key: "RSI-R POI patterns" },
-        { name: "ZLR", key: "zero line reversals" },
-        { name: "T3", key: "all t3 patterns" },
-        { name: "T3 FAILURES", key: "all t3 failures" },
-        { name: "FIBONACCI", key: "all fibonacci retracements" },
-        { name: "MOVING AVG", key: "moving average strategies" },
-        { name: "SMT", key: "smt divergence patterns" },
-    ]);
+    let [patterns, setPatterns] = useState([]);
 
     const handlePatternFilterChange = (pattern) => {
         setFilterPatter(pattern);
@@ -218,6 +182,7 @@ const PatternTriggers = ({
                     setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                     handlePatternChange={handlePatternChange}
                     patterns={patterns}
+                    setPatterns={setPatterns}
                     fetchTimeStamp={fetchTimeStamp}
                     templateChange={templateChange}
                     setGraphConfigs={setGraphConfigs}
