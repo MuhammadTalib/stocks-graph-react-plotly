@@ -21,7 +21,6 @@ const PatternTriggers = ({
     placeSelectedItemInTheMiddle,
     selectedStock,
     hanldeSelectedTime,
-    handleStockChange,
     selectedTime,
     stocks,
     setStocks,
@@ -30,7 +29,8 @@ const PatternTriggers = ({
     setSelectedTriggerFromPanel,
     handlePatternChange,
     templateChange,
-    setGraphConfigs
+    setGraphConfigs,
+    graphConfigs
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -167,7 +167,6 @@ const PatternTriggers = ({
                     selectedCategory={selectedCategory}
                     selectedStock={selectedStock}
                     hanldeSelectedTime={hanldeSelectedTime}
-                    handleStockChange={handleStockChange}
                     setSelectStockIndex={setSelectStockIndex}
                     selectedTime={selectedTime}
                     stocks={stocks}
@@ -185,6 +184,7 @@ const PatternTriggers = ({
                     setPatterns={setPatterns}
                     fetchTimeStamp={fetchTimeStamp}
                     templateChange={templateChange}
+                    graphConfigs={graphConfigs}
                     setGraphConfigs={setGraphConfigs}
                 />
             </Grid>

@@ -29,7 +29,6 @@ function CustomTabPanel(props) {
 }
 
 const WatchList = ({
-    handleStockChange,
     stocks,
     setStocks,
     selectedCategory,
@@ -107,7 +106,7 @@ const WatchList = ({
         getAllStocks("stocks/watchlish/" + selectedCategory).then((res) => {
             setStocks(res?.data?.list || []);
             setSelectStockIndex(0);
-            handleStockChange(res?.data?.list[0]);
+            setGraphConfigs({...graphConfigs, stock: res?.data?.list[0]})
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCategory]);
@@ -115,12 +114,12 @@ const WatchList = ({
     const handleKeyDown = (e) => {
         if (e.keyCode === 38) {
             hanldeSelectedTime(selectedTime);
-            handleStockChange(stocks[selectedStockIndex - 1]);
+            setGraphConfigs({...graphConfigs, stock: stocks[selectedStockIndex - 1]})
             setSelectStockIndex(selectedStockIndex - 1);
             placeSelectedItemInTheMiddle(selectedStockIndex - 1);
         } else if (e.keyCode === 40) {
             hanldeSelectedTime(selectedTime);
-            handleStockChange(stocks[selectedStockIndex + 1]);
+            setGraphConfigs({...graphConfigs, stock: stocks[selectedStockIndex + 1]})
             setSelectStockIndex(selectedStockIndex + 1);
             placeSelectedItemInTheMiddle(selectedStockIndex + 1);
         }
@@ -239,13 +238,13 @@ const WatchList = ({
                                 placeSelectedItemInTheMiddle
                             }
                             hanldeSelectedTime={hanldeSelectedTime}
-                            handleStockChange={handleStockChange}
                             setSelectStockIndex={setSelectStockIndex}
                             selectedTime={selectedTime}
                             stocks={stocks}
                             setStocks={setStocks}
                             strategiesData={strategiesData}
                             graphConfigs={graphConfigs}
+                            setGraphConfigs={setGraphConfigs}
                         />
                     </div>
                 </Grid>
@@ -280,7 +279,6 @@ const WatchList = ({
                 selectedCategory={selectedCategory}
                 selectedStock={graphConfigs.stock}
                 hanldeSelectedTime={hanldeSelectedTime}
-                handleStockChange={handleStockChange}
                 setSelectStockIndex={setSelectStockIndex}
                 selectedTime={selectedTime}
                 stocks={stocks}
@@ -295,6 +293,7 @@ const WatchList = ({
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 handlePatternChange={handlePatternChange}
                 templateChange={templateChange}
+                graphConfigs={graphConfigs}
                 setGraphConfigs={setGraphConfigs}
             />
         );

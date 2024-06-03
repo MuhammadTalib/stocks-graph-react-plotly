@@ -137,9 +137,9 @@ const Header = ({
                                     return option ? option?.name : "";
                                 }}
                                 isOptionEqualToValue={(option, value) =>
-                                    option.name === value.name &&
-                                    option.desc === value.desc &&
-                                    option.ms === value.ms
+                                    option.name === value?.name &&
+                                    option.desc === value?.desc &&
+                                    option.ms === value?.ms
                                 }
                             />
                         </Grid>

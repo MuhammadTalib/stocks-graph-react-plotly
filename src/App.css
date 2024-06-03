@@ -205,3 +205,9 @@
 .button-like:hover {
   background-color: #ddd !important; /* Change to desired hover color */
 }
+
+.MuiTableCell-root{
+  /* background-color: RED !important; */
+  padding-left: 1px !important;
+  padding-right: 1px !important;
+}

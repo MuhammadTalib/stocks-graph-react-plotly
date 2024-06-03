@@ -19,13 +19,13 @@ const WatchListTable = ({
     order,
     placeSelectedItemInTheMiddle,
     hanldeSelectedTime,
-    handleStockChange,
     setSelectStockIndex,
     selectedTime,
     stocks,
     setStocks,
     strategiesData,
-    graphConfigs
+    graphConfigs,
+    setGraphConfigs
 }) => {
     return (
         <TableContainer
@@ -103,7 +103,8 @@ const WatchListTable = ({
                                 row={row}
                                 index={index}
                                 selectedStock={graphConfigs.stock}
-                                handleStockChange={handleStockChange}
+                                graphConfigs={graphConfigs}
+                                setGraphConfigs={setGraphConfigs}                               
                                 setSelectStockIndex={setSelectStockIndex}
                                 selectedTime={selectedTime}
                                 placeSelectedItemInTheMiddle={

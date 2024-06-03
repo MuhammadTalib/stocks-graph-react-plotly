@@ -1,18 +1,16 @@
 import { makeStyles } from "@mui/styles";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import "./App.css";
 import GraphRenderer from "./Components/GraphRenderer";
 import Header from "./Components/Header";
 import WatchList from "./Components/WatchList";
 import { initialLayout, templates, times } from "./Utils/defaults";
-import "./App.css";
 
 const useStyles = makeStyles(() => ({
     container: (sidebarWidth) => {
         return { width: `calc(100% - ${sidebarWidth}px)` };
     },
 }));
-
-
 
 function App({ dataBaseUrl }) {
     const [stocks, setStocks] = useState([]);
@@ -31,26 +29,30 @@ function App({ dataBaseUrl }) {
     });
     const [switchToggle, setSwitchToggle] = useState("0");
     const [selectedStrategy, setSelectedStrategy] = useState([]);
-    const [selectedTriggerFromPanel, setSelectedTriggerFromPanel] = useState(null);
-    const [resizeFromWatchlistButton, setResizeFromWatchlistButton] = useState(false);
+    const [selectedTriggerFromPanel, setSelectedTriggerFromPanel] =
+        useState(null);
+    const [resizeFromWatchlistButton, setResizeFromWatchlistButton] =
+        useState(false);
 
     // Graph configurationData
-    const [graphConfigs, setGraphConfigs] = useState({
-        stock:"MMM",
-        time:times[11],
-        template:templates[0],
-        pattern: ""
-    })
-    // const [selectedStock, setSelectStock] = useState("MMM");
-    // const [selectedTime, setSelectTime] = useState(times[11]); //1DAY
-    // const [selectedTemp, setSelectedTemp] = useState(templates[0]);
-    // const [selectedPattern, setSelectedPattern] = useState(null);
-
+    const [graphConfigs, setGraphConfigsState] = useState({
+        stock: "MMM",
+        time: times[11],
+        template: templates[0],
+        pattern: "",
+    });
 
     const handleGrapthType = (type) => {
         setGraphType(type);
     };
-
+    const setGraphConfigs = (value) => {
+        if (value?.time?.name !== "1d") {
+            setToggleFirstDayLine(false);
+        }else{
+            setToggleFirstDayLine(true);
+        }
+        setGraphConfigsState(value);
+    };
     React.useEffect(() => {
         function handleResize() {
             if (
@@ -73,42 +75,45 @@ function App({ dataBaseUrl }) {
         setSelectedStrategy([]);
         setStrategiesData([]);
         setGraphConfigs({
-            ...graphConfigs, pattern: pattern
-        })
+            ...graphConfigs,
+            pattern: pattern,
+        });
     };
 
-    const handleStockChange = (stock) => {
-        setGraphConfigs({
-            ...graphConfigs, stock
-        })
-    };
 
     const hanldeSelectedTime = (time) => {
+        if (!time) {
+            time = times[11]
+        }
         if (time?.name !== "1d") {
             setToggleFirstDayLine(false);
+        }else{
+            setToggleFirstDayLine(true);
         }
         setGraphConfigs({
-            ...graphConfigs, time
-        })
+            ...graphConfigs,
+            time,
+        });
     };
 
     const templateChange = (template) => {
         setGraphConfigs({
-            ...graphConfigs, template
-        })
+            ...graphConfigs,
+            template,
+        });
     };
 
     const handlSwitchToggle = (v) => {
         setSwitchToggle(v);
     };
 
-    
-
     const handleChangeSelectedStrategy = (s) => {
         setSelectedStrategy([...s]);
         setGraphConfigs({
-            ...graphConfigs, pattern: null
-        })    };
+            ...graphConfigs,
+            pattern: null,
+        });
+    };
 
     return (
         <div className="app-container">
@@ -121,7 +126,6 @@ function App({ dataBaseUrl }) {
                     graphType={graphType}
                     templateChange={templateChange}
                     setSidebarWidth={setSidebarWidth}
-                    handleStockChange={handleStockChange}
                     handlePatternChange={handlePatternChange}
                     hanldeSelectedTime={hanldeSelectedTime}
                     handlSwitchToggle={handlSwitchToggle}
@@ -160,7 +164,6 @@ function App({ dataBaseUrl }) {
 
             <WatchList
                 graphConfigs={graphConfigs}
-                handleStockChange={handleStockChange}
                 stocks={stocks}
                 setStocks={setStocks}
                 selectedCategory={selectedCategory}

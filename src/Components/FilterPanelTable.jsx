@@ -20,7 +20,6 @@ const FilterPanelTable = ({
     placeSelectedItemInTheMiddle,
     selectedStock,
     hanldeSelectedTime,
-    handleStockChange,
     selectedTime,
     strategiesData,
     selectedCategory,
@@ -33,6 +32,7 @@ const FilterPanelTable = ({
     setSelectedTriggerFromPanel,
     fetchTimeStamp,
     setGraphConfigs,
+    graphConfigs,
     setPatterns,
     patterns
 }) => {
@@ -41,7 +41,7 @@ const FilterPanelTable = ({
         { label: "Symbol", numeric: false, type: "string" },
         { label: "Interval", numeric: false, type: "string" },
         {
-            label: "Closing Session Time / Date",
+            label: "Session",
             numeric: false,
             type: "time",
         },
@@ -124,7 +124,7 @@ const FilterPanelTable = ({
     const handleKeyDown = (e) => {
         if (e.keyCode === 38) {
             hanldeSelectedTime(selectedTime);
-            handleStockChange({
+            setGraphConfigs({...graphConfigs, stock: {
                 description: "",
                 name: tableData[selectedStockIndex - 1].stock_symbol,
                 sectorName: "",
@@ -134,12 +134,12 @@ const FilterPanelTable = ({
                         selectedStock.sources.length &&
                         selectedStock.sources[0],
                 ],
-            });
+            }})
             setSelectStockIndex(selectedStockIndex - 1);
             placeSelectedItemInTheMiddle(selectedStockIndex - 1);
         } else if (e.keyCode === 40) {
             hanldeSelectedTime(selectedTime);
-            handleStockChange({
+            setGraphConfigs({...graphConfigs, stock: {
                 description: "",
                 name: tableData[selectedStockIndex + 1] && tableData[selectedStockIndex + 1].stock_symbol,
                 sectorName: "",
@@ -149,7 +149,7 @@ const FilterPanelTable = ({
                         selectedStock.sources.length &&
                         selectedStock.sources[0],
                 ],
-            });
+            }})
             setSelectStockIndex(selectedStockIndex + 1);
             placeSelectedItemInTheMiddle(selectedStockIndex + 1);
         }
@@ -282,7 +282,6 @@ const FilterPanelTable = ({
                                             pattern: null,
                                             template: T0
                                         })
-                                        
                                         placeSelectedItemInTheMiddle(index);
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row);

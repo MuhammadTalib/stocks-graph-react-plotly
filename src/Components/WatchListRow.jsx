@@ -5,13 +5,14 @@ const WatchListRow = ({
     row,
     index,
     selectedStock,
-    handleStockChange,
     selectedTime,
     placeSelectedItemInTheMiddle,
     setSelectStockIndex,
     hanldeSelectedTime,
     selectedStrategy,
     strategiesData,
+    graphConfigs,
+    setGraphConfigs
 }) => {
     return row && selectedStock ? (
         <TableRow
@@ -23,7 +24,7 @@ const WatchListRow = ({
             onClick={() => {
                 hanldeSelectedTime(selectedTime);
                 placeSelectedItemInTheMiddle(index);
-                handleStockChange(row);
+                setGraphConfigs({...graphConfigs, stock: row})
                 setSelectStockIndex(index);
             }}
             focus={(row.name === selectedStock.name).toString()}
