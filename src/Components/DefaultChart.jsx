@@ -18,14 +18,13 @@ import {
 } from "../Utils/utils";
 import { Graph } from "./Graph";
 import InfoLines from "./InfoLines";
-const style = { width: "100%", height: "100%", border: "1px solid red"  };
+const style = { width: "100%", height: "100%", border: "1px solid red" };
 
 export function DefaultChart({
     onHover,
     onUnhover,
     onClick,
     pointIndex,
-    graphType,
     layout,
     toggleFirstDayLine,
     switchToggle,
@@ -43,10 +42,12 @@ export function DefaultChart({
     setStrategiesData,
     strategiesData,
     selectedTriggerFromPanel,
-    graphConfigs
+    graphConfigs,
 }) {
     const [data, setGraphData] = useState({ ...dummy });
-    const [currentSelectedTemp, setCurrentSelectedTemp] = useState(graphConfigs.template);
+    const [currentSelectedTemp, setCurrentSelectedTemp] = useState(
+        graphConfigs.template
+    );
     const [loader, setLoader] = useState(false);
 
     useEffect(() => {
@@ -62,7 +63,7 @@ export function DefaultChart({
         setCurrentSelectedTemp,
         setGraphData,
         setLayout,
-        graphType,
+        graphConfigs.graphType,
         enableDualChart,
         sidebarWidth,
         dataBaseUrl,
@@ -97,7 +98,7 @@ export function DefaultChart({
         graphConfigs.pattern,
         switchToggle,
         graphConfigs.template.id,
-        graphType,
+        graphConfigs.graphType,
         enableDualChart,
         selectedStrategy,
     ]);
@@ -163,7 +164,7 @@ export function DefaultChart({
                 onClick={onClick}
                 onDoubleClick={() => onDoubleClick(type)}
                 style={style}
-                data={{ ...data, type: graphType }}
+                data={{ ...data, type: graphConfigs.graphType }}
                 layout={layout}
                 toggleFirstDayLine={toggleFirstDayLine}
                 selectedPattern={graphConfigs.pattern}
@@ -172,7 +173,7 @@ export function DefaultChart({
                         currentSelectedTemp,
                         data,
                         pointIndex,
-                        graphType
+                        graphConfigs.graphType
                     ), //templates T1 , T2 , T3
                     ...drawConfirmHighAndLow(switchToggle, data, pointIndex), //0 1 2 3
                     ...(drawPatternData(
@@ -196,7 +197,7 @@ export function DefaultChart({
                         currentSelectedTemp,
                         data,
                         pointIndex,
-                        graphType
+                        graphConfigs.graphType
                     ),
                 ]}
                 loader={loader}

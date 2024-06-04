@@ -27,8 +27,6 @@ const PatternTriggers = ({
     strategiesData,
     selectedCategory,
     setSelectedTriggerFromPanel,
-    handlePatternChange,
-    templateChange,
     setGraphConfigs,
     graphConfigs
 }) => {
@@ -179,11 +177,9 @@ const PatternTriggers = ({
                     startDate={startDate}
                     filterPattern={filterPattern}
                     setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
-                    handlePatternChange={handlePatternChange}
                     patterns={patterns}
                     setPatterns={setPatterns}
                     fetchTimeStamp={fetchTimeStamp}
-                    templateChange={templateChange}
                     graphConfigs={graphConfigs}
                     setGraphConfigs={setGraphConfigs}
                 />

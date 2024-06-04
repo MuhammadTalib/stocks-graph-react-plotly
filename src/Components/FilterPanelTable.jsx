@@ -34,9 +34,9 @@ const FilterPanelTable = ({
     setGraphConfigs,
     graphConfigs,
     setPatterns,
-    patterns
+    patterns,
 }) => {
-    const pollingTime = 100 //seconds
+    const pollingTime = 100; //seconds
     const filtersColumns = [
         { label: "Symbol", numeric: false, type: "string" },
         { label: "Interval", numeric: false, type: "string" },
@@ -54,11 +54,19 @@ const FilterPanelTable = ({
         total_count: 0,
         total_pages: 0,
     });
-    const [selectedColumnIndex, setSelectedColumnIndex] = useState(null)
-    const [time, setTime] = useState(0)
+    const [selectedColumnIndex, setSelectedColumnIndex] = useState(null);
+    const [time, setTime] = useState(0);
     useEffect(() => {
         fetchTableData();
-    }, [symbolFilter, timeFilter, pagination.currentPage, startDate, filterPattern, fetchTimeStamp, time]);
+    }, [
+        symbolFilter,
+        timeFilter,
+        pagination.currentPage,
+        startDate,
+        filterPattern,
+        fetchTimeStamp,
+        time,
+    ]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
@@ -71,8 +79,9 @@ const FilterPanelTable = ({
         setTableData(data?.alert_data || []);
     };
 
-    useEffect(() => { //POLLING data
-        const timer = setInterval(()=>{
+    useEffect(() => {
+        //POLLING data
+        const timer = setInterval(() => {
             setTime(new Date().getTime());
         }, 1000 * pollingTime);
         return () => clearInterval(timer);
@@ -97,18 +106,25 @@ const FilterPanelTable = ({
             if (timeFilter && timeFilter.length) {
                 url += `&interval=${timeFilter.map((m) => m.name).join(",")}`;
             }
-            if (startDate && startDate.length > 1 && startDate[0] && startDate[1]) {
+            if (
+                startDate &&
+                startDate.length > 1 &&
+                startDate[0] &&
+                startDate[1]
+            ) {
                 url += `&start_date=${startDate[0]}&end_date=${startDate[1]}`;
             }
             if (filterPattern && filterPattern.length) {
-                url += `&pattern=${filterPattern?.map((m) => m.be_pattern).join(",")}`;
+                url += `&pattern=${filterPattern
+                    ?.map((m) => m.be_pattern)
+                    .join(",")}`;
             }
             getAllStocks(url, "get").then((res) => {
                 // eslint-disable-next-line array-callback-return
                 let data = res?.data?.data;
                 processTableData(data);
-                if(!(filterPattern && filterPattern.length)){
-                    setPatterns(data?.fe_dropdown_column || []) //used for dropdown
+                if (!(filterPattern && filterPattern.length)) {
+                    setPatterns(data?.fe_dropdown_column || []); //used for dropdown
                 }
                 setPatternColumns(data?.columns || []); //columns
                 setPagination({
@@ -124,32 +140,40 @@ const FilterPanelTable = ({
     const handleKeyDown = (e) => {
         if (e.keyCode === 38) {
             hanldeSelectedTime(selectedTime);
-            setGraphConfigs({...graphConfigs, stock: {
-                description: "",
-                name: tableData[selectedStockIndex - 1].stock_symbol,
-                sectorName: "",
-                sources: [
-                    selectedStock &&
-                        selectedStock.sources &&
-                        selectedStock.sources.length &&
-                        selectedStock.sources[0],
-                ],
-            }})
+            setGraphConfigs({
+                ...graphConfigs,
+                stock: {
+                    description: "",
+                    name: tableData[selectedStockIndex - 1].stock_symbol,
+                    sectorName: "",
+                    sources: [
+                        selectedStock &&
+                            selectedStock.sources &&
+                            selectedStock.sources.length &&
+                            selectedStock.sources[0],
+                    ],
+                },
+            });
             setSelectStockIndex(selectedStockIndex - 1);
             placeSelectedItemInTheMiddle(selectedStockIndex - 1);
         } else if (e.keyCode === 40) {
             hanldeSelectedTime(selectedTime);
-            setGraphConfigs({...graphConfigs, stock: {
-                description: "",
-                name: tableData[selectedStockIndex + 1] && tableData[selectedStockIndex + 1].stock_symbol,
-                sectorName: "",
-                sources: [
-                    selectedStock &&
-                        selectedStock.sources &&
-                        selectedStock.sources.length &&
-                        selectedStock.sources[0],
-                ],
-            }})
+            setGraphConfigs({
+                ...graphConfigs,
+                stock: {
+                    description: "",
+                    name:
+                        tableData[selectedStockIndex + 1] &&
+                        tableData[selectedStockIndex + 1].stock_symbol,
+                    sectorName: "",
+                    sources: [
+                        selectedStock &&
+                            selectedStock.sources &&
+                            selectedStock.sources.length &&
+                            selectedStock.sources[0],
+                    ],
+                },
+            });
             setSelectStockIndex(selectedStockIndex + 1);
             placeSelectedItemInTheMiddle(selectedStockIndex + 1);
         }
@@ -217,12 +241,12 @@ const FilterPanelTable = ({
                                 }),
                             ].map((column, index) => (
                                 <TableCell
-                                    key={"key column"+column?.label + index}
+                                    key={"key column" + column?.label + index}
                                     align={column.numeric ? "center" : "center"}
                                     sortDirection={
                                         orderBy === column.label ? order : false
                                     }
-                                    style={{ padding:"16px 0px !important" }}
+                                    style={{ padding: "16px 0px !important" }}
                                 >
                                     <TableSortLabel
                                         active={orderBy === column.label}
@@ -255,7 +279,12 @@ const FilterPanelTable = ({
                         {tableData?.map((row, index) => {
                             return (
                                 <TableRow
-                                    key={'row'+row?.stock_symbol +index+ Date.now()}
+                                    key={
+                                        "row" +
+                                        row?.stock_symbol +
+                                        index +
+                                        Date.now()
+                                    }
                                     className={
                                         selectedStockIndex === index
                                             ? "selectedRowStyle"
@@ -266,26 +295,31 @@ const FilterPanelTable = ({
                                     ).toString()}
                                     onClick={() => {
                                         setGraphConfigs({
+                                            ...graphConfigs,
                                             time: getTimeObject(row?.interval),
                                             stock: {
                                                 description: "",
-                                                name: row.stock_symbol.replace("/", ''),
+                                                name: row.stock_symbol.replace(
+                                                    "/",
+                                                    ""
+                                                ),
                                                 sectorName: "",
                                                 sources: [
                                                     selectedStock &&
                                                         selectedStock.sources &&
                                                         selectedStock.sources
                                                             .length &&
-                                                        selectedStock.sources[0],
+                                                        selectedStock
+                                                            .sources[0],
                                                 ],
                                             },
                                             pattern: null,
-                                            template: T0
-                                        })
+                                            template: T0,
+                                        });
                                         placeSelectedItemInTheMiddle(index);
                                         setSelectStockIndex(index);
                                         setSelectedTriggerFromPanel(row);
-                                        setSelectedColumnIndex(null)
+                                        setSelectedColumnIndex(null);
                                     }}
                                     focus={(
                                         selectedStockIndex === index
@@ -304,45 +338,74 @@ const FilterPanelTable = ({
                                         {row.date}
                                     </TableCell>
                                     {patternColumns.map((col, col_index) => {
-                                        console.log("col", col)
+                                        console.log("col", col);
                                         return row.pattern_dict[col]?.join(", ")
                                             ?.length ? (
                                             <TableCell
-                                                key={col+col_index}
+                                                key={col + col_index}
                                                 align={"center"}
                                                 onClick={(event) => {
-                                                    event.stopPropagation()
-                                                    let pObj = patterns.find(p=>p.name === col)
-                                                    let template = templates.find(t=>t.name===(pObj?.template || "T0"))
-                                                    placeSelectedItemInTheMiddle(index);
+                                                    event.stopPropagation();
+                                                    let pObj = patterns.find(
+                                                        (p) => p.name === col
+                                                    );
+                                                    let template =
+                                                        templates.find(
+                                                            (t) =>
+                                                                t.name ===
+                                                                (pObj?.template ||
+                                                                    "T0")
+                                                        );
+                                                    placeSelectedItemInTheMiddle(
+                                                        index
+                                                    );
                                                     setSelectStockIndex(index);
-                                                    setSelectedColumnIndex(col_index)
+                                                    setSelectedColumnIndex(
+                                                        col_index
+                                                    );
                                                     setGraphConfigs({
-                                                        time: getTimeObject(row?.interval),
+                                                        ...graphConfigs,
+                                                        time: getTimeObject(
+                                                            row?.interval
+                                                        ),
                                                         stock: {
                                                             description: "",
-                                                            name: row.stock_symbol.replace("/", ''),
+                                                            name: row.stock_symbol.replace(
+                                                                "/",
+                                                                ""
+                                                            ),
                                                             sectorName: "",
                                                             sources: [
                                                                 selectedStock &&
                                                                     selectedStock.sources &&
-                                                                    selectedStock.sources
+                                                                    selectedStock
+                                                                        .sources
                                                                         .length &&
-                                                                    selectedStock.sources[0],
+                                                                    selectedStock
+                                                                        .sources[0],
                                                             ],
                                                         },
                                                         pattern: pObj.pattern,
-                                                        template: template
-                                                    })
+                                                        template: template,
+                                                    });
                                                 }}
-                                                className={`button-like ${(selectedStockIndex === index && col_index === selectedColumnIndex) ?'selectedColumnStyle':''}`}
+                                                className={`button-like ${
+                                                    selectedStockIndex ===
+                                                        index &&
+                                                    col_index ===
+                                                        selectedColumnIndex
+                                                        ? "selectedColumnStyle"
+                                                        : ""
+                                                }`}
                                                 style={{
                                                     cursor: "pointer",
                                                     transition:
                                                         "background-color 0.3s",
-                                                    backgroundColor:  selectedColumnIndex === col_index
-                                                    ? "beige !important"
-                                                    : "red !important"
+                                                    backgroundColor:
+                                                        selectedColumnIndex ===
+                                                        col_index
+                                                            ? "beige !important"
+                                                            : "red !important",
                                                 }}
                                             >
                                                 {row.pattern_dict[col].join(

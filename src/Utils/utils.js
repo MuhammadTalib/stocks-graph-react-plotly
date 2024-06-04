@@ -317,6 +317,16 @@ export function getDataRequestService(
         meta_trader_indicator,
         data
     ) => {
+        console.log(
+            "getDataRequest",
+            stock,
+            time,
+            template,
+            pattern,
+            meta_trader_indicator,
+            data
+        );
+
         document.querySelector('[data-title="Autoscale"]')?.click();
         let strategiesLength = selectedStrategy?.length;
 
@@ -781,7 +791,12 @@ export const getOccuredReversalPatterns = (
     patternData.length &&
         Array.isArray(keys) &&
         keys.forEach((key, i) => {
-            if(pattern === "R/F Combo Pattern" && patternData?.[pointIndex]?.["trigger"] && patternData?.[pointIndex]?.[key] && key !== "trigger_reversal" ){
+            if (
+                pattern === "R/F Combo Pattern" &&
+                patternData?.[pointIndex]?.["trigger"] &&
+                patternData?.[pointIndex]?.[key] &&
+                key !== "trigger_reversal"
+            ) {
                 if (occured.length > 0) occured += ", ";
                 occured += key;
             } else if (
@@ -806,14 +821,14 @@ export const getOccuredReversalPatterns = (
                 occured += key;
             }
         });
-    if((pattern === "R/F Combo Pattern")){
-        if(patternData?.[pointIndex]?.["trigger"] && occured){
-            return pattern + " - " + occured.replace(", trigger_reversal","")
+    if (pattern === "R/F Combo Pattern") {
+        if (patternData?.[pointIndex]?.["trigger"] && occured) {
+            return pattern + " - " + occured.replace(", trigger_reversal", "");
         }
-        return ""
+        return "";
     }
 
-    return ((isT3FailurePattern(pattern) && occured))
+    return isT3FailurePattern(pattern) && occured
         ? pattern
         : ((isT3Pattern(pattern) || isT3FailurePattern(pattern)) && occured
               ? `${pattern} - `
@@ -905,7 +920,7 @@ export const isT3FailurePattern = (pattern) => {
         "Tower Bottom Modified Failure",
         "Tower Top Modified V2 Failure",
         "Tower Bottom Modified V2 Failure",
-        "Windows Gap Failure"
+        "Windows Gap Failure",
     ];
     return T3FailuesPatterns.includes(pattern);
 };

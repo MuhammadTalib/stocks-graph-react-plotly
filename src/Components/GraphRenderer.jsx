@@ -7,7 +7,6 @@ import { DefaultChart } from "./DefaultChart";
 const GraphRenderer = ({
   layout,
   enableDualChart,
-  graphType,
   separateGraphs,
   toggleFirstDayLine,
   switchToggle,
@@ -23,12 +22,11 @@ const GraphRenderer = ({
   selectedTriggerFromPanel,
   graphConfigs
 }) => {
-  const [secondaryChartTime, setSecondayChartTime] = useState(null);
+  // const [secondaryChartTime, setSecondayChartTime] = useState(null);
 
-  useEffect(() => {
-    let t = getTimeforSecondaryGraph(graphConfigs.time);
-    setSecondayChartTime(enableDualChart ? t : graphConfigs.time);
-  }, [graphConfigs.time, enableDualChart]);
+  // useEffect(() => {
+  //   setSecondayChartTime(enableDualChart ? getTimeforSecondaryGraph(graphConfigs.time) : graphConfigs.time);
+  // }, [graphConfigs.time, enableDualChart]);
 
   const [cursor, setCursor] = useState("crosshair");
   const [currentSelected, setCurrentSelected] = useState("");
@@ -127,7 +125,6 @@ const GraphRenderer = ({
             onUnhover={onUnhover}
             onClick={onClick}
             pointIndex={pointIndex}
-            graphType={graphType}
             enableDualChart={enableDualChart}
             graphConfigs={graphConfigs}
             layout={layout}
@@ -135,7 +132,7 @@ const GraphRenderer = ({
             switchToggle={switchToggle}
             separateGraphs={separateGraphs}
             id={"default"}
-            selectedTime={secondaryChartTime}
+            selectedTime={enableDualChart ? getTimeforSecondaryGraph(graphConfigs.time) : graphConfigs.time}
             selectedCategory={selectedCategory}
             setLayout={setLayout}
             selectedStrategy={selectedStrategy}
@@ -174,7 +171,6 @@ const GraphRenderer = ({
                 type="secondary"
                 onHover={onHover}
                 onDoubleClick={(e) => setCurrentSelected(e)}
-                graphType={graphType}
                 enableDualChart={enableDualChart}
                 layout={secondaryLayout}
                 toggleFirstDayLine={toggleFirstDayLine}

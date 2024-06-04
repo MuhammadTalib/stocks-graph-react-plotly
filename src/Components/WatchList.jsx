@@ -29,6 +29,7 @@ function CustomTabPanel(props) {
 }
 
 const WatchList = ({
+    graphConfigs,
     stocks,
     setStocks,
     selectedCategory,
@@ -45,11 +46,8 @@ const WatchList = ({
     setSecondaryLayout,
     strategiesData,
     setSelectedTriggerFromPanel,
-    handlePatternChange,
     resizeFromWatchlistButton,
     setResizeFromWatchlistButton,
-    templateChange,
-    graphConfigs,
     setGraphConfigs,
 }) => {
     const scrollableListRef = useRef(null);
@@ -291,8 +289,6 @@ const WatchList = ({
                 placeSelectedItemInTheMiddle={placeSelectedItemInTheMiddle}
                 selectedPattern={graphConfigs.pattern}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
-                handlePatternChange={handlePatternChange}
-                templateChange={templateChange}
                 graphConfigs={graphConfigs}
                 setGraphConfigs={setGraphConfigs}
             />

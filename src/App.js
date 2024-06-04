@@ -14,19 +14,29 @@ const useStyles = makeStyles(() => ({
 
 function App({ dataBaseUrl }) {
     const [stocks, setStocks] = useState([]);
-    const [sidebarWidth, setSidebarWidth] = useState(6);
-    const classes = useStyles(sidebarWidth);
-    const [graphType, setGraphType] = useState("candlestick");
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
-    const [enableDualChart, setEnableDualChart] = useState(false);
     const [layout, setLayout] = useState({ ...initialLayout });
-    const [strategiesData, setStrategiesData] = useState([]);
+    const [sidebarWidth, setSidebarWidth] = useState(6);
+    //Graph configuration data
+    const [graphConfigs, setGraphConfigsState] = useState({
+        graphType: "candlestick",
+        stock: "MMM",
+        time: times[11],
+        template: templates[0],
+        pattern: "",
+    });
+    //Graph Layout
     const [secondaryLayout, setSecondaryLayout] = useState({
         ...layout,
         width: "50%",
         height: window.innerHeight - 80,
     });
+
+    const classes = useStyles(sidebarWidth);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [toggleFirstDayLine, setToggleFirstDayLine] = useState(true);
+    const [enableDualChart, setEnableDualChart] = useState(false);
+    const [strategiesData, setStrategiesData] = useState([]);
+
     const [switchToggle, setSwitchToggle] = useState("0");
     const [selectedStrategy, setSelectedStrategy] = useState([]);
     const [selectedTriggerFromPanel, setSelectedTriggerFromPanel] =
@@ -34,24 +44,13 @@ function App({ dataBaseUrl }) {
     const [resizeFromWatchlistButton, setResizeFromWatchlistButton] =
         useState(false);
 
-    // Graph configurationData
-    const [graphConfigs, setGraphConfigsState] = useState({
-        stock: "MMM",
-        time: times[11],
-        template: templates[0],
-        pattern: "",
-    });
-
-    const handleGrapthType = (type) => {
-        setGraphType(type);
-    };
     const setGraphConfigs = (value) => {
-        if (value?.time?.name !== "1d") {
-            setToggleFirstDayLine(false);
-        }else{
-            setToggleFirstDayLine(true);
+        let time = value?.time
+        if (!time) {
+            time = times[11];
         }
-        setGraphConfigsState(value);
+        setToggleFirstDayLine(time?.name === "1d");
+        setGraphConfigsState({...value, time});
     };
     React.useEffect(() => {
         function handleResize() {
@@ -80,31 +79,15 @@ function App({ dataBaseUrl }) {
         });
     };
 
-
     const hanldeSelectedTime = (time) => {
         if (!time) {
-            time = times[11]
+            time = times[11];
         }
-        if (time?.name !== "1d") {
-            setToggleFirstDayLine(false);
-        }else{
-            setToggleFirstDayLine(true);
-        }
+        setToggleFirstDayLine(time?.name === "1d");
         setGraphConfigs({
             ...graphConfigs,
             time,
         });
-    };
-
-    const templateChange = (template) => {
-        setGraphConfigs({
-            ...graphConfigs,
-            template,
-        });
-    };
-
-    const handlSwitchToggle = (v) => {
-        setSwitchToggle(v);
     };
 
     const handleChangeSelectedStrategy = (s) => {
@@ -120,15 +103,13 @@ function App({ dataBaseUrl }) {
             <div className={classes.container + " app-frame"}>
                 <Header
                     graphConfigs={graphConfigs}
+                    setGraphConfigs={setGraphConfigs}
                     setEnableDualChart={setEnableDualChart}
                     enableDualChart={enableDualChart}
-                    handleGrapthType={handleGrapthType}
-                    graphType={graphType}
-                    templateChange={templateChange}
                     setSidebarWidth={setSidebarWidth}
                     handlePatternChange={handlePatternChange}
                     hanldeSelectedTime={hanldeSelectedTime}
-                    handlSwitchToggle={handlSwitchToggle}
+                    handlSwitchToggle={setSwitchToggle}
                     switchToggle={switchToggle}
                     toggleFirstDayLine={toggleFirstDayLine}
                     setToggleFirstDayLine={setToggleFirstDayLine}
@@ -145,7 +126,6 @@ function App({ dataBaseUrl }) {
                         graphConfigs={graphConfigs}
                         layout={layout}
                         enableDualChart={enableDualChart}
-                        graphType={graphType}
                         toggleFirstDayLine={toggleFirstDayLine}
                         switchToggle={switchToggle}
                         setLayout={setLayout}
@@ -180,10 +160,8 @@ function App({ dataBaseUrl }) {
                 setSecondaryLayout={setSecondaryLayout}
                 strategiesData={strategiesData}
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
-                handlePatternChange={handlePatternChange}
                 resizeFromWatchlistButton={resizeFromWatchlistButton}
                 setResizeFromWatchlistButton={setResizeFromWatchlistButton}
-                templateChange={templateChange}
                 setGraphConfigs={setGraphConfigs}
             />
         </div>

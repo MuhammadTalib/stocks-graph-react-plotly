@@ -14,8 +14,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 const Header = ({
-    handleGrapthType,
-    graphType,
     templateChange,
     setEnableDualChart,
     enableDualChart,
@@ -28,7 +26,8 @@ const Header = ({
     dataBaseUrl,
     setSidebarWidth,
     setResizeFromWatchlistButton,
-    graphConfigs
+    graphConfigs,
+    setGraphConfigs,
 }) => {
     let linkRef = useRef();
     let [patterns, setPatterns] = useState([]);
@@ -43,7 +42,7 @@ const Header = ({
     const openSidebar = () => {
         if (!sidebarOpen) setSidebarWidth(500);
         if (sidebarOpen) setSidebarWidth(6);
-        setResizeFromWatchlistButton(true)
+        setResizeFromWatchlistButton(true);
         setSidebarOpen(!sidebarOpen);
     };
 
@@ -73,7 +72,9 @@ const Header = ({
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        disabled={graphConfigs.time.name !== "1d"}
+                                        disabled={
+                                            graphConfigs.time.name !== "1d"
+                                        }
                                         checked={toggleFirstDayLine}
                                         onChange={(e) => {
                                             setToggleFirstDayLine(
@@ -92,23 +93,31 @@ const Header = ({
                             >
                                 <Button
                                     className={`btn ${
-                                        graphType !== "ohlc"
+                                        graphConfigs.graphType !== "ohlc"
                                             ? "templateBtn"
                                             : ""
                                     }`}
                                     onClick={() =>
-                                        handleGrapthType("candlestick")
+                                        setGraphConfigs({
+                                            ...graphConfigs,
+                                            graphType: "candlestick",
+                                        })
                                     }
                                 >
                                     {OHLC_ICON()}
                                 </Button>
                                 <Button
                                     className={`btn ${
-                                        graphType === "ohlc"
+                                        graphConfigs.graphType === "ohlc"
                                             ? "templateBtn"
                                             : ""
                                     }`}
-                                    onClick={() => handleGrapthType("ohlc")}
+                                    onClick={() =>
+                                        setGraphConfigs({
+                                            ...graphConfigs,
+                                            graphType: "ohlc",
+                                        })
+                                    }
                                 >
                                     {BAR_ICON()}
                                 </Button>
@@ -148,11 +157,11 @@ const Header = ({
                                 options={templates}
                                 value={graphConfigs.template}
                                 label={"Template"}
-                                handleChange={(e)=>{
-                                    if(!e){
-                                        e = T0
+                                handleChange={(e) => {
+                                    if (!e) {
+                                        e = T0;
                                     }
-                                    templateChange(e)
+                                    setGraphConfigs({...graphConfigs, template: e});
                                 }}
                                 selectedStock={graphConfigs.stock}
                                 getOptionLabel={(option) => {
