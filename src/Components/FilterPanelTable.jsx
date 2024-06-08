@@ -35,6 +35,7 @@ const FilterPanelTable = ({
     graphConfigs,
     setPatterns,
     patterns,
+    toggleFirstDayLine
 }) => {
     const pollingTime = 100; //seconds
     const filtersColumns = [
@@ -153,6 +154,7 @@ const FilterPanelTable = ({
                             selectedStock.sources[0],
                     ],
                 },
+                toggleFirstDayLine
             });
             setSelectStockIndex(selectedStockIndex - 1);
             placeSelectedItemInTheMiddle(selectedStockIndex - 1);
@@ -173,6 +175,7 @@ const FilterPanelTable = ({
                             selectedStock.sources[0],
                     ],
                 },
+                toggleFirstDayLine
             });
             setSelectStockIndex(selectedStockIndex + 1);
             placeSelectedItemInTheMiddle(selectedStockIndex + 1);
@@ -313,6 +316,7 @@ const FilterPanelTable = ({
                                                             .sources[0],
                                                 ],
                                             },
+                                            toggleFirstDayLine,
                                             pattern: null,
                                             template: T0,
                                         });
@@ -385,6 +389,7 @@ const FilterPanelTable = ({
                                                                         .sources[0],
                                                             ],
                                                         },
+                                                        toggleFirstDayLine,
                                                         pattern: pObj.pattern,
                                                         template: template,
                                                     });

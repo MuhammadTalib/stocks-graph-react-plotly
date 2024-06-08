@@ -28,7 +28,8 @@ const PatternTriggers = ({
     selectedCategory,
     setSelectedTriggerFromPanel,
     setGraphConfigs,
-    graphConfigs
+    graphConfigs,
+    toggleFirstDayLine
 }) => {
     const [symbolFilter, setSymbolFilter] = useState([]);
     const [timeFilter, setTimeFilter] = useState([]);
@@ -182,6 +183,7 @@ const PatternTriggers = ({
                     fetchTimeStamp={fetchTimeStamp}
                     graphConfigs={graphConfigs}
                     setGraphConfigs={setGraphConfigs}
+                    toggleFirstDayLine={toggleFirstDayLine}
                 />
             </Grid>
         </Grid>

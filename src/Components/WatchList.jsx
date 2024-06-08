@@ -49,6 +49,7 @@ const WatchList = ({
     resizeFromWatchlistButton,
     setResizeFromWatchlistButton,
     setGraphConfigs,
+    toggleFirstDayLine
 }) => {
     const scrollableListRef = useRef(null);
 
@@ -291,9 +292,10 @@ const WatchList = ({
                 setSelectedTriggerFromPanel={setSelectedTriggerFromPanel}
                 graphConfigs={graphConfigs}
                 setGraphConfigs={setGraphConfigs}
+                toggleFirstDayLine={toggleFirstDayLine}
             />
         );
-    }, [graphConfigs.stock, selectedTime]);
+    }, [graphConfigs.stock, selectedTime, toggleFirstDayLine]);
 
     const sidebarRef = useRef(null);
     const [isResizing, setIsResizing] = useState(false);

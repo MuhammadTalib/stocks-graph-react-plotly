@@ -45,12 +45,14 @@ function App({ dataBaseUrl }) {
         useState(false);
 
     const setGraphConfigs = (value) => {
-        let time = value?.time
+        let time = value?.time;
         if (!time) {
             time = times[11];
         }
-        setToggleFirstDayLine(time?.name === "1d");
-        setGraphConfigsState({...value, time});
+        if (value.toggleFirstDayLine) {
+            setToggleFirstDayLine(time?.name === "1d");
+        }
+        setGraphConfigsState({ ...value, time });
     };
     React.useEffect(() => {
         function handleResize() {
@@ -83,7 +85,9 @@ function App({ dataBaseUrl }) {
         if (!time) {
             time = times[11];
         }
-        setToggleFirstDayLine(time?.name === "1d");
+        if (toggleFirstDayLine) {
+            setToggleFirstDayLine(time?.name === "1d");
+        }
         setGraphConfigs({
             ...graphConfigs,
             time,
@@ -112,7 +116,10 @@ function App({ dataBaseUrl }) {
                     handlSwitchToggle={setSwitchToggle}
                     switchToggle={switchToggle}
                     toggleFirstDayLine={toggleFirstDayLine}
-                    setToggleFirstDayLine={setToggleFirstDayLine}
+                    setToggleFirstDayLine={(v)=>{
+                        console.log("v",v)
+                        setToggleFirstDayLine(v)
+                    }}
                     dataBaseUrl={dataBaseUrl}
                     setResizeFromWatchlistButton={setResizeFromWatchlistButton}
                 />
@@ -163,6 +170,7 @@ function App({ dataBaseUrl }) {
                 resizeFromWatchlistButton={resizeFromWatchlistButton}
                 setResizeFromWatchlistButton={setResizeFromWatchlistButton}
                 setGraphConfigs={setGraphConfigs}
+                toggleFirstDayLine={toggleFirstDayLine}
             />
         </div>
     );
