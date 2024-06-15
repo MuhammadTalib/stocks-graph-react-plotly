@@ -317,15 +317,6 @@ export function getDataRequestService(
         meta_trader_indicator,
         data
     ) => {
-        console.log(
-            "getDataRequest",
-            stock,
-            time,
-            template,
-            pattern,
-            meta_trader_indicator,
-            data
-        );
 
         document.querySelector('[data-title="Autoscale"]')?.click();
         let strategiesLength = selectedStrategy?.length;
@@ -446,7 +437,9 @@ export function getDataRequestService(
                         modified_condition.push(m["modified_condition"]);
                     }
 
-                    if (
+                    if(m[pattern]?.is_vicinity){
+                        patternData.push(m[pattern]);
+                    }else if (
                         (m[pattern]?.pattern_end !== undefined ||
                             m[pattern]?.trigger_value !== undefined) &&
                         m[pattern]?.trigger !== undefined &&

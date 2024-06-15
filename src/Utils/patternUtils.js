@@ -62,7 +62,8 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         });
     }
 
-    if (isT3FailurePattern(selectedPattern)) { //for all failures
+    if (isT3FailurePattern(selectedPattern)) {
+        //for all failures
         drawX = data.patternData;
         patterns = data.patternData.map((m) => {
             let ans = 0;
@@ -166,10 +167,12 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
         : [];
 };
 
-export const drawFVGPatternsMarker = (data, selectedPattern, strategiesData) => {
-    if (
-        selectedPattern === "All Failure Patterns"
-    ) {
+export const drawFVGPatternsMarker = (
+    data,
+    selectedPattern,
+    strategiesData
+) => {
+    if (selectedPattern === "All Failure Patterns") {
         return [];
     }
     let patterns = data.patternData;
@@ -212,15 +215,13 @@ export const drawFVGPatternsMarker = (data, selectedPattern, strategiesData) => 
         : [];
 };
 
-export const drawFVGPatterns = (data,selectedPattern) => {
-    if(selectedPattern !== "FVG Down" && selectedPattern !== "FVG Up"){
-        return []
+export const drawFVGPatterns = (data, selectedPattern) => {
+    if (selectedPattern !== "FVG Down" && selectedPattern !== "FVG Up") {
+        return [];
     }
     let frames = [];
-    
-    
-    data?.patternData?.forEach((d,i) => {
-        if(d.pattern_end){
+    data?.patternData?.forEach((d, i) => {
+        if (d.pattern_end) {
             frames.push({
                 type: "rect",
                 x0: i - 2,
@@ -237,8 +238,8 @@ export const drawFVGPatterns = (data,selectedPattern) => {
                 type: "line",
                 x0: i - 2,
                 x1: i,
-                y1: d.point_1+((d.point_4-d.point_1)/2),
-                y0: d.point_1+((d.point_4-d.point_1)/2),
+                y1: d.point_1 + (d.point_4 - d.point_1) / 2,
+                y0: d.point_1 + (d.point_4 - d.point_1) / 2,
                 line: {
                     color: "red",
                     width: 1.5,
@@ -247,7 +248,63 @@ export const drawFVGPatterns = (data,selectedPattern) => {
                 hoverinfo: "x",
             });
         }
-       
+    });
+    return frames;
+};
+
+export const drawVicinityPatterns = (data, selectedPattern) => {
+    let isVicinity =
+        data &&
+        data.patternData &&
+        data.patternData.length &&
+        data.patternData[0].is_vicinity;
+
+
+    if (!isVicinity) {
+        return [];
+    }
+    console.log("data?.patternData", data?.patternData);
+    let frames = [];
+    data?.patternData?.forEach((d, i) => {
+        if (d.pattern_end && d.is_vicinity) {
+            frames.push({
+                type: "line",
+                x0: i - d.vicinity_distance,
+                x1: i,
+                y1: d.vicinity_upper_point,
+                y0: d.vicinity_upper_point,
+                line: {
+                    color: "red",
+                    width: 1.5,
+                },
+                hoverinfo: "x",
+            });
+            frames.push({
+                type: "line",
+                x0: i - d.vicinity_distance,
+                x1: i,
+                y1: d.vicinity_mid_point,
+                y0: d.vicinity_mid_point,
+                line: {
+                    color: "red",
+                    width: 1.5,
+                    dash: "dot",
+                },
+                hoverinfo: "x",
+            });
+            frames.push({
+                type: "line",
+                x0: i - d.vicinity_distance,
+                x1: i,
+                y1: d.vicinity_lower_point,
+                y0: d.vicinity_lower_point,
+                line: {
+                    color: "red",
+                    width: 1.5,
+                },
+                hoverinfo: "x",
+            });
+        }
     });
     return frames;
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { drawFirstDateLine, drawStrategiesBar } from "../Utils/utils";
 import "../App.css";
 import Plot from "react-plotly.js";
-import { drawFVGPatterns } from "../Utils/patternUtils";
+import { drawFVGPatterns, drawVicinityPatterns } from "../Utils/patternUtils";
 import { CircularProgress } from "@mui/material";
 
 export const Graph = ({
@@ -73,6 +73,7 @@ export const Graph = ({
                                       )
                                     : []),
                                 ...drawFVGPatterns(data, graphConfigs.pattern),
+                                ...drawVicinityPatterns(data, graphConfigs.pattern),
                             ],
                         }}
                         config={{
@@ -108,6 +109,7 @@ export const Graph = ({
                                             data,
                                             graphConfigs.pattern
                                         ),
+                                        ...drawVicinityPatterns(data, graphConfigs.pattern),
                                     ],
                                 });
                             }
