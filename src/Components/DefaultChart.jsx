@@ -106,7 +106,9 @@ export function DefaultChart({
     return data && data?.x?.length ? (
         <>
             <InfoLines
+                graphConfigs={graphConfigs}
                 selectedStock={graphConfigs.stock}
+                switchToggle={switchToggle}
                 ohlc={{
                     high: data.high[pointIndex],
                     low: data.low[pointIndex],
@@ -122,6 +124,7 @@ export function DefaultChart({
                         pointIndex,
                         "ConfrimLow"
                     ),
+                    switchToggle: switchToggle
                 }}
                 selectedPattern={
                     (data.patternData[pointIndex]
