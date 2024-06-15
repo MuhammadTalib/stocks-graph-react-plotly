@@ -169,20 +169,20 @@ const WatchList = ({
         return (
             <Grid container style={{ margin: "0px 6px" }}>
                 <Grid container item md={12} sm={12} xs={12} spacing={2}>
-                    <Grid item md={3} sm={3} xs={3}>
+                    <Grid item md={6} sm={6} xs={6}>
                         <AutocompleteWrapper
                             options={categories}
                             value={selectedCategory}
-                            label={"Categrories"}
+                            label={"Data Source"}
                             handleChange={setSelectedCategory}
                             selectedStock={graphConfigs.stock}
                         />
                     </Grid>
-                    <Grid item md={2} sm={2} xs={2}>
+                    <Grid item md={6} sm={6} xs={6}>
                         <AutocompleteWrapper
                             options={times}
                             value={selectedTime}
-                            label={"Time"}
+                            label={"Interval"}
                             handleChange={(newValue) => {
                                 setSelectedTime(newValue);
                                 hanldeSelectedTime(newValue);
@@ -193,7 +193,7 @@ const WatchList = ({
                             }}
                         />
                     </Grid>
-                    <Grid item md={7} sm={7} xs={7}>
+                    {/* <Grid item md={7} sm={7} xs={7}>
                         <AutocompleteWrapper
                             options={strategies}
                             value={selectedStrategy}
@@ -221,7 +221,7 @@ const WatchList = ({
                                 );
                             }}
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
 
                 <Grid item md={12} sm={12} xs={12}>
@@ -384,8 +384,8 @@ const WatchList = ({
                         onChange={handleChange}
                         aria-label="basic tabs example"
                     >
-                        <Tab label="Symbol" {...a11yProps(0)} />
-                        <Tab label="Pattern Triggers" {...a11yProps(1)} />
+                        <Tab label="Watch Lists" {...a11yProps(0)} />
+                        <Tab label="Feed" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>

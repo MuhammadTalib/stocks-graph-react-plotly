@@ -37,6 +37,7 @@ const AutocompleteWrapper = ({
             onMouseLeave={() => {
                 setOpenPatternDropdown(false);
             }}
+            style={{ paddingTop: "6px" }}
         >
             <Autocomplete
                 limitTags={limitTags}

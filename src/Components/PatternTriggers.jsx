@@ -85,7 +85,7 @@ const PatternTriggers = ({
                         limitTags={2}
                         id="multiple-limit-tags"
                         value={timeFilter}
-                        label="Time"
+                        label="Interval"
                         handleChange={(v) => {
                             if (v && v.length) {
                                 setTimeFilter([...v]);

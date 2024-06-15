@@ -127,7 +127,7 @@ const Header = ({
                             <AutocompleteWrapper
                                 options={["0", 1, 2, 3, 4, 5]}
                                 value={switchToggle}
-                                label={"MT4"}
+                                label={"Price Action"}
                                 handleChange={handlSwitchToggle}
                                 selectedStock={graphConfigs.stock}
                                 getOptionLabel={(option) => {
@@ -139,7 +139,7 @@ const Header = ({
                             <AutocompleteWrapper
                                 options={times}
                                 value={graphConfigs.time}
-                                label={"Time"}
+                                label={"Interval"}
                                 handleChange={hanldeSelectedTime}
                                 selectedStock={graphConfigs.stock}
                                 getOptionLabel={(option) => {
@@ -156,7 +156,7 @@ const Header = ({
                             <AutocompleteWrapper
                                 options={templates}
                                 value={graphConfigs.template}
-                                label={"Template"}
+                                label={"Indicators"}
                                 handleChange={(e) => {
                                     if (!e) {
                                         e = T0;

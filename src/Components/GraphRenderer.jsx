@@ -113,7 +113,7 @@ const GraphRenderer = ({
           id="default-chart"
           style={{
             cursor,
-            marginTop: "52px",
+            marginTop: "65px",
             border:
               currentSelected === "default" ? "4px solid #438695" : "none",
           }}
