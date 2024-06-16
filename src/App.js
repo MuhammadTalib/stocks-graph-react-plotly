@@ -28,7 +28,7 @@ function App({ dataBaseUrl }) {
     const [secondaryLayout, setSecondaryLayout] = useState({
         ...layout,
         width: "50%",
-        height: window.innerHeight - 80,
+        height: window.innerHeight - 80 - 30,
     });
 
     const classes = useStyles(sidebarWidth);
@@ -58,13 +58,13 @@ function App({ dataBaseUrl }) {
         function handleResize() {
             if (
                 layout.width !== window.innerWidth - 10 ||
-                layout.height !== window.innerHeight - 80
+                layout.height !== window.innerHeight - 80 - 30
             ) {
                 document.querySelector('[data-title="Autoscale"]')?.click();
                 setLayout({
                     ...layout,
                     width: window.innerWidth - 10,
-                    height: window.innerHeight - 80,
+                    height: window.innerHeight - 80 - 30,
                 });
             }
         }

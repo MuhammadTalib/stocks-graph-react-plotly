@@ -67,7 +67,7 @@ const GraphRenderer = ({
         setLayout({
           ...layout,
           width: w,
-          height: window.innerHeight - 80,
+          height: window.innerHeight - 80 - 30,
         });
         setSecondaryLayout({
           ...secondaryLayout,
@@ -75,7 +75,7 @@ const GraphRenderer = ({
             dualChartRef.current.getBoundingClientRect().right -
             mouseMoveEvent.clientX -
             10,
-          height: window.innerHeight - 80,
+          height: window.innerHeight - 80 - 30,
         });
         setDualChartWidth(
           dualChartRef.current.getBoundingClientRect().right -

@@ -640,7 +640,7 @@ export function getDataRequestService(
                         ? (window.innerWidth - sidebarWidth) / 2
                         : window.innerWidth - sidebarWidth,
                     dualChartSet: enableDualChart,
-                    height: window.innerHeight - 80,
+                    height: window.innerHeight - 80 - 30,
                     xaxis: {
                         ...layout.xaxis,
                         rangeslider: {

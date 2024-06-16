@@ -54,7 +54,7 @@ export const initialLayout = {
     opacity: 0.2,
     autosize: true,
     width: window.innerWidth - 10,
-    height: window.innerHeight - 80,
+    height: window.innerHeight - 80 - 30,
 };
 
 export const times = [
@@ -106,7 +106,7 @@ export const T0 = {
 
 export const dummy = {
     x: [],
-    name: "main",
+    name: "",
     close: [],
     decreasing: {
         fillcolor: "black",

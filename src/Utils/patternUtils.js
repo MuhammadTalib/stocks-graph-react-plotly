@@ -21,7 +21,8 @@ export const drawPatternData = (data, selectedPattern, strategiesData) => {
     if (
         selectedPattern === "All Failure Patterns" ||
         selectedPattern === "FVG Up" ||
-        selectedPattern === "FVG Down"
+        selectedPattern === "FVG Down" ||
+        (data.patternData && data.patternData.length && data.patternData[0].is_vicinity)
     ) {
         return [];
     }
@@ -269,7 +270,7 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
         if (d.pattern_end && d.is_vicinity) {
             frames.push({
                 type: "line",
-                x0: i - d.vicinity_distance,
+                x0: i - d.vicinity_distance - 1,
                 x1: i,
                 y1: d.vicinity_upper_point,
                 y0: d.vicinity_upper_point,
@@ -281,7 +282,7 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
             });
             frames.push({
                 type: "line",
-                x0: i - d.vicinity_distance,
+                x0: i - d.vicinity_distance - 1,
                 x1: i,
                 y1: d.vicinity_mid_point,
                 y0: d.vicinity_mid_point,
@@ -294,7 +295,7 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
             });
             frames.push({
                 type: "line",
-                x0: i - d.vicinity_distance,
+                x0: i - d.vicinity_distance - 1,
                 x1: i,
                 y1: d.vicinity_lower_point,
                 y0: d.vicinity_lower_point,
@@ -310,6 +311,9 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
 };
 
 export const drawPatternTriggers = (data, strategiesData, selectedPattern) => {
+    if (selectedPattern === "R/F Combo Pattern") {
+        return;
+    }
     if (selectedPattern === "R/F Combo Pattern") {
         return;
     }
