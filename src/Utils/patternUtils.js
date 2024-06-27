@@ -264,14 +264,13 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
     if (!isVicinity) {
         return [];
     }
-    console.log("data?.patternData", data?.patternData);
     let frames = [];
     data?.patternData?.forEach((d, i) => {
         if (d.pattern_end && d.is_vicinity) {
             frames.push({
                 type: "line",
-                x0: i - d.vicinity_distance - 1,
-                x1: i,
+                x0: i - d.vicinity_distance,
+                x1: i + 1,
                 y1: d.vicinity_upper_point,
                 y0: d.vicinity_upper_point,
                 line: {
@@ -282,8 +281,8 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
             });
             frames.push({
                 type: "line",
-                x0: i - d.vicinity_distance - 1,
-                x1: i,
+                x0: i - d.vicinity_distance,
+                x1: i + 1,
                 y1: d.vicinity_mid_point,
                 y0: d.vicinity_mid_point,
                 line: {
@@ -295,8 +294,8 @@ export const drawVicinityPatterns = (data, selectedPattern) => {
             });
             frames.push({
                 type: "line",
-                x0: i - d.vicinity_distance - 1,
-                x1: i,
+                x0: i - d.vicinity_distance,
+                x1: i + 1,
                 y1: d.vicinity_lower_point,
                 y0: d.vicinity_lower_point,
                 line: {

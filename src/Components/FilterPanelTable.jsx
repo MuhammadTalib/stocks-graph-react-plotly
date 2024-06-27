@@ -342,7 +342,6 @@ const FilterPanelTable = ({
                                         {row.date}
                                     </TableCell>
                                     {patternColumns.map((col, col_index) => {
-                                        console.log("col", col);
                                         return row.pattern_dict[col]?.join(", ")
                                             ?.length ? (
                                             <TableCell

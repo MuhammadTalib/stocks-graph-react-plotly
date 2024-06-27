@@ -117,7 +117,6 @@ function App({ dataBaseUrl }) {
                     switchToggle={switchToggle}
                     toggleFirstDayLine={toggleFirstDayLine}
                     setToggleFirstDayLine={(v)=>{
-                        console.log("v",v)
                         setToggleFirstDayLine(v)
                     }}
                     dataBaseUrl={dataBaseUrl}

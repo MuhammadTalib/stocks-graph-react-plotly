@@ -63,7 +63,6 @@ const WatchList = ({
 
     useEffect(()=>{
         if(resizeFromWatchlistButton){
-            console.log(resizeFromWatchlistButton)
             setResizeFromWatchlistButton(false)
              let wGraph = window.innerWidth - sidebarWidth - 10;
     
