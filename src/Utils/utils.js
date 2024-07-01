@@ -317,7 +317,7 @@ export function getDataRequestService(
         meta_trader_indicator,
         data
     ) => {
-
+        console.log("calling data")
         document.querySelector('[data-title="Autoscale"]')?.click();
         let strategiesLength = selectedStrategy?.length;
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { getTimeforSecondaryGraph } from "../Utils/utils";
 import { DefaultChart } from "./DefaultChart";
 
@@ -151,7 +150,7 @@ const GraphRenderer = ({
           className="app-dualchart"
           style={{
             width: secondaryLayout.width + 10 + "px",
-            marginTop: "52px",
+            marginTop: "65px",
           }}
           onMouseDown={(e) => e.preventDefault()}
         >

@@ -92,7 +92,7 @@ export function DefaultChart({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         graphConfigs.stock,
-        selectedTime,
+        // selectedTime,
         selectedCategory,
         graphConfigs,
         graphConfigs.pattern,
